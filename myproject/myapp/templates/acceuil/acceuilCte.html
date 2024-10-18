@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>My App</title>
+    {% load static %}
+
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{% static 'myapp/vendors/feather/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/vendors/ti-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/vendors/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/vendors/typicons/typicons.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/vendors/simple-line-icons/css/simple-line-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/vendors/css/vendor.bundle.base.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'myapp/images/favicon.png' %}" />
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    {% include 'layout/navbarCte.html' %}
+    <div class="container-fluid page-body-wrapper">
+    
+    <!-- Sidebar -->
+
+    <!-- Main Content Wrapper -->
+    {% include 'layout/sidebarCte.html' %}
+    <div class="main-panel">
+
+<center>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>CIVISME FISCALE</h1>
+</center>
+</div>
+</div>
+
+    <!-- Footer -->
+    {% include 'layout/footer.html' %}
+
+    <!-- JavaScript Libraries -->
+    <script src="{% static 'myapp/vendors/js/vendor.bundle.base.js' %}"></script>
+    <script src="{% static 'myapp/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{% static 'myapp/js/off-canvas.js' %}"></script>
+    <script src="{% static 'myapp/js/template.js' %}"></script>
+    <script src="{% static 'myapp/js/settings.js' %}"></script>
+    <script src="{% static 'myapp/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'myapp/js/todolist.js' %}"></script>
+  </body>
+</html>
