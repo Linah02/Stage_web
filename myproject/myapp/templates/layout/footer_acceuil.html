@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mon Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body style="background-color: white;">
+    <!-- Contenu principal de la page -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer_acceuil">
+        <center>
+        <div class="d-sm-flex flex-column justify-content-center">
+            <br>
+            <br>
+            <span class="text-muted footer-text">
+                Direction Générale des Impôts - Immeuble des Finances et du Budget Antaninarenina Antananarivo 101 - BP 863.
+            </span>
+            <h6 class="footer-text">
+                Tél: 22 335 50 / 22 287 08 - Email: <a href="mailto:dgimpots@moov.mg" class="footer-link">dgimpots@moov.mg</a>
+            </h6>
+            <span class="footer-text">
+                Copyright © 2008 - 2024 DGI https://www.impots.mg . Tous droits réservés
+            </span>
+            <br>
+            <h5 class="follow-us">SUIVEZ-NOUS</h5>
+
+            <div class="social-icons">
+                <a href="https://www.facebook.com/www.impots.mg?ref=bookmarks"><img src="{% static 'myapp/images/logo/fb.png' %}" alt="Facebook" class="social-icon"></a>
+                <a href="https://twitter.com/impotsMada"><img src="{% static 'myapp/images/logo/x.png' %}" alt="Twitter" class="social-icon"></a>
+                <a href="https://plus.google.com/u/0/collection/MzP9cB"><img src="{% static 'myapp/images/logo/ggl.png' %}" alt="Google+" class="social-icon"></a>
+            </div>
+        </div>
+    </center>
+    </footer>
+
+</body>
+</html>

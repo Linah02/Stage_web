@@ -9,6 +9,8 @@ from .models import Contribuable
 from .models import Operateur
 import logging
 import random
+#  import requests
+
 from django.core.exceptions import ValidationError
 logger = logging.getLogger(__name__)
 from .models import Genre
@@ -67,6 +69,31 @@ def valider_cin_et_contact(cin, contact):
     
     # Si aucune exception n'a été levée, tout est correct
     return True
+
+
+
+
+# def valider_cin_et_contact_api(cin, contact):
+#     cin = cin.strip()  # Supprimer les espaces
+#     contact = contact.strip()
+    
+#     try:
+#         # Appel à l'API pour obtenir l'opérateur
+#         response = requests.get(f"https://api.exemple.com/operateurs?cin={cin}")
+        
+#         if response.status_code == 200:
+#             data = response.json()  # Récupérer les données JSON
+            
+#             # Vérifier si le contact correspond
+#             if 'contact' not in data or data['contact'] != contact:
+#                 raise ValidationError("Le contact ne correspond pas à ce CIN.")
+#         else:
+#             raise ValidationError("Le CIN n'est pas valide.")
+        
+#     except requests.exceptions.RequestException:
+#         raise ValidationError("Erreur lors de l'accès à l'API.")
+    
+#     return True
 
 def form_part2(request):
     show_modal = False  # Pour contrôler l'affichage du modal de succès

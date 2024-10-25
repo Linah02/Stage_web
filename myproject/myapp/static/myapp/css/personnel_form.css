@@ -1,0 +1,91 @@
+/* Nouveau style pour container pour un alignement vertical */
+.container {
+    display: flex;
+    flex-direction: column; /* Aligne les éléments de haut en bas */
+    justify-content: flex-start; /* Aligne le contenu en haut */
+    max-width: 1500px;
+    padding: 20px;
+    background-color: hsl(0, 0%, 100%);
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Pour le conteneur du formulaire */
+.container_card {
+    margin: 20px auto;
+    width: 1000px; /* Ajuste cette valeur selon la largeur désirée */
+    /* padding: 20px; */
+    /* background-color: #fff; */
+    /* border-radius: 10px; */
+    /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
+}
+
+
+/* Titre du formulaire */
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+/* Sous-titre */
+p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Ajouter de l'espacement entre les champs */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Aligner les boutons */
+button[type="submit"], button[type="button"] {
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    background-color: #bf8d12;
+    color: white;
+}
+
+button[type="button"] {
+    background-color: #ddd;
+    color: #333;
+}
+
+/* Champs du formulaire pour gérer la largeur et les marges */
+.form-control, .form-check-label {
+    width: 100%; /* Pour que les champs prennent toute la largeur */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Alignement des lignes (champs côte à côte) */
+.row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.col-md-6 {
+    flex: 0 0 48%; /* Chaque champ prend environ la moitié de l'espace */
+    margin-bottom: 20px; /* Espacement en bas de chaque colonne */
+}
+
+/* Si tu veux plus de contrôle sur les marges */
+.form-check-inline {
+    margin-right: 10px;
+}
+

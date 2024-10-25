@@ -1,99 +1,45 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vérification du code</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f7f7f7;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
-        input[type="text"] {
-            width: 60%;
-            padding: 10px;
-            font-size: 20px;
-            text-align: center;
-            margin: 15px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        button {
-            padding: 10px 15px;
-            margin: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-email {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-validate {
-            background-color: #a1bb0e;
-            color: white;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        #countdown {
-            font-size: 18px;
-            color: #ff0000;
-        }
-        p.error {
-            color: red;
-        }
-    </style>
-   <script>
-    // Récupérer la variable Django pour savoir si le compte à rebours doit démarrer
-    var startTimer = "{{ start_timer|default:False }}";  // Si `start_timer` n'existe pas, il retourne False
+    <link rel="stylesheet" href="{% static 'myapp/css/double_auth.css' %}">
+    <script>
+        var startTimer = "{{ start_timer|default:False }}";
 
-    // Fonction de compte à rebours
-    function startCountdown(duration) {
-        var countdown = document.getElementById('countdown');
-        var timeLeft = duration;
+        function startCountdown(duration) {
+            var countdown = document.getElementById('countdown');
+            var timeLeft = duration;
 
-        var interval = setInterval(function() {
-            var minutes = Math.floor(timeLeft / 60);
-            var seconds = timeLeft % 60;
-            countdown.textContent = minutes + ":" + (seconds < 10 ? '0' + seconds : seconds);
+            var interval = setInterval(function() {
+                var minutes = Math.floor(timeLeft / 60);
+                var seconds = timeLeft % 60;
+                countdown.textContent = minutes + ":" + (seconds < 10 ? '0' + seconds : seconds);
 
-            timeLeft--;
+                timeLeft--;
 
-            if (timeLeft < 0) {
-                clearInterval(interval);
-                countdown.textContent = "Le code a expiré. Renvoyez un nouveau code.";
+                if (timeLeft < 0) {
+                    clearInterval(interval);
+                    countdown.textContent = "Le code a expiré. Renvoyez un nouveau code.";
+                }
+            }, 1000);
+        }
+
+        window.onload = function() {
+            if (startTimer === "True") {
+                startCountdown(120);
             }
-        }, 1000);
-    }
-
-    // Démarrer le compte à rebours si `startTimer` est vrai
-    window.onload = function() {
-        if (startTimer === "True") {  // Vérifie si la variable Django a été évaluée à vrai
-            startCountdown(120);  // Lancer le compte à rebours de 2 minutes
-        }
-    };
-</script>
+        };
+    </script>
 </head>
 <body>
-
     <div class="container">
         <h2>Vérification du code</h2>
-        <p>Cliquer sur le bouton pour renvoyer l'email de confirmation et commencer la vérification.</p>
+        <p>Cliquer sur le bouton pour renvoyer <span class="highlight-green">l'email de confirmation</span> et commencer la vérification.</p>
+
 
         {% if message %}
         <p>{{ message }}</p>
@@ -107,13 +53,12 @@
             <input type="text" name="code" maxlength="6" placeholder="Entrez le code" />
 
             <div>
-                <button class="btn-email" type="submit" name="send_code">Renvoyer le code</button>
+                <button class="btn-email" type="submit" name="send_code">Renvoyer</button>
                 <button class="btn-validate" type="submit" name="validate_code">Valider</button>
             </div>
         </form>
 
-        <p id="countdown"></p>  <!-- Compte à rebours -->
+        <p id="countdown"></p>
     </div>
-
 </body>
 </html>

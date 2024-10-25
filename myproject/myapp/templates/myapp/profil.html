@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mon Profil{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
+    
+    <style>
+        /* Style pour la page de profil */
+        .profile-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: hsl(0, 0%, 98%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-photo {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .profile-photo img {
+            max-width: 150px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+
+        .profile-details {
+            flex: 2;
+            padding: 20px;
+        }
+
+        .profile-details h2 {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .profile-info {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .profile-info label {
+            font-weight: bold;
+        }
+
+        .btn-modifier {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #178b36;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-modifier:hover {
+            background-color: #068e8c;
+        }
+        .photo-wrapper {
+            height: 200px;
+        text-align: center;
+        margin-bottom: 10px; /* Ajoute un espacement entre l'image et la description */
+    }
+
+.photo-wrapper img {
+    max-width: 150px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+.description {
+    text-align: center; /* Centrer le texte de la description */
+    font-size: 14px; /* Ajuste la taille de la police si nécessaire */
+    height: 300px;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        {% include 'layout/navbar_acceuil.html' %}
+    </header>
+    
+    <div class="page-container">
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                {% include 'layout/sidebar_acceuil.html' %}
+            </aside>
+            
+            <main class="main-content">
+                <div class="profile-container">
+                    <!-- Section photo -->
+                    <div class="profile-photo">
+                        <h2>Photo de Profil</h2>
+                        <div class="photo-wrapper">
+                            <img src="{% static 'myapp/images/LOGO_MEF.jpeg' %}" alt="Photo de profil">
+                        </div>
+                        <div class="description">
+                            <p>Cette section peut contenir une brève description de l'utilisateur ou d'autres informations pertinentes.</p>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- Section détails -->
+                    <div class="profile-details">
+                        <h2>Détails du Contribuable</h2>
+                        <div class="profile-info">
+                            <label>Nom:</label>
+                            <p>RAHARINIRINA </p>
+                        </div>
+                        <div class="profile-info">
+                            <label>Prénom:</label>
+                            <p>Yvette Lina</p>
+                        </div>
+                        <div class="profile-info">
+                            <label>PRENIF:</label>
+                            <p>{{ user.prenif }}</p>
+                        </div>
+                        <div class="profile-info">
+                            <label>Email:</label>
+                            <p>{{ user.email }}</p>
+                        </div>
+                        <div class="profile-info">
+                            <label>Téléphone:</label>
+                            <p>{{ user.telephone }}</p>
+                        </div>
+                        <div class="profile-info">
+                            <label>Adresse:</label>
+                            <p>{{ user.adresse }}</p>
+                        </div>
+                        
+                        <!-- Bouton de modification -->
+                        <a href="#" class="btn-modifier">Modifier Profil</a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <footer>
+        {% include 'layout/footer_acceuil.html' %}
+    </footer>
+</body>
+</html>

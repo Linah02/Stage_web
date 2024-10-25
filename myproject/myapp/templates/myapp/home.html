@@ -1,121 +1,99 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>My app</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'myapp/vendors/feather/feather.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/mdi/css/materialdesignicons.min.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/ti-icons/css/themify-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/typicons/typicons.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/simple-line-icons/css/simple-line-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/css/vendor.bundle.base.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
-    <!-- endinject -->
-    <link rel="shortcut icon" href="{% static 'myapp/images/favicon.png' %}" />
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Page d'Accueil{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
+        <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
+
+      </head>
 <body>
-    {% include 'layout/navbar.html' %}
-    <div class="container-fluid page-body-wrapper">
-        {% include 'layout/sidebar.html' %}
-        <div class="main-panel">
-            <div class="col-12 grid-margin">
-                <div class="card">
-                   <div class="card-body">
-    <h4 class="card-title">Informations personnelles</h4>
+    <header>{% include 'layout/navbar_acceuil.html' %}</header>
+    <div class="page-container">
+        <!-- Sidebar et contenu principal côte à côte -->
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                {% include 'layout/sidebar_acceuil.html' %}
+            </aside>
+
+            <main class="main-content">
+<div class="container">
+    <h2 style="margin-bottom: 1px;">Informations personnelles</h2>
+    <p style="color: rgb(194, 12, 73); margin-top: 1px;">Les champs marqués en *** sont obligatoires</p>
+      
     <form method="post" action="{% url 'home' %}">
         {% csrf_token %}
-        <p style="color: cornflowerblue;"> Les champs marqués en *** sont obligatoires </p>
+        <div class="container_card">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" class="form-control" name="nom" required/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Situation matrimoniale</label>
+                    <select class="form-control" name="situation_matrimoniale" required>
+                        {% for situation in situations %}
+                            <option value="{{ situation.id }}">{{ situation.situation }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Nom</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" name="nom" required/>
-                    </div>
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" class="form-control" name="prenom" />
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Situation matrimoniale</label>
-                    <div class="col-sm-9">
-                        <select class="form-control" name="situation_matrimoniale" required>
-                            {% for situation in situations %}
-                                <option value="{{ situation.id }}">{{ situation.situation }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label>Date de naissance</label>
+                    <input type="date" class="form-control" name="date_naissance" required/>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Prénom</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" name="prenom" />
-                    </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    {% for genre in genres %}
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="genre" value="{{ genre.genre }}" {% if forloop.first %} checked {% endif %} required>
+                            <label class="form-check-label">{{ genre.genre | upper }}</label>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Date de naissance</label>
-                    <div class="col-sm-9">
-                        <input type="date" class="form-control" name="date_naissance" required/>
-                    </div>
+                <div class="form-group">
+                    <label>Lieu de naissance</label>
+                    <input class="form-control" name="lieu_naissance" required/>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Genre</label>
-                    <div class="col-sm-9">
-                        {% for genre in genres %}
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="genre" value="{{ genre.genre }}" {% if forloop.first %} checked {% endif %} required>
-                                <label class="form-check-label">{{ genre.genre | upper }}</label>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Lieu de naissance</label>
-                    <div class="col-sm-9">
-                        <input class="form-control" name="lieu_naissance" required/>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-warning btn-icon-text">Suivant </button>
-        
+
+        <button type="submit" class="btn btn-warning">Suivant</button>
         <button type="button" class="btn btn-light">Annuler</button>
     </form>
 </div>
-                </div>
-            </div>
-        </div>
-    </div>
-   
-    {% include 'layout/footer.html' %}
+</div>
+
+</main>
+</div>
+</div>
+
+<footer>
+    {% include 'layout/footer_acceuil.html' %}
+</footer>
     
-    <!-- plugins:js -->
-    <script src="{% static 'myapp/vendors/js/vendor.bundle.base.js' %}"></script>
-    <script src="{% static 'myapp/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
-    <!-- endinject -->
-    <!-- inject:js -->
-    <script src="{% static 'myapp/js/off-canvas.js' %}"></script>
-    <script src="{% static 'myapp/js/template.js' %}"></script>
-    <script src="{% static 'myapp/js/settings.js' %}"></script>
-    <script src="{% static 'myapp/js/hoverable-collapse.js' %}"></script>
-    <script src="{% static 'myapp/js/todolist.js' %}"></script>
-    <!-- endinject -->
 </body>
 </html>

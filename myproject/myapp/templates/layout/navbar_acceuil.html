@@ -1,0 +1,48 @@
+{% load static %}
+
+<nav class="navbar">
+    <div class="logo">
+        <img src="{% static 'myapp/images/LOGO_MEF.jpeg' %}" alt="Logo">
+    </div>
+    <div class="search-container">
+        <select id="dropdown-search">
+            <option value="">Sélectionnez une option</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select>
+
+        <button id="calendar-btn">🗓️</button>
+
+        <input type="text" id="search-input" placeholder="Recherche...">
+        <button id="search-btn">Rechercher</button>
+    </div>
+    <div class="menu">
+        <ul>
+            <li><a href="{% url 'acceuil' %}">Accueil</a></li>
+            <li><a href="{% url 'acceuil' %}">À propos</a></li>
+            <li><a href="{% url 'acceuil' %}">Contact</a></li>
+            <li><a href="{% url 'home' %}">S'inscrire</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    window.onscroll = function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.pageYOffset > 0) {
+            navbar.classList.add('fixed'); // Ajoute la classe 'fixed' lorsque l'utilisateur fait défiler
+        } else {
+            navbar.classList.remove('fixed'); // Retire la classe 'fixed' quand l'utilisateur est en haut
+        }
+    };
+    $(document).ready(function() {
+    $("#calendar-btn").on("click", function() {
+        $("#search-input").datepicker({
+            showOn: "focus",
+            dateFormat: "mm/dd/yy"
+        }).focus();
+    });
+});
+
+</script>

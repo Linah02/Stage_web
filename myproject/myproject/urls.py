@@ -23,6 +23,12 @@ from myapp.views import  search_province
 from myapp.acceuil_views import acceuil
 from myapp.views import mdp_oubliee
 from myapp.acceuil_views import acceuilCte
+from myapp.acceuil_views import test_acceuil
+from myapp.acceuil_views import home1
+from myapp.acceuil_views import chart
+from myapp.acceuil_views import list_transaction
+from myapp.acceuil_views import profil
+
 from myapp.views import D_authentification
 
 
@@ -34,9 +40,14 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('search_province/', search_province, name='search_province'),
     path('acceuil/', acceuil, name='acceuil'),
+    path('test_acceuil/', test_acceuil, name='test_acceuil'),
     path('mdp_oubliee/', mdp_oubliee, name='mdp_oubliee'),
     path('acceuilCte/', acceuilCte, name='acceuilCte'),
     path('D_authentification/', D_authentification, name='D_authentification'),
+    path('home1/', home1, name='home1'),
+    path('profil/', profil, name='profil'),
+    path('chart/', chart, name='chart'),
+    path('list_transaction/', list_transaction, name='list_transaction'),
     
 
 ]

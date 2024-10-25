@@ -1,0 +1,269 @@
+
+/* Style général pour la barre de navigation */
+/* Style général pour la barre de navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    height: 100px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    background-color: #ffffff;
+    transition: box-shadow 0.3s; /* Pour une transition douce de l'ombre */
+}
+
+/* Navbar fixe avec ombre */
+.navbar.fixed {
+    position: fixed; /* Fixe la navbar en haut */
+    top: 0; /* Positionne la navbar en haut de la page */
+    width: 100%; /* S'assure que la navbar prend toute la largeur */
+    z-index: 1000; /* Assure que la navbar est au-dessus des autres éléments */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre grise */
+}
+
+
+/* Style pour le logo */
+.navbar .logo img {
+    max-width: 280px;
+    height: 100px;
+}
+
+/* Style du menu */
+.navbar .menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+/* Style des liens */
+.navbar .menu ul li {
+    margin-right: 20px;
+}
+
+.navbar .menu ul li a {
+    text-decoration: none; /* Supprimer le soulignement des liens */
+    color: #c61618; /* Couleur des liens par défaut */
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Effet hover pour changer la couleur au survol */
+.navbar .menu ul li a:hover {
+    color: rgb(0, 0, 0); /* Couleur lors du survol */
+}
+
+/* Changement de couleur au clic */
+.navbar .menu ul li a:active {
+    background-color: rgb(0, 0, 0); /* Fond jaune lorsque le lien est cliqué */
+    color: white; /* Le texte devient blanc */
+    border-radius: 5px; /* Ajout d'un arrondi pour un effet de bouton */
+}
+
+/* Style pour la sidebar */
+.sidebar {
+    width: 200px;
+    background-color: #d8d8d8;
+    height: calc(100vh - 100px); /* Prend toute la hauteur de la fenêtre moins la hauteur de la navbar */
+    padding-top: 20px;
+    position: fixed; /* Position fixe */
+    top: 100px; /* Positionne la sidebar juste en dessous de la navbar */
+    left: 0; /* Positionne la sidebar à gauche */
+}
+
+/* Style pour la sidebar */
+.sidebar {
+    width: 200px;
+    background-color: #8fc3c6;
+    height: calc(100vh - 100px); /* Hauteur de la sidebar */
+    padding-top: 20px;
+    position: fixed; /* Position fixe */
+    top: 120px; /* Ajuster la position pour qu'elle soit en dessous de la navbar */
+    left: 0; /* Positionne la sidebar à gauche */
+}
+/* Style pour les icônes de la sidebar */
+.sidebar-icon {
+    margin-right: 10px; /* Espace entre l'icône et le texte */
+    font-size: 20px; /* Taille de l'icône */
+    color: white; /* Couleur de l'icône */
+}
+
+/* Style pour la liste dans la sidebar */
+.sidebar ul {
+    list-style: none; /* Supprime les puces de la liste */
+    padding: 0; /* Supprime le padding par défaut */
+}
+
+.sidebar ul li {
+    margin: 15px 0; /* Espace entre les éléments de la liste */
+}
+
+.sidebar ul li a {
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Supprime le soulignement */
+    padding: 10px; /* Padding autour du texte */
+    display: flex; /* Utilise flexbox pour aligner l'icône et le texte */
+    align-items: center; /* Centre verticalement les éléments */
+}
+
+.sidebar ul li a:hover {
+    background-color: #50989c; /* Change la couleur de fond au survol */
+}
+
+
+
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+
+p {
+
+    font-size: 18px;
+}
+
+
+/* Footer Styles */
+.footer_acceuil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa; /* Couleur de fond du footer */
+    border-top: 1px solid #e7e7e7;
+}
+
+.footer-text {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.footer-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
+.follow-us {
+    color: #5353da;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Social icons styles */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-icon {
+    width: 30px;
+    margin: 0 10px;
+    transition: transform 0.3s;
+}
+
+.social-icon:hover {
+    transform: scale(1.2); /* Légère animation d'agrandissement au survol */
+}
+
+/* Style pour le conteneur de recherche */
+.search-container {
+    display: flex; /* Utiliser flexbox pour aligner les éléments horizontalement */
+    align-items: center; /* Aligner les éléments verticalement */
+    margin-left: 20px; /* Marge pour l'espacement à gauche du logo */
+}
+
+.search-container select,
+.search-container input {
+    margin-right: 10px; /* Marge entre les éléments */
+    padding: 5px; /* Padding pour le confort */
+}
+
+/* Style pour le bouton calendrier */
+#calendar-btn {
+    padding: 5px 10px; /* Padding pour le bouton */
+    cursor: pointer; /* Changer le curseur au survol */
+}
+
+/* Style pour le bouton de recherche */
+#search-btn {
+    padding: 5px 10px; /* Padding pour le bouton */
+    cursor: pointer; /* Changer le curseur au survol */
+}
+
+/* Assure-toi que le body prend tout l'espace sans marge */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.video-container {
+    text-align: center; /* Centre la vidéo */
+    margin: 20px 0; /* Espace autour de la vidéo */
+}
+
+
+  /* Style pour la table de transactions */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th{
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+table td {
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.btn {
+    padding: 5px 10px;
+    background-color: #068e8c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #bf8d12;
+}
+
+.btn-icon {
+    padding: 10px 10px;
+    color: #bf8d12; /* Jaune personnalisé */
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    text-decoration: none;
+}
+
+.btn-icon:hover {
+    background-color: #068e8c;
+}
+

@@ -1,66 +1,38 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>My App</title>
-    {% load static %}
-
-    <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{% static 'myapp/vendors/feather/feather.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/mdi/css/materialdesignicons.min.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/ti-icons/css/themify-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/typicons/typicons.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/simple-line-icons/css/simple-line-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/css/vendor.bundle.base.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
-    
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static 'myapp/images/favicon.png' %}" />
-  </head>
-
-  <body>
-    <!-- Navbar -->
-    {% include 'layout/navbarCte.html' %}
-    <div class="container-fluid page-body-wrapper">
-    
-    <!-- Sidebar -->
-
-    <!-- Main Content Wrapper -->
-    {% include 'layout/sidebarCte.html' %}
-    <div class="main-panel">
-
-<center>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <h1>CIVISME FISCALE</h1>
-</center>
-</div>
-</div>
-
-    <!-- Footer -->
-    {% include 'layout/footer.html' %}
-
-    <!-- JavaScript Libraries -->
-    <script src="{% static 'myapp/vendors/js/vendor.bundle.base.js' %}"></script>
-    <script src="{% static 'myapp/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
-    
-    <!-- Custom JavaScript -->
-    <script src="{% static 'myapp/js/off-canvas.js' %}"></script>
-    <script src="{% static 'myapp/js/template.js' %}"></script>
-    <script src="{% static 'myapp/js/settings.js' %}"></script>
-    <script src="{% static 'myapp/js/hoverable-collapse.js' %}"></script>
-    <script src="{% static 'myapp/js/todolist.js' %}"></script>
-  </body>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Page d'Accueil{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
+</head>
+<body>
+    <header>
+        {% include 'layout/navbar_Cte.html' %}
+    </header>
+    <div class="page-container">
+        <!-- Sidebar et contenu principal côte à côte -->
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                {% include 'layout/sidebar_acceuil.html' %}
+            </aside>
+            <main class="main-content">
+                <h1>Civisme Fiscal</h1>
+                <div class="video-container">
+                    <!-- Remplace 'Musique/7-F.S.C-Tsiky(2022).m4a' par le chemin de ton fichier -->
+                    <!-- <video width="1100" height="315" autoplay loop muted> -->
+                      <video width="1100" height="315" autoplay loop controls>
+                        <source src="{% static 'myapp/video/test_civisme_fiscal.mp4' %}" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture de ce fichier audio.
+                      </video>
+                </div>
+            </main>
+        </div>
+    </div>
+    <footer>
+        {% include 'layout/footer_acceuil.html' %}
+    </footer>
+</body>
 </html>

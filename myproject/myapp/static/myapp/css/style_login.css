@@ -1,0 +1,84 @@
+/* Style général du corps */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Carte de connexion */
+.login-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+}
+
+/* Logo */
+.brand-logo img {
+    margin-bottom: 20px;
+}
+
+/* Formulaire */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.btn-submit {
+    background-color: #8fc3c6;
+    color: white;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-submit:hover {
+    background-color: #c61618;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: rgb(240, 121, 121); /* Rouge pour "Mot de passe oublié" */
+    font-size: 14px;
+}
+
+.signup-link {
+    display: block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #79aee2; /* Bleu pour "S'inscrire" */
+    font-size: 14px;
+}
+
+/* Evite le soulignement des liens sur clic */
+.forgot-password:active, .signup-link:active, 
+.forgot-password:focus, .signup-link:focus {
+    text-decoration: none;
+}
+
+.forgot-password:hover, .signup-link:hover {
+    text-decoration: underline;
+}

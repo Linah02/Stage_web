@@ -1,8 +1,0 @@
-<!-- <div>
-        <a class="navbar-brand brand-logo" href="{% url 'index' %}">
-          <img src="{% static 'myapp/images/logo.svg' %}" alt="logo" />
-        </a>
-        <a class="navbar-brand brand-logo-mini" href="{% url 'index' %}">
-          <img src="{% static 'images/logo-mini.svg' %}" alt="logo-mini" />
-        </a>
-      </div> -->
