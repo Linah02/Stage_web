@@ -49,5 +49,4 @@ urlpatterns = [
     path('chart/', chart, name='chart'),
     path('list_transaction/', list_transaction, name='list_transaction'),
     
-
 ]

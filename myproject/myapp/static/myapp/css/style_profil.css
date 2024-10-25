@@ -1,0 +1,76 @@
+ /* Style pour la page de profil */
+ .profile-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: hsl(0, 0%, 98%);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-photo {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-photo img {
+    max-width: 150px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+.profile-details {
+    flex: 2;
+    padding: 20px;
+}
+
+.profile-details h2 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.profile-info {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.profile-info label {
+    font-weight: bold;
+}
+
+.btn-modifier {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #178b36;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-modifier:hover {
+    background-color: #068e8c;
+}
+.photo-wrapper {
+    height: 200px;
+text-align: center;
+margin-bottom: 10px; /* Ajoute un espacement entre l'image et la description */
+}
+
+.photo-wrapper img {
+max-width: 150px;
+border-radius: 50%;
+border: 2px solid #ddd;
+}
+
+.description {
+text-align: center; /* Centrer le texte de la description */
+font-size: 14px; /* Ajuste la taille de la police si nécessaire */
+height: 300px;
+}

@@ -6,22 +6,100 @@
 <aside class="sidebar">
     <ul>
         <li>
-            <a href="#">
+            <a href="{% url 'profil' %}">
                 <i class="fas fa-tachometer-alt sidebar-icon"></i>
                 Dashboard
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="has-dropdown">
+            <a href="#" onclick="toggleDropdown('historique-dropdown')">
                 <i class="fas fa-history sidebar-icon"></i>
                 Historique
+                <i class="fas fa-caret-down dropdown-icon"></i>
             </a>
+            <!-- Sous-menu pour Historique -->
+            <ul id="historique-dropdown" class="dropdown-menu-sidebar">
+                <li><a href="{% url 'list_transaction' %}">Transaction</a></li>
+                <li><a href="#">Détail</a></li>
+            </ul>
         </li>
-        <li>
-            <a href="#">
+        <li class="has-dropdown">
+            <a href="#" onclick="toggleDropdown('chart-dropdown')">
                 <i class="fas fa-chart-bar sidebar-icon"></i>
                 Chart
+                <i class="fas fa-caret-down dropdown-icon"></i>
             </a>
+            <!-- Sous-menu pour Chart -->
+            <ul id="chart-dropdown" class="dropdown-menu-sidebar">
+                <li><a href="{% url 'chart' %}">Vue d'ensemble</a></li>
+                <li><a href="#">Détail</a></li>
+            </ul>
         </li>
     </ul>
 </aside>
+
+<style>
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .has-dropdown {
+        position: relative;
+    }
+
+    .dropdown-menu-sidebar {
+        display: none;
+        background-color: #8fc3c6;
+        padding-left: 15px;
+        list-style-type: none;
+        margin-top: 5px;
+    }
+
+    .dropdown-menu-sidebar li a {
+        color: #0c0c0c;
+        text-decoration: none;
+        font-size: 14px;
+        padding: 5px 0;
+        display: block;
+    }
+
+    .dropdown-icon {
+        margin-left: auto;
+    }
+
+    .sidebar ul > li > a {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .sidebar ul > li {
+        padding: 5px 0;
+    }
+</style>
+
+<script>
+    function toggleDropdown(menuId) {
+        const dropdownMenu = document.getElementById(menuId);
+
+        // Ferme les autres menus déroulants
+        document.querySelectorAll('.dropdown-menu-sidebar').forEach(menu => {
+            if (menu.id !== menuId) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // Bascule l'affichage du menu déroulant sélectionné
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Ferme le menu déroulant si l'utilisateur clique en dehors
+    window.onclick = function(event) {
+        if (!event.target.closest('.has-dropdown')) {
+            document.querySelectorAll('.dropdown-menu-sidebar').forEach(menu => menu.style.display = 'none');
+        }
+    };
+</script>

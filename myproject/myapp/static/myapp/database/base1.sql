@@ -11,6 +11,7 @@ create table SIT_MATRIM(
 );
 
 -- Table demandes
+-- create table DEMANDES(
 CREATE TABLE CONTRIBUABLE(
     ID_CONTRIBUABLE SERIAL PRIMARY KEY, -- Gestion de la clé primaire avec SERIAL
     DM_CIN VARCHAR(15), -- Numéro de carte d'identité nationale (CIN)
@@ -39,8 +40,7 @@ CREATE TABLE CONTRIBUABLE(
 
  
 -- sans commercial
--- create table ACTIVITY(
-create table DEMANDES(
+create table ACTIVITY(
     ID_ACTIVITY SERIAL PRIMARY KEY, -- Gestion de la clé primaire avec SERIAL
     ID_CONTRIBUABLE int REFERENCES CONTRIBUABLE(ID_CONTRIBUABLE),
     CREATE_DATE DATE -- Date de création de la demande
@@ -88,19 +88,6 @@ create table DEMANDES(
     RJT_CODE INTEGER REFERENCES MOTIF_REJET(RJT_CODE), -- Code de motif de rejet, se réfère à la table MOTIF_REJET
     DM_MOTIF_REJET VARCHAR(200), -- Motif du rejet de la demande
 );
-
-
--- create table demande(activity_contribuable)
--- CREATE TABLE DEMANDES(
---     ID_DEMANDE SERIAL PRIMARY KEY, -- Gestion de la clé primaire avec SERIAL
---     ID_ACTIVITY int REFERENCES ACTIVITY(ID_ACTIVITY),
---     ID_CONTRIBUABLE int REFERENCES CONTRIBUABLE(ID_CONTRIBUABLE),
---     CREATE_DATE DATE -- Date de création de la demande
--- );
-
-
-
-
 
 
 -- Create table Fokontany
@@ -164,6 +151,14 @@ create table operateur(
     cin VARCHAR(220),
     contact VARCHAR(220)
 );
+
+
+-- 
+CREATE TABLE TRANSACTION(
+    id serial primary key not null,
+       
+);
+
 
 
 -- Creta table Centre_fiscal

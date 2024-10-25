@@ -22,14 +22,99 @@
     </div>
     <div class="menu">
         <ul>
-            <li><a href="#"><i class="fas fa-bell"></i></a></li> <!-- Icône notification -->
-            <li><a href="#"><i class="fas fa-envelope"></i></a></li> <!-- Icône message -->
-            <li><a href="#"><i class="fas fa-user"></i></a></li> <!-- Icône profil -->
+            <!-- Menu pour les notifications -->
+            <li class="notification-icon" onclick="toggleDropdown('notification-dropdown')">
+                <a href="#"><i class="fas fa-bell"></i></a>
+                <div id="notification-dropdown" class="dropdown-menu">
+                    <h4>Notifications</h4>
+                    <a href="#">• Expéditeur 1 :<class  style="color: rgb(0, 0, 0);">Raison de la notification</class> </a>
+                    <a href="#">• Expéditeur 2 : <class  style="color: rgb(0, 0, 0);">Raison de la notification</class></a>
+                </div>
+            </li>
+            <!-- Menu pour les messages -->
+            <li class="message-icon" onclick="toggleDropdown('message-dropdown')">
+                <a href="#"><i class="fas fa-envelope"></i></a>
+                <div id="message-dropdown" class="dropdown-menu">
+                    <h4>Messages</h4>
+                    <a href="#">• Expéditeur 1 : <class  style="color: rgb(0, 0, 0);">Contenu du message</class></a>
+                    <a href="#">• Expéditeur 2 : <class  style="color: rgb(0, 0, 0);">Contenu du message</class></a>
+                </div>
+            </li>
+            <!-- Menu pour le profil -->
+            <li class="profile-icon" onclick="toggleDropdown('profile-dropdown')">
+                <a href="#"><i class="fas fa-user"></i></a>
+                <div id="profile-dropdown" class="dropdown-menu">
+                    <a href="{% url 'profil' %}">Voir Profil</a>
+                    <a href="#">Déconnexion</a>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>
 
+<style>
+    .notification-icon, .message-icon, .profile-icon {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        min-width: 200px;
+        padding: 10px 0;
+        z-index: 1000;
+    }
+
+    .dropdown-menu h4 {
+        text-align: center;
+        margin: 0;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 10px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .dropdown-menu a:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
 <script>
+    // Fonction pour basculer l'affichage d'un menu déroulant spécifique
+    function toggleDropdown(menuId) {
+        const dropdownMenu = document.getElementById(menuId);
+        // Fermer tous les autres menus
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu !== dropdownMenu) menu.style.display = 'none';
+        });
+        // Basculer l'affichage du menu sélectionné
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Ferme tous les menus déroulants si l'utilisateur clique en dehors
+    window.onclick = function(event) {
+        if (!event.target.closest('.notification-icon') && 
+            !event.target.closest('.message-icon') && 
+            !event.target.closest('.profile-icon')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.style.display = 'none');
+        }
+    };
+
     window.onscroll = function() {
         const navbar = document.querySelector('.navbar');
         if (window.pageYOffset > 0) {
