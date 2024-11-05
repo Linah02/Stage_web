@@ -33,10 +33,10 @@ class Contribuable(models.Model):
     propr_nif = models.CharField(max_length=10, null=True)  # Numéro d'identification fiscale
     statistic_no = models.CharField(max_length=21, null=True)  # Numéro statistique
     statistic_date = models.DateField(null=True)  # Date d'enregistrement statistique
-    photo = models.CharField(max_length=200, null=True)  # Photo du demandeur
+    photo = models.ImageField(upload_to='images/faces/', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.nom} {self.prenom}'
+        return f'{self.nom} {self.prenom} {self.photo.name if self.photo else 'No Image'}'
 
 class Operateur(models.Model):
     cin = models.CharField(max_length=15)
@@ -104,6 +104,71 @@ class Fokontany(models.Model):
     def __str__(self):
         return self.fkt_desc
 
+class Logiciel(models.Model):
+    logiciel = models.CharField(max_length=50)  # SURF/SIGTAS/HETRAONLINE
+
+    def __str__(self):
+        return self.logiciel
+
+class ModePaiement(models.Model):
+    sens = models.CharField(max_length=100)  # depot, declaration, espece, virement
+
+    def __str__(self):
+        return self.sens
+
+class NumImpot(models.Model):
+    impot = models.CharField(max_length=200)  # IRSA=5, IR=10, IS=15, AMENDE=43, PENALITE=44
+    numero = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.impot} ({self.numero})"
+
+class CentralRecette(models.Model):
+    id_contribuable = models.ForeignKey("Contribuable", on_delete=models.CASCADE)
+    id_centre_recette = models.CharField(max_length=200)  # NIF+QUIT+CENTRE
+    regisseur = models.CharField(max_length=50, null=True, blank=True, default=None)
+    logiciel = models.ForeignKey(Logiciel, on_delete=models.CASCADE, null=True, blank=True)
+    ref_trans = models.CharField(max_length=60, null=True, blank=True)
+    ref_reglement = models.CharField(max_length=60, null=True, blank=True)
+    daty = models.DateField(null=True, blank=True)
+    mouvement = models.CharField(max_length=1, default='0')
+    moyen_paiement = models.CharField(max_length=2, null=True, blank=True, default=None)
+    rib = models.CharField(max_length=30, null=True, blank=True)
+    raison_sociale = models.CharField(max_length=250, null=True, blank=True)
+    nimp = models.ForeignKey(NumImpot, on_delete=models.CASCADE, null=True, blank=True)  # N° impôts
+    numrec = models.IntegerField(null=True, blank=True)  # N° de créance
+    libelle = models.CharField(max_length=20, null=True, blank=True)
+    flag = models.CharField(max_length=1, default='N')
+    date_debut = models.DateField(null=True, blank=True)
+    date_fin = models.DateField(null=True, blank=True)
+    periode = models.IntegerField(default=1)  # Période d’impôts (1 ou 2)
+    periode2 = models.CharField(max_length=10, null=True, blank=True)
+    mnt_ap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)  # Montant à payer
+    base = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)  # Base de calcul
+    imp_detail = models.CharField(max_length=200, null=True, blank=True)  # Nature des impôts
+    da = models.IntegerField(default=0)  # Début d’activité (1/0)
+    banque = models.CharField(max_length=75, null=True, blank=True)
+    annee_recouvrement = models.IntegerField(null=True, blank=True)  # Date de recouvrement
+    code_bureau = models.CharField(max_length=250, null=True, blank=True)  # Code unité opérationnelle
+    libelle_bureau = models.CharField(max_length=250, null=True, blank=True)  # Centre fiscal
+
+    def __str__(self):
+        return f"Transaction {self.id_transaction} - Contribuable {self.id_contribuable}"
+
+
+class Paiement(models.Model):
+    id_contribuable = models.ForeignKey("Contribuable", on_delete=models.CASCADE)
+    central_recette = models.ForeignKey(CentralRecette, on_delete=models.CASCADE)
+    mode_paiement = models.ForeignKey(ModePaiement, on_delete=models.CASCADE)
+    n_quit = models.CharField(max_length=50)  # Numéro quittance de paiement
+    montant = models.DecimalField(max_digits=20, decimal_places=2)  # Montant à payer
+    date_paiement = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Paiement {self.n_quit} - Contribuable {self.id_contribuable}"
+
+
+
 class FokontanyView(models.Model):
     fkt_no = models.IntegerField(primary_key=True)
     fkt_desc = models.CharField(max_length=255)
@@ -136,3 +201,73 @@ class FokontanyView(models.Model):
     class Meta:
         managed = False  # Indique à Django de ne pas essayer de créer ou de modifier cette table
         db_table = 'v_getfokontany'
+
+class VueTransactionsParQuitEtContribuable(models.Model):
+    contribuable = models.IntegerField()  # Changez cela si c'est juste un ID
+    n_quit = models.CharField(max_length=50, primary_key=True)  # Numéro quittance comme clé primaire
+    mont_ap = models.DecimalField(max_digits=20, decimal_places=2)  # Montant à payer
+    total_payee = models.DecimalField(max_digits=20, decimal_places=2)  # Total payé
+    reste_ap = models.DecimalField(max_digits=20, decimal_places=2)  # Reste à payer
+
+    class Meta:
+        managed = False  # Indique que ce modèle ne gère pas les migrations
+        db_table = 'vue_transactions_par_quit_et_contribuable' 
+
+
+class VueSommeParContribuableParAnnee(models.Model):
+    contribuable = models.IntegerField()
+    annee = models.IntegerField()
+    total_mnt_ver = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        managed = False  # Indique que Django ne doit pas gérer les migrations pour ce modèle
+        db_table = 'vue_somme_par_contribuable_par_annee'  # Nom de votre vue dans la base de données
+        unique_together = (('contribuable', 'annee'),)  # Si vous voulez traiter ce couple comme unique
+
+
+
+
+class VueRecouvrementsEtPaiementsParAnnee(models.Model):
+    contribuable = models.IntegerField()  # Utilisez IntegerField pour l'ID du contribuable
+    annee_recouvrement = models.IntegerField()  # Pour l'année de recouvrement
+    total_recouvrement_annuel = models.DecimalField(max_digits=10, decimal_places=2)  # Montant total des recouvrements
+    total_paye_annuel = models.DecimalField(max_digits=10, decimal_places=2)  # Montant total payé
+
+    class Meta:
+        managed = False  # Indique que Django ne gère pas ce modèle (pas de migrations)
+        db_table = 'vue_recouvrements_et_paiements_par_annee'  # Nom de la vue dans la base de données
+
+
+
+class TransactionDetail(models.Model):
+    contribuable = models.IntegerField()  # Utilisez IntegerField pour l'ID du contribuable
+    n_quit = models.CharField(max_length=50)
+    date_paiement = models.DateField()
+    annee_de_paiement = models.IntegerField()
+    annee_recouvrement = models.IntegerField()
+    date_debut = models.DateField()
+    date_fin = models.DateField()
+    base = models.DecimalField(max_digits=15, decimal_places=2)
+    mnt_ap = models.DecimalField(max_digits=15, decimal_places=2)
+    nimp = models.IntegerField()
+    imp_detail = models.CharField(max_length=200)
+    numero = models.CharField(max_length=50)
+    impot = models.CharField(max_length=50)
+    sens = models.CharField(max_length=50)
+    logiciel = models.CharField(max_length=100)
+    montant = models.DecimalField(max_digits=15, decimal_places=2)
+
+
+    class Meta:
+        managed = False  # Indique que Django ne doit pas essayer de créer ou modifier cette table
+        db_table = 'vue_detail_transactions_par_quit_et_contribuable'  # Nom de la vue dans la base de données
+        verbose_name = 'Transaction Detail'
+        verbose_name_plural = 'Transaction Details'
+
+    def __str__(self):
+        return f"Contribuable {self.contribuable} - Quittance {self.n_quit}"
+
+
+    #      // type: 'doughnut',  // ou autre type de graphique
+    # // type: 'line',  // ou autre type de graphique
+    # // type: 'pie',  // ou autre type de graphique

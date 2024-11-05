@@ -22,8 +22,8 @@
             <main class="main-content">
 <div class="container">
     <h2 style="margin-bottom: 1px;">Informations personnelles</h2>
-    <p style="color: rgb(194, 12, 73); margin-top: 1px;">Les champs marqués en *** sont obligatoires</p>
-      
+    <p style="color: rgb(99, 141, 161); margin-top: 1px;">Les champs marqués en <class  style="color: red;">***</class> sont obligatoires</p>
+  
     <form method="post" action="{% url 'home' %}">
         {% csrf_token %}
         <div class="container_card">
@@ -65,13 +65,16 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Genre</label>
-                    {% for genre in genres %}
-                        <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" name="genre" value="{{ genre.genre }}" {% if forloop.first %} checked {% endif %} required>
-                            <label class="form-check-label">{{ genre.genre | upper }}</label>
-                        </div>
-                    {% endfor %}
+                    <div class="radio-group">
+                        {% for genre in genres %}
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="genre" value="{{ genre.genre }}" {% if forloop.first %} checked {% endif %} required>
+                                <label class="form-check-label">{{ genre.genre | upper }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
+                
             </div>
             <div class="col-md-6">
                 <div class="form-group">

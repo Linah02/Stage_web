@@ -10,13 +10,15 @@ from .models import Operateur
 import logging
 import random
 #  import requests
-
+from django import forms
+import os
 from django.core.exceptions import ValidationError
 logger = logging.getLogger(__name__)
 from .models import Genre
 from django.contrib import messages
 from django.http import JsonResponse
 from .models import FokontanyView
+from .forms import ContribuableForm
 from datetime import datetime, timedelta
 
 
@@ -292,3 +294,68 @@ def GenererPRENIFetMdp(cin):
         mot_de_passe += str(somme_pair % 10)
 
     return prenif, mot_de_passe
+
+# def modifier_contribuable(request):
+#     id_contribuable = request.session.get('id_contribuable')  # Récupère l'ID depuis la session
+#     if not id_contribuable:
+#         messages.error(request, 'Vous devez vous connecter pour accéder à cette page.')
+#         return redirect('connexion')  # Assurez-vous que cette vue renvoie un HttpResponse
+
+#     contribuable = get_object_or_404(Contribuable, id=id_contribuable)
+
+#     if request.method == 'POST':
+#         form = ContribuableForm(request.POST, request.FILES, instance=contribuable)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Profil modifié avec succès.')
+#             return redirect('home')  # Redirection vers une page valide après le succès
+#     else:
+#         form = ContribuableForm(instance=contribuable)
+
+#     return render(request, 'myapp/profil.html', {'form': form, 'contribuable': contribuable})
+def modifier_contribuable(request):
+    # Définition directe de l'ID du contribuable
+    id_contribuable = 6  
+
+    # Vérifier si l'ID est valide
+    contribuable = get_object_or_404(Contribuable, id=id_contribuable)
+
+    if request.method == 'POST':
+        form = ContribuableForm(request.POST, request.FILES, instance=contribuable)
+        if form.is_valid():
+            form.save()
+            # messages.success(request, 'Profil modifié avec succès.')
+            return redirect('profil')  # Redirection après la sauvegarde
+        else:
+            print("Erreurs de validation:", form.errors)  # Affiche les erreurs de validation
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Erreur dans {field}: {error}")
+
+    else:
+        form = ContribuableForm(instance=contribuable)
+    return render(request, 'myapp/profil.html', {
+        'form': form,
+        'contribuable': contribuable,
+        'MEDIA_URL': settings.MEDIA_URL
+    })
+    # return render(request, 'myapp/profil.html', {'form': form, 'contribuable': contribuable})
+
+
+class ContribuableForm(forms.ModelForm):
+    class Meta:
+        model = Contribuable
+        fields = ['nom', 'prenom', 'email', 'contact', 'mot_de_passe', 'fokontany', 'photo']  # Assurez-vous que les champs sont corrects
+
+    # Rendre 'mot_de_passe' et 'photo' optionnels
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['mot_de_passe'].required = False
+        self.fields['fokontany'].required = False
+        self.fields['photo'].required = False
+
+def deconnexion(request):
+    logout(request)  # Déconnecte l'utilisateur
+    request.session.flush()  # Efface toutes les données de la session
+    messages.success(request, 'Déconnexion réussie.')
+    return redirect('home')  # Redirige vers la page d'accueil

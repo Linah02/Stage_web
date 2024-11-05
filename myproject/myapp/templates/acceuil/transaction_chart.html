@@ -53,8 +53,7 @@
                     <div class="chart-details">
                         <h3>Détails de la Chart</h3>
                         <p>Voici les informations complémentaires sur le graphique.</p>
-                        <p>Voici les informations complémentaires sur le graphique.</p>
-                        <p>Voici les informations complémentaires sur le graphique.</p>
+                        <ul id="detailsList"></ul> <!-- Conteneur pour la liste -->
                     </div>
                 </div>
             </main>
@@ -63,41 +62,91 @@
     <footer>
         {% include 'layout/footer_acceuil.html' %}
     </footer>
-
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Sélectionne le canvas et initialise le contexte 2D
-    const ctx = document.getElementById('transactionsChart').getContext('2d');
-const transactionsChart = new Chart(ctx, {
-    // type: 'doughnut',  // ou autre type de graphique
-    // type: 'line',  // ou autre type de graphique
-    // type: 'pie',  // ou autre type de graphique
-    type: 'bar',  // ou autre type de graphique
-    data: {
-        labels: ['2020', '2021', '2022'],
-        datasets: [{
-            label: 'Montant des achats',
-            data: [15000, 20000, 12000],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(75, 192, 192, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(75, 192, 192, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: false,  // Désactive la réactivité
-        maintainAspectRatio: false,  // Facultatif : désactive le ratio aspect si tu veux plus de contrôle
-    }
-});
-</script>
+    // Récupérer les données depuis le backend
+    const sommes = JSON.parse('{{ sommes|safe }}');  // `sommes` est maintenant en JSON.
+    const labels = sommes.map(s => s.annee); // Extraire les années comme étiquettes
+    const dataMontants = sommes.map(s => s.total_mnt_ver); // Extraire les montants pour les données
+    const detailsList = document.getElementById('detailsList');
 
+        // Itération sur les données et création d'éléments de liste
+        sommes.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Contribuable: ${item.contribuable}, Année: ${item.annee}, Montant: ${item.total_mnt_ver}`;
+            detailsList.appendChild(listItem);
+        });
+    // Initialiser le graphique
+    const ctx = document.getElementById('transactionsChart').getContext('2d');
+    const transactionsChart = new Chart(ctx, {
+        type: 'bar',
+        // type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Montant des achats',
+                data: dataMontants,
+                backgroundColor: [
+                    '#f0c75e', // jaune clair
+                    '#e75d5e', // rouge clair
+                    '#5ac46a', // vert clair
+                    '#3eb4b1', // bleu-vert clair
+                    '#b3d9da', // bleu clair
+                    '#f0c75e', // jaune clair
+                    '#e75d5e', // rouge clair
+                    '#5ac46a', // vert clair
+                    '#3eb4b1', // bleu-vert clair
+                    '#b3d9da', // bleu clair
+                    '#f0c75e', // jaune clair
+                    '#e75d5e', // rouge clair
+                    '#5ac46a', // vert clair
+                    '#3eb4b1', // bleu-vert clair
+                    '#b3d9da', // bleu clair
+
+                    'rgba(255, 159, 177, 0.2)',
+                    'rgba(143, 58, 72, 0.2)',
+                    'rgba(122, 232, 145, 0.2)',
+                    'rgba(255, 159, 177, 0.2)',
+                    'rgba(143, 58, 72, 0.2)',
+                    'rgba(122, 232, 145, 0.2)',
+                    'rgba(255, 159, 177, 0.2)',
+                    'rgba(143, 58, 72, 0.2)',
+                    'rgba(122, 232, 145, 0.2)'
+            
+                ],
+                borderColor: [
+                    '#f0c75e', // jaune clair
+                    '#e75d5e', // rouge clair
+                    '#5ac46a', // vert clair
+                    '#3eb4b1', // bleu-vert clair
+                    '#b3d9da', // bleu clair
+                    '#f0c75e', // jaune clair
+                    '#e75d5e', // rouge clair
+                    '#5ac46a', // vert clair
+                    '#3eb4b1', // bleu-vert clair
+                    '#b3d9da', // bleu clair
+                    '#f0c75e', // jaune clair
+                    '#e75d5e', // rouge clair
+                    '#5ac46a', // vert clair
+                    '#3eb4b1', // bleu-vert clair
+                    '#b3d9da', // bleu clair
+
+                    'rgba(255, 159, 177, 1)',
+                    'rgba(143, 58, 72, 1)',
+                    'rgba(122, 232, 145, 1)',
+                    'rgba(255, 159, 177, 1)',
+                    'rgba(143, 58, 72, 1)',
+                    'rgba(122, 232, 145, 1)'
+                ],
+     borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+        }
+    });
+</script>
 </html>

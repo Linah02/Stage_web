@@ -1,20 +1,51 @@
 {% load static %}
+<style>
+    .navbar .search-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 10px 0;
+}
 
+#dropdown-search, #search-input, #search-btn {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #b9e7f3;
+    width: 150px;
+    border-radius: 5px;
+}
+
+#dropdown-search, #search-input {
+
+    flex: 1; /* Pour que le menu déroulant et le champ de recherche prennent plus d'espace */
+}
+
+#search-btn {
+    background-color: #ffffff;
+    border:solid 1px #b9e7f3;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+#search-btn:hover {
+    background-color: #b9e7f3;
+    color: #ffffff;
+}
+
+</style>
 <nav class="navbar">
     <div class="logo">
         <img src="{% static 'myapp/images/LOGO_MEF.jpeg' %}" alt="Logo">
     </div>
     <div class="search-container">
         <select id="dropdown-search">
-            <option value="">Sélectionnez une option</option>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+            <option value="">Lieu</option>
+            <option value="option1">Antananarivo</option>
+            <option value="option2">Majunga</option>
+            <option value="option3">Tamatave</option>
+            <option value="option3">Fort Dauphin</option>
         </select>
-
-        <button id="calendar-btn">🗓️</button>
-
-        <input type="text" id="search-input" placeholder="Recherche...">
+        <input type="date" id="search-input" placeholder="Recherche...">
         <button id="search-btn">Rechercher</button>
     </div>
     <div class="menu">
@@ -36,13 +67,4 @@
             navbar.classList.remove('fixed'); // Retire la classe 'fixed' quand l'utilisateur est en haut
         }
     };
-    $(document).ready(function() {
-    $("#calendar-btn").on("click", function() {
-        $("#search-input").datepicker({
-            showOn: "focus",
-            dateFormat: "mm/dd/yy"
-        }).focus();
-    });
-});
-
 </script>

@@ -6,9 +6,9 @@
 <aside class="sidebar">
     <ul>
         <li>
-            <a href="{% url 'profil' %}">
-                <i class="fas fa-tachometer-alt sidebar-icon"></i>
-                Dashboard
+            <a href="{% url 'acceuil' %}">
+                <i class="fas fa-home sidebar-icon"></i>
+                Accueil
             </a>
         </li>
         <li class="has-dropdown">
@@ -20,7 +20,6 @@
             <!-- Sous-menu pour Historique -->
             <ul id="historique-dropdown" class="dropdown-menu-sidebar">
                 <li><a href="{% url 'list_transaction' %}">Transaction</a></li>
-                <li><a href="#">Détail</a></li>
             </ul>
         </li>
         <li class="has-dropdown">
@@ -31,10 +30,17 @@
             </a>
             <!-- Sous-menu pour Chart -->
             <ul id="chart-dropdown" class="dropdown-menu-sidebar">
-                <li><a href="{% url 'chart' %}">Vue d'ensemble</a></li>
-                <li><a href="#">Détail</a></li>
+                <li><a href="{% url 'chart' %}">Montant par année de paiement</a></li>
+                <li><a href="{% url 'chart_line' %}">Montant par année de recouvrement</a></li>
             </ul>
         </li>
+        <li>
+            <a href="#" class="btn-deconnexion">
+                <i class="fas fa-sign-out-alt sidebar-icon"></i>
+                Déconnexion
+            </a>
+        </li>
+        
     </ul>
 </aside>
 
@@ -79,6 +85,22 @@
     .sidebar ul > li {
         padding: 5px 0;
     }
+    /* Style pour le bouton de déconnexion */
+.btn-deconnexion {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: white;
+    background-color: #ff4b4b; /* Rouge pour signifier la déconnexion */
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-deconnexion:hover {
+    background-color: #ff3333; /* Rouge plus foncé pour l'effet hover */
+}
+
 </style>
 
 <script>

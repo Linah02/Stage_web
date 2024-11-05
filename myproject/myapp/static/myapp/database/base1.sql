@@ -14,6 +14,7 @@ create table SIT_MATRIM(
 -- create table DEMANDES(
 CREATE TABLE CONTRIBUABLE(
     ID_CONTRIBUABLE SERIAL PRIMARY KEY, -- Gestion de la clé primaire avec SERIAL
+    CREATE_DATE DATE DEFAULT datenow -- Date de création de la demande
     DM_CIN VARCHAR(15), -- Numéro de carte d'identité nationale (CIN)
     PROPR_NAME VARCHAR(100), -- Nom du propriétaire
     SEX INTEGER REFERENCES genre(id), -- Sexe du demandeur (1 pour homme, 2 pour femme)
@@ -29,16 +30,15 @@ CREATE TABLE CONTRIBUABLE(
     BANK_ACCT_NO VARCH  AR(250), -- Numéro de compte bancaire de l'entreprise
     PASSEPORT VARCHAR(20), -- Numéro de passeport du demandeur
     DM_REF VARCHAR(15), -- Référence de la demande
-    PROPR_NIF VARCHAR(10), -- Numéro d'identification fiscale du propriétaire 
+    PROPR_PRENIF VARCHAR(10), -- Numéro d'identification fiscale du propriétaire 
     STATISTIC_NO VARCHAR(21), -- Numéro statistique
     STATISTIC_DATE DATE, -- Date d'enregistrement statistique
     FKT_NO INTEGER REFERENCES FOKONTANY(FKT_NO), -- Numéro de fokontany, se réfère à la table FOKONTANY
     PASSWORD VARCHAR(50),
     PHOTO VARCHAR(200)
-
 );
 
- 
+
 -- sans commercial
 create table ACTIVITY(
     ID_ACTIVITY SERIAL PRIMARY KEY, -- Gestion de la clé primaire avec SERIAL
@@ -153,10 +153,84 @@ create table operateur(
 );
 
 
--- 
-CREATE TABLE TRANSACTION(
-    id serial primary key not null,
-       
+
+-- CREATE TABLE NOTIFICATIONS(
+--     id serial primary key,
+--     raison int,
+--     date 
+-- );
+
+create table messages(
+    id serial primary key,
+    prenif int
+    question text,
+    reponse text default null,
+    date_question datetime,
+    date_reponse datetime,
+);
+
+
+--
+
+create table logiciel(
+    id serial primary key,
+    logiciel VARCHAR(50) --SURF/SIGTAS/HETRAONLINE
+);
+
+create table MODE_PAIEMENT(
+    id serial primary key,
+    sens VARCHAR(100)--depot,declaration,espece,virement
+);
+
+create table NUM_IMPOT(
+    id serial primary key,
+    IMPOT VARCHAR(200),--IRSA=5,IR=10,IS=15,AMENDE=43,PENALITE=44
+    numero int,
+);
+
+
+CREATE TABLE CENTRAL_RECETTE(
+    ID_TRANSACTION serial primary key not null,
+    ID_CONTRIBUABLE int REFERENCES CONTRIBUABLE(id),
+    ID_CENTRE_RECETTE VARCHAR(200),--NIF+QUIT+CENTRE
+    REGISSEUR VARCHAR(50) DEFAULT Null,
+    LOGICIEL INT REFERENCES logiciel(id),
+    REF_TRANS VARCHAR(60),--
+    REF_REGLEMENT VARCHAR(60),--
+    DATY DATE,--date 
+    MOUVEMENT VARCHAR(1) DEFAULT 0,--1/0
+    MOYEN_PAIEMENT VARCHAR(2) default NULL,
+    RIB VARCHAR(30),
+    PRENIF VARCHAR(20),
+    RAISON_SOCIALE VARCHAR(250),
+    NIMP int REFERENCES NUM_IMPOT(id),--N° impots
+    NUMREC INT,--N° de créance
+    LIBELLE VARCHAR(20),--libelle NIMP
+    FLAG VARCHAR(1) DEFAULT 'N',
+    DATE_DEBUT DATE,--date  début de paiement
+    DATE_FIN DATE,--date fin de paiement
+    PERIODE int default 1,--periode impots (1 ou 2)
+    PERIODE2 VARCHAR(10), 
+    MNT_AP DOUBLE PRECISION,--montant à payer
+    BASE DOUBLE PRECISION,--BASE DE CALCUL AU LIEU DE CA
+    IMP_DETAIL VARCHAR(200),--Nature impôts : declaration,taxation d'office,PV,Titre de perception
+    DA int default 0,--Début d'activité 1/0
+    BANQUE VARCHAR(75),
+    ANNEE_RECOUVREMENT int,--date de recouvrement
+    CODE_BUREAU VARCHAR(250),--CODE UNITE OPERATIONNEL()
+    LIBELLE_BUREAU VARCHAR(250),--Cetre FISCAL
+);
+
+
+
+
+create table paiement(
+    ID_CONTRIBUABLE int,
+    CENTRAL_RECETTE int REFERENCES CENTRAL_RECETTE(id),
+    MODE_PAIEMENT int REFERENCES MODE_PAIEMENT(id),
+    N_QUIT VARCHAR(50),--Numéro quittance de paiment(N° generer par debut de paiement mais utilisé si on paie encore pour même transaction)
+    MONTANT DOUBLE PRECISION,--montant à payer
+    date_paiement default datenow,
 );
 
 
@@ -265,6 +339,7 @@ CREATE UNIQUE INDEX PK_AUTHORITY ON AUTHORITY (ID_AUTHORITY);
 
 
 describe:
+
 SELECT 
     column_name, 
     data_type, 
@@ -273,3 +348,23 @@ FROM
     information_schema.columns 
 WHERE 
     table_name = 'myapp_contribuable';
+
+
+UPDATE myapp_centralrecette
+SET 
+    date_debut = '2023-01-01',
+    date_fin = '2023-12-31',
+    imp_detail = 'Taxation d ''office'
+WHERE 
+    id_transaction IN (2, 3);
+
+
+
+UPDATE myapp_paiement
+SET 
+    date_paiement ='2025-04-01'
+WHERE 
+    id  =6;
+
+UPDATE myapp_centralrecette SET nimp_id =5 WHERE id  =2;
+

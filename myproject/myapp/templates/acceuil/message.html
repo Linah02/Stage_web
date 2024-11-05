@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Page de Discussion{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
+    <style>
+        /* Styles pour la page de discussion */
+        .container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            position: relative; /* Ajouté pour positionner les dates */
+        }
+        .message-contribuable {
+            background-color: #f1f1f1;
+            text-align: left;
+        }
+        .message-operator {
+            background-color: #e2f0d9;
+            text-align: right;
+        }
+        .message-info {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .message-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .message-date {
+            position: absolute; /* Positionné pour la date */
+            font-size: 10px;
+        }
+        .date-contribuable {
+            left: 10px; /* Position en bas à gauche */
+            bottom: 5px;
+        }
+        .date-operator {
+            right: 10px; /* Position en bas à droite */
+            bottom: 5px;
+        }
+        .message-input {
+            display: flex;
+            flex-direction: column;
+        }
+        .message-input textarea {
+            resize: none;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .btn-envoyer {
+            align-self: flex-end;
+            padding: 10px 15px;
+            background-color: #178b36;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-envoyer:hover {
+            background-color: #178b36;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% include 'layout/navbar_Cte.html' %}
+    </header>
+    <div class="page-container">
+        <!-- Sidebar et contenu principal côte à côte -->
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                {% include 'layout/sidebar_acceuil.html' %}
+            </aside>
+            <main class="main-content">
+                <h1>Discussions</h1>
+                <div class="container" id="discussionContainer">
+                    <!-- Exemple de messages -->
+                    <div class="message message-contribuable">
+                        <div class="message-info">
+                            <img src="{% static 'myapp/images/contribuable.jpg' %}" alt="Photo Contribuable">
+                            <span>Nom Contribuable</span>
+                        </div>
+                        <p>Bonjour, j'ai des questions concernant ma déclaration d'impôts.</p>
+                        <span class="message-date date-contribuable">2024-10-30 10:30</span>
+                    </div>
+                    <div class="message message-operator">
+                        <div class="message-info" style="justify-content: flex-end;">
+                            <span>Nom Opérateur</span>
+                            <img src="{% static 'myapp/images/operator.jpg' %}" alt="Photo Opérateur">
+                        </div>
+                      
+                        <p>Bonjour! Je suis là pour vous aider. Quelles sont vos questions?</p>
+                        <span class="message-date date-operator">2024-10-30 10:31</span>
+                    </div>
+                    <!-- Ajoutez d'autres messages ici -->
+                </div>
+
+                <div class="message-input">
+                    <textarea placeholder="Écrivez votre message ici..." id="messageInput"></textarea>
+                    <button class="btn-envoyer" id="sendMessage">Envoyer</button>
+                </div>
+            </main>
+        </div>
+    </div>
+    <footer>
+        {% include 'layout/footer_acceuil.html' %}
+    </footer>
+
+    <script>
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            var message = document.getElementById('messageInput').value;
+            if (message) {
+                // Créez un nouvel élément de message
+                var messageElement = document.createElement('div');
+                messageElement.className = 'message message-contribuable';
+                var currentDate = new Date().toLocaleString(); // Récupère la date actuelle
+                messageElement.innerHTML = '<div class="message-info">' +
+                    // '<img src="{% static 'myapp/images/contribuable.jpg' %}" alt="Photo Contribuable">' +
+                    '<span>Nom Contribuable</span>' +
+                '</div>' +
+                '<p>' + message + '</p>' +
+                '<span class="message-date date-contribuable">' + currentDate + '</span>';
+                
+                // Ajoutez le message au conteneur de discussion
+                document.getElementById('discussionContainer').appendChild(messageElement);
+                
+                // Effacez le champ de texte
+                document.getElementById('messageInput').value = '';
+                
+                // Faites défiler le conteneur vers le bas
+                var discussionContainer = document.getElementById('discussionContainer');
+                discussionContainer.scrollTop = discussionContainer.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>

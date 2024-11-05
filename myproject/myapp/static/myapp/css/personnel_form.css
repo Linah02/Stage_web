@@ -72,6 +72,22 @@ button[type="button"] {
     border-radius: 5px;
 }
 
+.form-group .radio-group {
+    display: flex;
+    gap: 15px; /* Espace entre les options */
+    align-items: center;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espace entre le bouton radio et le label */
+}
+
+.form-check-label {
+    font-size: 16px;
+}
+
 /* Alignement des lignes (champs côte à côte) */
 .row {
     display: flex;

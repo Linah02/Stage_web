@@ -1,0 +1,43 @@
+<!-- pdf_template.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de la Transaction {{ n_quit }}</title>
+    <style>
+        /* Styles pour le PDF */
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Détails de la Transaction {{ n_quit }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Contribuable</th>
+                <th>Date de Paiement</th>
+                <th>Année de Paiement</th>
+                <th>Montant à Payer</th>
+                <th>Impôt</th>
+                <!-- Ajoutez d'autres colonnes selon les besoins -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transaction_details %}
+                <tr>
+                    <td>{{ transaction.0 }}</td>
+                    <td>{{ transaction.2 }}</td>
+                    <td>{{ transaction.3 }}</td>
+                    <td>{{ transaction.8 }} .Ar</td>
+                    <td>{{ transaction.12 }}</td>
+                    <!-- Ajoutez d'autres détails de la transaction ici -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

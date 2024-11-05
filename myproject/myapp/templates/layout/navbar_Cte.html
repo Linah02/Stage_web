@@ -7,19 +7,7 @@
     <div class="logo">
         <img src="{% static 'myapp/images/logo.png' %}" alt="Logo">
     </div>
-    <div class="search-container">
-        <select id="dropdown-search">
-            <option value="">Sélectionnez une option</option>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
-
-        <button id="calendar-btn">🗓️</button>
-
-        <input type="text" id="search-input" placeholder="Recherche...">
-        <button id="search-btn">Rechercher</button>
-    </div>
+    
     <div class="menu">
         <ul>
             <!-- Menu pour les notifications -->
@@ -27,8 +15,7 @@
                 <a href="#"><i class="fas fa-bell"></i></a>
                 <div id="notification-dropdown" class="dropdown-menu">
                     <h4>Notifications</h4>
-                    <a href="#">• Expéditeur 1 :<class  style="color: rgb(0, 0, 0);">Raison de la notification</class> </a>
-                    <a href="#">• Expéditeur 2 : <class  style="color: rgb(0, 0, 0);">Raison de la notification</class></a>
+                    <a href="{% url 'notification' %}">• Expéditeur 1 :<class  style="color: rgb(0, 0, 0);">Raison de la notification</class> </a>
                 </div>
             </li>
             <!-- Menu pour les messages -->
@@ -36,23 +23,39 @@
                 <a href="#"><i class="fas fa-envelope"></i></a>
                 <div id="message-dropdown" class="dropdown-menu">
                     <h4>Messages</h4>
-                    <a href="#">• Expéditeur 1 : <class  style="color: rgb(0, 0, 0);">Contenu du message</class></a>
-                    <a href="#">• Expéditeur 2 : <class  style="color: rgb(0, 0, 0);">Contenu du message</class></a>
+                    <a href="{% url 'discussion' %}">• Expéditeur 1 : <class  style="color: rgb(0, 0, 0);">Contenu du message</class></a>
                 </div>
             </li>
-            <!-- Menu pour le profil -->
+
             <li class="profile-icon" onclick="toggleDropdown('profile-dropdown')">
-                <a href="#"><i class="fas fa-user"></i></a>
+                <a href="#">
+                    <img src="{% static 'myapp/images/faces/face6.jpg' %}" alt="Profil" class="profile-image">
+                </a>
                 <div id="profile-dropdown" class="dropdown-menu">
                     <a href="{% url 'profil' %}">Voir Profil</a>
                     <a href="#">Déconnexion</a>
                 </div>
             </li>
+            
         </ul>
     </div>
 </nav>
 
 <style>
+
+.profile-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-image {
+    width: 24px; /* Taille de l'icône font-awesome */
+    height: 24px;
+    border-radius: 50%; /* Cercle pour une apparence de photo de profil */
+    object-fit: cover; /* Ajuste l'image pour remplir sans déformation */
+}
+
+
     .notification-icon, .message-icon, .profile-icon {
         position: relative;
         cursor: pointer;
@@ -132,4 +135,7 @@
             }).focus();
         });
     });
+
+
+
 </script>

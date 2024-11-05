@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',#integration de mon app dans mon projet
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -138,6 +139,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# Chemin vers le dossier des fichiers médias
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Page d'Accueil{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
+</head>
+<body>
+    <header>
+        {% include 'layout/navbar_Cte.html' %}
+    </header>
+    <div class="page-container">
+        <!-- Sidebar et contenu principal côte à côte -->
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                {% include 'layout/sidebar_acceuil.html' %}
+            </aside>
+            <main class="main-content">
+                <h1>Détails transactions</h1>
+                <div class="container">
+                </div>
+            </main>
+        </div>
+    </div>
+    <footer>
+        {% include 'layout/footer_acceuil.html' %}
+    </footer>
+</body>
+</html>

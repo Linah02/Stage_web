@@ -35,7 +35,6 @@
                     <div class="form-group">
                         <label>Province</label>
                         <input type="text" id="province-input" class="form-control" placeholder="Rechercher une province..." required>
-
                         <div id="province-suggestions" class="suggestions"></div>
                     </div>
                 </div>
@@ -162,11 +161,6 @@
           suggestion.textContent = item.label;
           suggestion.onclick = function() {
               document.getElementById('province-input').value = item.city_name;
-              // Assurez-vous que ces champs existent dans le DOM
-              document.getElementById('region-input').value = item.parish_name || '';  
-              document.getElementById('district-input').value = item.locality_desc || '';
-              document.getElementById('commune-input').value = item.wereda_desc || '';
-              document.getElementById('fokontany-input').value = item.fkt_desc || '';
               document.getElementById('fkt-no-input').value = item.fkt_no || '';
   
               suggestionsBox.innerHTML = '';  // Vider les suggestions une fois sélectionnées
