@@ -21,6 +21,7 @@ from django.urls import path,include
 from myapp.views import  home
 from myapp.views import  form_part2
 from myapp.views import  login
+from myapp.views import  deconnexion
 from myapp.views import  search_province
 from myapp.views import  modifier_contribuable
 from myapp.acceuil_views import acceuil
@@ -35,6 +36,9 @@ from myapp.acceuil_views import chart_line
 from myapp.acceuil_views import discussion
 from myapp.acceuil_views import notification
 from myapp.acceuil_views import get_transaction_details
+from myapp.acceuil_views import export_transaction_pdf
+from myapp.acceuil_views import filtre_list_transaction
+from myapp.acceuil_views import filtre_detail_transaction
 
 from myapp.views import D_authentification
 
@@ -45,6 +49,7 @@ urlpatterns = [
     path('home/', home, name='home'),
     path('form-part2/', form_part2, name='form_part2'),
     path('login/', login, name='login'),
+    path('deconnexion/', deconnexion, name='deconnexion'),
     path('search_province/', search_province, name='search_province'),
     path('acceuil/', acceuil, name='acceuil'),
     path('test_acceuil/', test_acceuil, name='test_acceuil'),
@@ -61,6 +66,9 @@ urlpatterns = [
     
     path('list_transaction/', list_transaction, name='list_transaction'),
     path('transaction_detail/<str:n_quit>/',get_transaction_details, name='transaction_detail'),
+    path('export_transaction_pdf/<str:n_quit>/',export_transaction_pdf, name='export_transaction_pdf'),
+    path('filtre_list_transaction/',filtre_list_transaction, name='filtre_list_transaction'),
+   path('transaction_detail/<str:n_quit>/filtre_detail_transaction', filtre_detail_transaction, name='filtre_detail_transaction'),
     
 ]
 

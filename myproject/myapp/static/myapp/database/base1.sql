@@ -162,7 +162,7 @@ create table operateur(
 
 create table messages(
     id serial primary key,
-    prenif int
+    ID_CONTRIBUABLE int REFERENCES CONTRIBUABLE(id),
     question text,
     reponse text default null,
     date_question datetime,
@@ -177,6 +177,7 @@ create table logiciel(
     logiciel VARCHAR(50) --SURF/SIGTAS/HETRAONLINE
 );
 
+
 create table MODE_PAIEMENT(
     id serial primary key,
     sens VARCHAR(100)--depot,declaration,espece,virement
@@ -187,6 +188,10 @@ create table NUM_IMPOT(
     IMPOT VARCHAR(200),--IRSA=5,IR=10,IS=15,AMENDE=43,PENALITE=44
     numero int,
 );
+
+-- +NUM_QUITT
+-- ao @paiement no misy créance raha indray manao paiement izy de 0
+--ajout champ sens dans paiement
 
 
 CREATE TABLE CENTRAL_RECETTE(
@@ -222,8 +227,6 @@ CREATE TABLE CENTRAL_RECETTE(
 );
 
 
-
-
 create table paiement(
     ID_CONTRIBUABLE int,
     CENTRAL_RECETTE int REFERENCES CENTRAL_RECETTE(id),
@@ -237,7 +240,7 @@ create table paiement(
 
 -- Creta table Centre_fiscal
 CREATE TABLE CENTRE_FISCAL(
-    ID_CENTRE_FISCAL SERIAL PRIMARY KEY, -- Utilisation de SERIAL pour auto-incrémentation et clé primaire
+    ID_CENTRE_FISCAL SERIAL PRIMARY KEY, 
     CFL_DESIGNATION VARCHAR(80),
     ID_DIRECTION INTEGER REFERENCES DIRECTIONS(ID_DIRECTION),
     PARISH VARCHAR(50),
@@ -277,6 +280,7 @@ CREATE TABLE FISCAL_REGIME(
     FISCAL_REGIME_DESC_F VARCHAR(30),
     FISCAL_REGIME_DESC_S VARCHAR(30)
 );
+
 
 -- create table users_nif
 CREATE TABLE USERS_NIF(

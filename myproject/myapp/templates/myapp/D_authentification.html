@@ -38,9 +38,7 @@
 <body>
     <div class="container">
         <h2>Vérification du code</h2>
-        <p>Cliquer sur le bouton pour renvoyer <span class="highlight-green">l'email de confirmation</span> et commencer la vérification.</p>
-
-
+        <p>Cliquer sur le bouton renvoyer pour  <span class="highlight-green">confirmer que c'est bien vous!</span><p style="color: rgb(175, 174, 174);">Celui-ci est composé de 6 chiffres.</p></p>
         {% if message %}
         <p>{{ message }}</p>
         {% endif %}
@@ -56,6 +54,7 @@
                 <button class="btn-email" type="submit" name="send_code">Renvoyer</button>
                 <button class="btn-validate" type="submit" name="validate_code">Valider</button>
             </div>
+
         </form>
 
         <p id="countdown"></p>

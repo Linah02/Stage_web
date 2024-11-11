@@ -7,7 +7,6 @@
     <title>{% block title %}Mon Profil{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'myapp/css/style_profil.css' %}">
     <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
-    <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Inclure jQuery ici -->
     
     <style>
@@ -40,7 +39,6 @@
 
 
                             {% if contribuable.photo %}
-                            <p>URL de la photo : {{ contribuable.photo }}</p>
                             <img src="/media/{{ contribuable.photo }}" alt="Photo de {{ contribuable.id }}">
                             <!-- <img src="{{ MEDIA_URL }}{{ contribuable.photo }}" alt="Photo de {{ contribuable.id }}"> -->
 
@@ -58,14 +56,10 @@
                             
                             <!-- Contenu principal de la carte -->
                             <div class="main-content">
-                                <!-- Logo carré -->
-                                <div class="logo_carte">
-                            <img src="{% static 'myapp/images/logo.png' %}" alt="logo">
-                            </div>
                                 
                                 <!-- Texte à droite du logo -->
                                 <div class="text">
-                                    <p>PRECARTE FISCALE</p>
+                                    <p>N° CIN : <span>{{ contribuable.cin }}</span></p>
                                     <p>N° PRENIF : <span>{{ contribuable.propr_nif }}</span></p>
                                 </div>
                             </div>
@@ -74,7 +68,6 @@
                             
                             <!-- Bouton de téléchargement -->
                         </div>
-                        <button class="btn-telecharger">Télécharger</button>
 
                         
                         
@@ -316,6 +309,7 @@ h2 {
 
 .text p {
     margin: 0;
+    color: #a09e9e;
     font-weight: bold;
 }
 

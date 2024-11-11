@@ -548,7 +548,7 @@ CREATE TABLE "NIF"."CENTRAL_RECETTE"
 	"N_QUIT" VARCHAR2(50), --Numero quittance de paiement
 	"NUM_IMP" VARCHAR2(10), --Numero impots(IRSA ,IR,43:AMENDE(tsy nanao depot declaration),44:PENALITE(retard 1)...)
 	-- "NIMP" INT, 
-  -- NUMREC INT, NUMERO DE CREANCE
+  NUMREC INT, NUMERO DE CREANCE
 	"TOT_VER" NUMBER, --total payer
 	"LIBELLE" VARCHAR2(20), --libelle NIMP
 	"FLAG" VARCHAR2(1) DEFAULT 'N', --

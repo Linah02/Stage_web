@@ -181,16 +181,17 @@ def envoyer_email(email, prenif, mot_de_passe):
 
 def login(request):
     if request.method == 'POST':
-        email = request.POST['mail']
+        prenif = request.POST['prenif']
         password = request.POST['password']
         
         try:
             # Rechercher un utilisateur avec l'email et vérifier le mot de passe
-            contribuable = Contribuable.objects.get(email=email)
+            contribuable = Contribuable.objects.get(propr_nif=prenif)
             if contribuable.mot_de_passe == password:
                 # Si l'email et le mot de passe correspondent, rediriger vers l'authentification à 2 facteurs
                 request.session['contribuable_id'] = contribuable.id  # Stocker l'utilisateur pour la prochaine étape
-                request.session['user_email'] = contribuable.email
+                request.session['prenif'] = contribuable.propr_nif
+                request.session['email'] = contribuable.email
                 return redirect('D_authentification')  # Redirigez vers la vue pour la confirmation 2FA
             else:
                 # Si le mot de passe est incorrect, afficher une erreur
@@ -222,6 +223,14 @@ def search_province(request):
         ]
         
         return JsonResponse(formatted_data, safe=False)
+
+def deconnexion(request):
+    # Supprimez l'ID du contribuable de la session pour déconnecter l'utilisateur
+    if 'id_contribuable' in request.session:
+        del request.session['id_contribuable']
+        
+    # Redirigez vers la page de connexion (ou autre page de votre choix)
+    return redirect('login')  # Remplacez 'login' par le nom de la vue de la page de connexion
 
 def mdp_oubliee(request):
     return render(request, 'myapp/mdp_oubli.html')  # Rediriger vers la page d'accueil
@@ -295,51 +304,37 @@ def GenererPRENIFetMdp(cin):
 
     return prenif, mot_de_passe
 
-# def modifier_contribuable(request):
-#     id_contribuable = request.session.get('id_contribuable')  # Récupère l'ID depuis la session
-#     if not id_contribuable:
-#         messages.error(request, 'Vous devez vous connecter pour accéder à cette page.')
-#         return redirect('connexion')  # Assurez-vous que cette vue renvoie un HttpResponse
 
-#     contribuable = get_object_or_404(Contribuable, id=id_contribuable)
-
-#     if request.method == 'POST':
-#         form = ContribuableForm(request.POST, request.FILES, instance=contribuable)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Profil modifié avec succès.')
-#             return redirect('home')  # Redirection vers une page valide après le succès
-#     else:
-#         form = ContribuableForm(instance=contribuable)
-
-#     return render(request, 'myapp/profil.html', {'form': form, 'contribuable': contribuable})
 def modifier_contribuable(request):
-    # Définition directe de l'ID du contribuable
-    id_contribuable = 6  
+    # Récupérer l'ID du contribuable connecté depuis la session
+    id_contribuable = request.session.get('contribuable_id')
 
-    # Vérifier si l'ID est valide
+    # Vérifier si l'utilisateur est authentifié
+    if not id_contribuable:
+        return redirect('login')  # Redirige vers la page de login si non connecté
+
+    # Charger le contribuable avec l'ID récupéré
     contribuable = get_object_or_404(Contribuable, id=id_contribuable)
 
     if request.method == 'POST':
         form = ContribuableForm(request.POST, request.FILES, instance=contribuable)
         if form.is_valid():
             form.save()
-            # messages.success(request, 'Profil modifié avec succès.')
+            messages.success(request, 'Profil modifié avec succès.')
             return redirect('profil')  # Redirection après la sauvegarde
         else:
-            print("Erreurs de validation:", form.errors)  # Affiche les erreurs de validation
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"Erreur dans {field}: {error}")
 
     else:
         form = ContribuableForm(instance=contribuable)
+    
     return render(request, 'myapp/profil.html', {
         'form': form,
         'contribuable': contribuable,
         'MEDIA_URL': settings.MEDIA_URL
     })
-    # return render(request, 'myapp/profil.html', {'form': form, 'contribuable': contribuable})
 
 
 class ContribuableForm(forms.ModelForm):
@@ -355,7 +350,5 @@ class ContribuableForm(forms.ModelForm):
         self.fields['photo'].required = False
 
 def deconnexion(request):
-    logout(request)  # Déconnecte l'utilisateur
-    request.session.flush()  # Efface toutes les données de la session
-    messages.success(request, 'Déconnexion réussie.')
-    return redirect('home')  # Redirige vers la page d'accueil
+    request.session.flush()
+    return redirect('login')  # Redirige vers la page d'accueil

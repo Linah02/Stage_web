@@ -9,13 +9,79 @@
     <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
     <style>
         .title-cell {
-    font-weight: bold; /* Met le texte en gras */
-    color: black;      /* Définit la couleur du texte en noir */
-   
-
+            font-weight: bold; /* Met le texte en gras */
+            color: black;      /* Définit la couleur du texte en noir */
+        }
+        .color-red {
+            color: red; /* Applique une couleur rouge au texte */
+        }
+            /* Style pour le conteneur de recherche */
+.container .search-container {
+    display: flex;
+    gap: 10px;
+    width: 1000px;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* max-width: 600px; */
+    /* margin: auto; */
 }
-.color-red {
-    color: red; /* Applique une couleur rouge au texte */
+
+/* Conteneur pour les champs de date */
+.date-range {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+/* Conteneur pour les champs de montant */
+.amount-range {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+/* Style pour les champs de saisie */
+.search-container input[type="date"],
+.search-container input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+}
+
+.search-container input[type="date"]:focus,
+.search-container input[type="number"]:focus {
+    border-color: #178b36;
+    outline: none;
+}
+
+/* Style pour le bouton de recherche */
+#search-btn {
+    padding: 10px 20px;
+    background-color: #178b36;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#search-btn:hover {
+    background-color: #178b36;
 }
 
     </style>
@@ -31,24 +97,39 @@
             </aside>
             <main class="main-content">
                 <h1>Détails des Transactions</h1>
-                
-                <!-- Tableau des détails de la transaction -->
-                <div class="container">
-                    <table class="details-table">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Valeur</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if transaction_details %}
-                                {% for transaction in transaction_details %}
-                                    {% if forloop.first %}
-                                    <tr>
-                                        <td class="title-cell">Numéro quittance</td>
-                                        <td>{{ transaction.1 }}</td>
-                                    </tr>
+                <!-- <h3>Requête SQL :</h3>
+                    <pre>{{ query }}</pre> -->
+
+                    <div class="container">
+                        <!-- Formulaire de recherche avec filtres -->
+                        <form action="{% url 'filtre_detail_transaction' n_quit %}" method="GET">
+                            <div class="search-container">
+                                <input type="number" id="min" name="min" placeholder="MIN" value="{{ request.GET.min }}">
+                                <input type="number" id="max" name="max" placeholder="MAX" value="{{ request.GET.max }}">
+                                <input type="date" id="date_min" name="date_min" placeholder="Date Min" value="{{ request.GET.date_min }}">
+                                <input type="date" id="date_max" name="date_max" placeholder="Date Max" value="{{ request.GET.date_max }}">
+                                <button id="search-btn" type="submit">Rechercher</button>
+                            </div>
+                        </form>
+                        
+                    
+                        <!-- Détails de la transaction -->
+                        <table class="details-table">
+                            <thead>
+                                <tr>
+                                    <th>Titre</th>
+                                    <th>Valeur</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if transaction_details %}
+                                    {% for transaction in transaction_details %}
+                                        {% if forloop.first %}
+                                        <!-- Détails de la première transaction (id, base, montant à payer, etc.) -->
+                                        <tr>
+                                            <td class="title-cell">Numéro quittance</td>
+                                            <td>{{ transaction.1 }}</td>
+                                        </tr>
                                         <tr>
                                             <td class="title-cell">Base</td>
                                             <td>{{ transaction.7 }} .Ar</td>
@@ -77,53 +158,53 @@
                                             <td class="title-cell">Date de recouvrement</td>
                                             <td>{{ transaction.4 }}</td>
                                         </tr>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td colspan="2">Aucun résultat trouvé.</td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                           </table>
-                </div>
-                <br>
-                
-                <!-- Tableau des transactions -->
-                <div class="container">
-                    <table class="transaction-table">
-                        <thead>
-                            <tr>
-                                <th>Date de Paiement</th>
-                                <th>Montant</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if transaction_details %}
-                                {% for transaction in transaction_details %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
                                     <tr>
-                                        <td class="{% if transaction.3 > transaction.4 %}color-red{% endif %}">{{ transaction.2 }}</td>
-                                        <td>{{ transaction.15 }}</td>
+                                        <td colspan="2">Aucun résultat trouvé.</td>
                                     </tr>
-                                {% endfor %}
-                            {% else %}
-                          
-                        
-                            {% endif %}
-                            <tr>
-
-                                <td style="background-color: rgb(115, 148, 115); color: white;" >Total renversé.</td>
-                                <td style="background-color: rgb(115, 148, 115); color: white;" >1 200 000 .Ar</td>
-                            </tr>
-                            <tr>
-                               
-                                <td style="background-color:rgb(173, 119, 119);color: white;" >Reste à payer.</td>
-                                <td style="background-color: rgb(173, 119, 119); color: white;" >40 000 .Ar</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </main>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <br>
+                    
+                    <!-- Tableau des transactions -->
+                    <div class="container">
+                        <table class="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Date de Paiement</th>
+                                    <th>Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if transaction_details %}
+                                    {% for transaction in transaction_details %}
+                                        <tr>
+                                            <td class="{% if transaction.3 > transaction.4 %}color-red{% endif %}">{{ transaction.2 }}</td>
+                                            <td>{{ transaction.15 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="2">Aucune transaction trouvée pour les critères spécifiés.</td>
+                                    </tr>
+                                {% endif %}
+                                <tr>
+                                    <td style="background-color: rgb(115, 148, 115); color: white;">Total renversé.</td>
+                                    <td style="background-color: rgb(115, 148, 115); color: white;">1 200 000 .Ar</td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: rgb(173, 119, 119); color: white;">Reste à payer.</td>
+                                    <td style="background-color: rgb(173, 119, 119); color: white;">40 000 .Ar</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                                </main>
         </div>
     </div>
     <footer>

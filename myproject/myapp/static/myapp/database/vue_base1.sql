@@ -44,9 +44,11 @@
 -- vue select all transaction group by quit 
 -- (total_payee =somme mnt_ver,reste_ap=mnt_ap-total_payee),
 -- n_quit,ANNEE,date_debt et fin,NIMP,imp_detail
+--filtre montant
 CREATE VIEW vue_transactions_par_quit_et_contribuable AS
 SELECT
     c.id_contribuable_id AS contribuable,
+    c.
     p.n_quit,
     c.mnt_ap as mont_ap,
     SUM(p.montant) AS total_payee,
@@ -56,11 +58,95 @@ FROM
 JOIN
     myapp_paiement p ON c.id = p.central_recette_id
 GROUP BY
-    c.id_contribuable_id, p.n_quit,c.mnt_ap
+    c.id_contribuable_id,p.n_quit,c.mnt_ap
 ORDER BY
     contribuable, p.n_quit;
 
 
+
+CREATE VIEW vue_transactions_par_quit_et_contribuable AS
+SELECT
+    c.id_contribuable_id AS contribuable,
+    c.code_bureau,
+    c.libelle_bureau,
+    c.numrec,
+    c.imp_detail,
+    ni.numero,
+    ni.impot,
+    l.logiciel,
+    p.n_quit,
+    c.mnt_ap as mont_ap,
+    SUM(p.montant) AS total_payee,
+    c.mnt_ap - SUM(p.montant) AS reste_ap
+FROM
+    myapp_centralrecette c
+JOIN
+    myapp_paiement p ON c.id = p.central_recette_id
+    join 
+    myapp_NUMIMPOT ni on c.nimp_id= ni.id 
+join 
+    myapp_MODEPAIEMENT mp on mp.id =p.MODE_PAIEMENT_id
+join 
+    myapp_logiciel l on l.id = c.logiciel_id
+GROUP BY
+    c.id_contribuable_id,p.n_quit,c.mnt_ap, c.code_bureau,
+    c.libelle_bureau,
+    c.numrec,
+    c.imp_detail,
+    ni.numero,
+    ni.impot,
+    l.logiciel,
+    p.n_quit
+ORDER BY
+    contribuable, p.n_quit;
+
+
+
+
+
+
+
+-- filtre date date et montant
+CREATE VIEW vue_detail_transactions_par_quit_et_contribuable AS
+SELECT
+    c.id_contribuable_id AS contribuable,
+    p.n_quit,
+    p.date_paiement,
+    EXTRACT(YEAR FROM p.date_paiement) AS annee_de_paiement,
+    c.annee_recouvrement,
+    MIN(c.date_debut) AS date_debut,
+    MAX(c.date_fin) AS date_fin,
+    c.base,
+    c.mnt_ap,
+    c.nimp_id AS NIMP,
+    c.imp_detail,
+    ni.numero,
+    ni.impot,
+    mp.sens,
+    l.logiciel,
+    p.montant
+FROM
+    myapp_centralrecette c
+JOIN
+    myapp_paiement p ON c.id = p.central_recette_id
+join 
+    myapp_NUMIMPOT ni on c.nimp_id= ni.id 
+join 
+    myapp_MODEPAIEMENT mp on mp.id =p.MODE_PAIEMENT_id
+join 
+    myapp_logiciel l on l.id = c.logiciel_id
+GROUP BY
+    c.id_contribuable_id, p.n_quit, p.date_paiement, c.annee_recouvrement,c.base,c.mnt_ap, c.nimp_id, c.imp_detail, ni.numero,
+    ni.impot,
+    mp.sens,
+    l.logiciel,p.montant
+ORDER BY
+    contribuable, n_quit;
+
+
+
+-- liste centre fiscal ->detail paiement
+-- filtre date date et montant
 CREATE VIEW vue_detail_transactions_par_quit_et_contribuable AS
 SELECT
     c.id_contribuable_id AS contribuable,
@@ -101,23 +187,7 @@ ORDER BY
 
 
 
-
-
-
-
-
-SELECT 
-    c.id_contribuable_id AS contribuable,
-    c.annee_recouvrement,
-    SUM(c.mnt_ap) AS total_recouvrement_annuel
-FROM 
-    myapp_centralrecette c
-GROUP BY 
-    c.id_contribuable_id, c.annee_recouvrement
-ORDER BY 
-    contribuable, c.annee_recouvrement;
-
-
+-- chart 2
 CREATE VIEW vue_recouvrements_et_paiements_par_annee AS
 SELECT 
     c.id_contribuable_id AS contribuable,
@@ -135,11 +205,7 @@ ORDER BY
 
 
 
-
-
-
-
-
+-- Chart 1
 -- vue: somme par ans(taona) par contribuable somme  mnt_ver par contribuable
 
 CREATE VIEW vue_somme_par_contribuable_par_annee AS
@@ -155,7 +221,3 @@ GROUP BY
     c.id_contribuable_id, EXTRACT(YEAR FROM p.date_paiement)
 ORDER BY
     contribuable, annee;
-
-
-
-

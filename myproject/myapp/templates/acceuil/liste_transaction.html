@@ -92,48 +92,93 @@
             </aside>
             <main class="main-content">
                 <div class="container">
-                    <div class="search-container">
-                        <input type="date" id="date_min" placeholder="MIN">
-                        <input type="date" id="date_max" placeholder="MAX">
-
-                        <input type="number" id="min" placeholder="MIN">
-                        <input type="number" id="max" placeholder="MAX">
-
-                        <button id="search-btn">Rechercher</button> 
-                    </div>
+                    <form action="{% url 'filtre_list_transaction' %}" method="GET">
+                        <div class="search-container">
+                            <input type="number" id="min" name="min" placeholder="MIN" value="{{ request.GET.min }}">
+                            <input type="number" id="max" name="max" placeholder="MAX" value="{{ request.GET.max }}">
+                            <button id="search-btn" type="submit">Rechercher</button>
+                        </div>
+                    </form>
+                    
                     <h2>Liste des Transactions</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>N° QUITTANCE</th>
-                                <th>MNT à PAYER</th>
-                                <th>PAYEE</th>
-                                <th>RES à PAYER</th>
-                                <th>Voir Détail</th>
-                                <th>Télécharger PDF</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for transaction in transactions %}
-                            <tr>
-                                <td>{{ transaction.n_quit }}</td>
-                                <td>{{ transaction.mont_ap|intcomma }}  .Ar</td>
-                                <td>{{ transaction.total_payee|intcomma }}  .Ar</td>
-                                <td>{{ transaction.reste_ap|intcomma }}   .Ar</td>
-                                
-                                <td>
-                                    <a href="{% url 'transaction_detail' transaction.n_quit %}" class="btn">Voir Détail</a>
-                                </td>
-                                
-                                <td><a href="#" class="btn-icon"><i class="fas fa-download"></i></a></td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6">Aucune transaction trouvée.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    
+                    {% if transactions %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>N° QUITTANCE</th>
+                                    <th>IMPOTS</th>
+                                    <th>N° et et libelle BUREAU</th>
+                                    <th>MNT à PAYER</th>
+                                    <th>PAYEE</th>
+                                    <th>RES à PAYER</th>
+                                    <th>Détail paiement</th>
+                                    <th>Télécharger PDF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in transactions %}
+                                <tr>
+                                    <td>{{ transaction.8 }}</td>
+                                    <td>{{ transaction.6 }}</td>
+                                    <td>{{ transaction.1 }} _ {{ transaction.2 }}</td>
+                                    <td>{{ transaction.9|intcomma }}  .Ar</td>
+                                    <td>{{ transaction.11|intcomma }}  .Ar</td>
+                                    <td>{{ transaction.10|intcomma }}   .Ar</td>
+                                    <td>
+                                        {% if transaction.8 %}
+                                            <a href="{% url 'transaction_detail' transaction.8 %}" class="btn">Détail paiement</a>
+                                        {% else %}
+                                            <span>Numéro de quittance manquant</span>
+                                        {% endif %}
+                                    </td>
+                                     <td>
+                                        {% if transaction.8 %}
+                                            <a href="{% url 'export_transaction_pdf' transaction.8 %}" class="btn-icon"><i class="fas fa-download"></i></a>
+                                        {% else %}
+                                            <span>Numéro de quittance manquant</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>Aucune transaction trouvée avec les critères de recherche spécifiés.</p>
+                        <!-- Affichage des transactions sans filtre -->
+                        <h3>Toutes les transactions :</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>N° QUITTANCE</th>
+                                    <th>IMPOTS</th>
+                                    <th>N° et et libelle BUREAU</th>
+                                    <th>MNT à PAYER</th>
+                                    <th>PAYEE</th>
+                                    <th>RES à PAYER</th>
+                                    <th>Détail paiement</th>
+                                    <th>Télécharger PDF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in all_transactions %}
+                                <tr>
+                                    <td>{{ transaction.n_quit }}</td>
+                                    <td>{{ transaction.impot }}</td>
+                                    <td>{{ transaction.code_bureau }}  _ {{ transaction.libelle_bureau }}</td>
+                                    <td>{{ transaction.mont_ap|intcomma }}  .Ar</td>
+                                    <td>{{ transaction.total_payee|intcomma }}  .Ar</td>
+                                    <td>{{ transaction.reste_ap|intcomma }}   .Ar</td>
+                                    <td>
+                                        <a href="{% url 'transaction_detail' transaction.n_quit %}" class=</a>
+paiement                                   </td>
+                                    <td><a href="{% url 'export_transaction_pdf' transaction.n_quit %}" class="btn-icon"><i class="fas fa-download"></i></a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    
                     
                 </div>
             </main>

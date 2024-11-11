@@ -31,14 +31,18 @@
             <!-- Sous-menu pour Chart -->
             <ul id="chart-dropdown" class="dropdown-menu-sidebar">
                 <li><a href="{% url 'chart' %}">Montant par année de paiement</a></li>
-                <li><a href="{% url 'chart_line' %}">Montant par année de recouvrement</a></li>
+                <!-- <li><a href="{% url 'chart_line' %}">Montant par année de recouvrement</a></li> -->
             </ul>
         </li>
-        <li>
-            <a href="#" class="btn-deconnexion">
-                <i class="fas fa-sign-out-alt sidebar-icon"></i>
-                Déconnexion
-            </a>
+
+
+        <li >
+        <form action="{% url 'deconnexion' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-deconnexions">
+                <i class="fas fa-sign-out-alt sidebar-icon"></i> Déconnexion
+            </button>
+        </form>
         </li>
         
     </ul>
@@ -86,20 +90,29 @@
         padding: 5px 0;
     }
     /* Style pour le bouton de déconnexion */
-.btn-deconnexion {
+    .btn-deconnexions {
     display: inline-flex;
     align-items: center;
     padding: 10px 15px;
     color: white;
-    background-color: #ff4b4b; /* Rouge pour signifier la déconnexion */
-    border-radius: 5px;
+    background-color: #ff4b4b;
     text-decoration: none;
     font-weight: bold;
+    border: none;
+    width: 200px;
+    cursor: pointer;
 }
 
-.btn-deconnexion:hover {
-    background-color: #ff3333; /* Rouge plus foncé pour l'effet hover */
+.btn-deconnexions:hover {
+    background-color: #8fc3c6;
 }
+
+.btn-deconnexions .sidebar-icon {
+    margin-right: 8px; /* Espace entre l'icône et le texte */
+}
+
+
+
 
 </style>
 

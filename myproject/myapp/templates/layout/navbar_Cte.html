@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 {% load static %}
 
@@ -33,8 +34,13 @@
                 </a>
                 <div id="profile-dropdown" class="dropdown-menu">
                     <a href="{% url 'profil' %}">Voir Profil</a>
-                    <a href="#">Déconnexion</a>
+
+                    <form action="{% url 'deconnexion' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btns-deconnexion">Déconnexion</button>
+                    </form>
                 </div>
+                
             </li>
             
         </ul>
@@ -92,6 +98,23 @@
         text-align: left;
     }
 
+    .btns-deconnexion {
+    font-weight: bold;
+    background: none;
+    border: none;
+    text-decoration: none;
+    color: #c61618; /* Couleur du lien */
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+}
+
+    .btns-deconnexion:hover {
+        color: #000000; /* Couleur du lien */
+        text-decoration: none; /* Supprime le soulignement au survol */
+    }
     .dropdown-menu a:hover {
         background-color: #f0f0f0;
     }

@@ -208,6 +208,14 @@ class VueTransactionsParQuitEtContribuable(models.Model):
     mont_ap = models.DecimalField(max_digits=20, decimal_places=2)  # Montant à payer
     total_payee = models.DecimalField(max_digits=20, decimal_places=2)  # Total payé
     reste_ap = models.DecimalField(max_digits=20, decimal_places=2)  # Reste à payer
+    code_bureau = models.CharField(max_length=50)
+    libelle_bureau = models.CharField(max_length=50)
+    numrec = models.CharField(max_length=50)
+    imp_detail = models.CharField(max_length=50)
+    numero = models.CharField(max_length=50)
+    impot =models.CharField(max_length=50)
+    sens=models.CharField(max_length=50)
+    logiciel=models.CharField(max_length=50)
 
     class Meta:
         managed = False  # Indique que ce modèle ne gère pas les migrations

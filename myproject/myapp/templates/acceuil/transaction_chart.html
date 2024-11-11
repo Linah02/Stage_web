@@ -51,10 +51,19 @@
                         <canvas id="transactionsChart" height="300"></canvas>
                     </div>
                     <div class="chart-details">
-                        <h3>Détails de la Chart</h3>
-                        <p>Voici les informations complémentaires sur le graphique.</p>
-                        <ul id="detailsList"></ul> <!-- Conteneur pour la liste -->
-                    </div>
+                        <table id="detailsTable">
+                            <thead>
+                                <tr>
+                                    <th  style="color: gray;  font-weight: bold;">Année</th>
+                                    <th style="color: gray;  font-weight: bold;">Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Les lignes de données seront ajoutées ici par JavaScript -->
+                            </tbody>
+                        </table>
+                        
+                           </div>
                 </div>
             </main>
         </div>
@@ -70,14 +79,28 @@
     const sommes = JSON.parse('{{ sommes|safe }}');  // `sommes` est maintenant en JSON.
     const labels = sommes.map(s => s.annee); // Extraire les années comme étiquettes
     const dataMontants = sommes.map(s => s.total_mnt_ver); // Extraire les montants pour les données
-    const detailsList = document.getElementById('detailsList');
+    const detailsTableBody = document.getElementById('detailsTable').querySelector('tbody');
 
-        // Itération sur les données et création d'éléments de liste
-        sommes.forEach(item => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `Contribuable: ${item.contribuable}, Année: ${item.annee}, Montant: ${item.total_mnt_ver}`;
-            detailsList.appendChild(listItem);
-        });
+// Remplir le tableau avec les données de `sommes`
+sommes.forEach(item => {
+    const row = document.createElement('tr'); // Créer une nouvelle ligne de tableau
+    
+    const anneeCell = document.createElement('td');
+    const montantCell = document.createElement('td');
+    
+   
+    anneeCell.textContent = item.annee;
+    montantCell.textContent = item.total_mnt_ver;
+    
+    // Ajouter les cellules à la ligne
+  
+    row.appendChild(anneeCell);
+    row.appendChild(montantCell);
+    
+    // Ajouter la ligne au tableau
+    detailsTableBody.appendChild(row);
+});
+
     // Initialiser le graphique
     const ctx = document.getElementById('transactionsChart').getContext('2d');
     const transactionsChart = new Chart(ctx, {
