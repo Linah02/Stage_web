@@ -160,17 +160,24 @@ create table operateur(
 --     date 
 -- );
 
-create table messages(
-    id serial primary key,
-    ID_CONTRIBUABLE int REFERENCES CONTRIBUABLE(id),
-    question text,
-    reponse text default null,
-    date_question datetime,
-    date_reponse datetime,
+CREATE TABLE operateurs (
+    id_operateur SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    email VARCHAR(100)
+);
+
+CREATE TABLE message (
+    id_message SERIAL PRIMARY KEY,
+    contenu TEXT,
+    fichier_joint VARCHAR(255),  
+    date_envoi TIMESTAMP DEFAULT NOW(),
+    id_contribuable INTEGER REFERENCES contribuable(id_contribuable),
+    id_operateur INTEGER REFERENCES operateur(id_operateur),
+    type_message VARCHAR(20) CHECK (type_message IN ('contribuable', 'operateur'))
 );
 
 
---
+
 
 create table logiciel(
     id serial primary key,
@@ -192,6 +199,7 @@ create table NUM_IMPOT(
 -- +NUM_QUITT
 -- ao @paiement no misy créance raha indray manao paiement izy de 0
 --ajout champ sens dans paiement
+
 
 
 CREATE TABLE CENTRAL_RECETTE(
@@ -226,6 +234,7 @@ CREATE TABLE CENTRAL_RECETTE(
     LIBELLE_BUREAU VARCHAR(250),--Cetre FISCAL
 );
 
+-- \encoding UTF8
 
 create table paiement(
     ID_CONTRIBUABLE int,

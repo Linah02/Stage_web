@@ -1,0 +1,115 @@
+
+.calcul-container {
+    display: flex; /* Place les deux sections côte à côte */
+    gap: 20px; /* Ajoute un espacement entre les deux sections */
+    align-items: center; /* Aligne verticalement au centre */
+    margin-top: 20px;
+}
+
+/* Section des détails */
+.calcul-details {
+    flex: 1; /* Prend moins de place */
+    padding: 10px;
+    background-color: #f9f9f9; /* Couleur de fond pour démarquer */
+    border: 1px solid #ddd; /* Bordure discrète */
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+
+/* Section de la vidéo */
+.calcul-content {
+    flex: 3; /* Prend plus de place */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-calcul {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: left;
+}
+
+.form-calcul h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.form-group {
+    display: flex;
+    align-items: center; /* Aligne verticalement les éléments */
+    gap: 10px; /* Espacement entre les labels et les inputs */
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    width: 150px; /* Fixe une largeur uniforme pour les labels */
+    font-size: 14px; /* Taille de texte uniforme */
+}
+
+.form-group input {
+    flex: 1; /* Permet aux inputs de prendre tout l'espace disponible */
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
+.btn_anuler {
+    background-color: #f44336; /* Rouge */
+    color: white; /* Texte blanc */
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn_anuler:hover {
+    background-color: gray; /* Rouge plus foncé au survol */
+}
+
+.btn_calculer {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #238649;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+
+
+.btn_calculer:hover {
+    background-color: #bf8d12;
+}
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input {
+
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.result {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}

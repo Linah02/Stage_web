@@ -3,14 +3,17 @@ logger = logging.getLogger(__name__)
 # from django.http import HttpResponse
 from django.template.loader import render_to_string
 # from weasyprint import HTML
-
+from django.utils import timezone
 # from django.http import HttpResponse
 # from weasyprint import HTML
+from django.core.paginator import Paginator
+from firebase_admin.messaging import Message, Notification, send
 
 import pdfkit
 from pdfkit import configuration
 from django.http import HttpResponse
 # from django.template.loader import render_to_string
+from firebase_admin import messaging
 
 
 import json
@@ -20,6 +23,15 @@ from .models import VueSommeParContribuableParAnnee  # Assurez-vous d'importer l
 from .models import VueRecouvrementsEtPaiementsParAnnee
 from django.core.mail import send_mail
 from django.conf import settings
+from .models import Message, Operateurs,Contribuable
+
+
+import imaplib
+import email
+from email.header import decode_header
+
+
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
@@ -32,18 +44,25 @@ from .models import TransactionDetail
 def acceuil(request):
     return render(request, 'acceuil/acceuil.html')  
 
+
+def acceuils(request):
+    return render(request, 'acceuil/accueils.html')  
+
+
 def acceuilCte(request):
     return render(request, 'acceuil/acceuilCte.html')  
 
-def test_acceuil(request):
-    return render(request, 'acceuil/test.html')  
+def IS_calcul(request):
+    return render(request, 'acceuil/IS_calcul.html')  
+def IR_calcul(request):
+    return render(request, 'acceuil/IR_calcul.html')  
+def IRSA_calcul(request):
+    return render(request, 'acceuil/IRSA_calcul.html')  
 
 
 def home1(request):
     return render(request, 'myapp/home1.html')  
 
-def discussion(request):
-    return render(request, 'acceuil/message.html')  
 
 def notification(request):
     return render(request, 'acceuil/notification.html')  
@@ -113,6 +132,31 @@ def chart_line(request):
         'data': json.dumps(data_par_contribuable)
     })
 
+# def list_transaction(request):
+#     # Récupérer l'ID du contribuable connecté depuis la session
+#     id_contribuable = request.session.get('contribuable_id')
+
+#     # Vérifier si l'utilisateur est connecté
+#     if not id_contribuable:
+#         return redirect('login')  # Redirige vers la page de login si non connecté
+
+#     # Créer la requête SQL pour obtenir les transactions du contribuable connecté
+#     query = """
+#         SELECT *
+#         FROM vue_transactions_par_quit_et_contribuable
+#         WHERE contribuable = %s;
+#     """
+    
+#     # Exécuter la requête SQL
+#     with connection.cursor() as cursor:
+#         cursor.execute(query, [id_contribuable])
+#         transactions = cursor.fetchall()
+    
+#     # Retourner le rendu avec toutes les transactions
+#     return render(request, 'acceuil/liste_transaction.html', {'transactions': transactions})
+
+
+
 def list_transaction(request):
     # Récupérer l'ID du contribuable connecté depuis la session
     id_contribuable = request.session.get('contribuable_id')
@@ -133,7 +177,12 @@ def list_transaction(request):
         cursor.execute(query, [id_contribuable])
         transactions = cursor.fetchall()
     
-    # Retourner le rendu avec toutes les transactions
+    # Paginer les résultats avec 10 transactions par page
+    paginator = Paginator(transactions, 2)  # 10 transactions par page
+    page_number = request.GET.get('page')
+    transactions = paginator.get_page(page_number)
+    
+    # Passer transactions au lieu de transactions dans le rendu
     return render(request, 'acceuil/liste_transaction.html', {'transactions': transactions})
 
 
@@ -381,4 +430,161 @@ def export_transaction_pdf(request, n_quit):
     # Retourner le PDF comme réponse
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="transaction_{n_quit}.pdf"'
+    return response
+
+# def discussion(request):
+#     contribuable_id = request.session.get('contribuable_id')
+#     contribuable = Contribuable.objects.get(id=contribuable_id)
+#     operateur = Operateurs.objects.get(id=1)  # Opérateur par défaut
+    
+#     if request.method == 'POST':
+#         contenu = request.POST.get('contenu')
+#         fichier_joint = request.FILES.get('fichier_joint')
+#         # Enregistrement du message dans la base de données
+#         message = Message.objects.create(
+#             contenu=contenu,
+#             fichier_joint=fichier_joint,
+#             id_contribuable_id=contribuable_id,
+#             id_operateur_id=operateur.id,
+#             type_message='contribuable',
+#             date_envoi=timezone.now()
+#         )
+#     send_notification_to_admin(contenu)
+#     # Récupérer les messages pour cet utilisateur, triés par date
+#     messages = Message.objects.filter(id_contribuable=contribuable_id).order_by('date_envoi')
+    
+#     return render(request, 'acceuil/message.html', {'messages': messages})
+
+def discussion(request):
+    contribuable_id = request.session.get('contribuable_id')
+    contribuable = Contribuable.objects.get(id=contribuable_id)
+    operateur = Operateurs.objects.get(id=1)  # Opérateur par défaut
+
+    if request.method == 'POST':
+        contenu = request.POST.get('contenu')
+        fichier_joint = request.FILES.get('fichier_joint')
+        # Enregistrement du message dans la base de données
+        message = Message.objects.create(
+            contenu=contenu,
+            fichier_joint=fichier_joint,
+            id_contribuable_id=contribuable_id,
+            id_operateur_id=operateur.id,
+            type_message='contribuable',
+            date_envoi=timezone.now()
+        )
+        # Appel à la fonction d'envoi de notification après la création du message
+        send_notification_to_admin(message)
+
+    # Récupérer les messages pour cet utilisateur, triés par date
+    messages = Message.objects.filter(id_contribuable=contribuable_id).order_by('date_envoi')
+    
+    return render(request, 'acceuil/message.html', {'messages': messages})
+
+
+def discussion_admin(request):
+    try:
+        operator = Operateurs.objects.get(id=1)  # Utiliser l'ID 1 par défaut
+    except Operateurs.DoesNotExist:
+        return render(request, 'admin/message.html', {'error': 'Opérateur non trouvé'})
+    messages_non_lus = Message.objects.filter(id_operateur=1, notifié=False)
+    
+    # messages_non_lus = Message.objects.filter(id_operateur=operator, notifié=False).order_by('date_envoi')
+    return render(request, 'admin/message.html', {'messages_non_lus': messages_non_lus})
+
+
+def view_message(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    
+    # Marquer le message comme lu
+    if not message.notifié:
+        message.notifié = True
+        message.save()
+
+    return render(request, 'admin/view_message.html', {'message': message})
+
+# @login_required
+def dashboard(request):
+    # Récupérer les messages non lus pour l'opérateur connecté
+    # operator = request.user.operateur
+    messages_non_lus = Message.objects.filter(id_operateur=1, notifié=False)
+    
+    # Passer les messages au template
+    return render(request, 'layout/navbar_admin.html', {'messages_non_lus': messages_non_lus})
+
+
+
+# def dashboard(request):
+#     # Récupérer les informations de session
+#     contribuable_id = request.session.get('contribuable_id')
+#     prenif = request.session.get('prenif')
+#     email = request.session.get('email')
+
+#     return render(request, 'acceuil/dashboard.html', {
+#         'contribuable_id': contribuable_id,
+#         'prenif': prenif,
+#         'email': email
+#     })
+
+
+def fetch_sent_emails():
+    mail = imaplib.IMAP4_SSL("imap.gmail.com")
+    mail.login("raharinirinalina@gmail.com", "cegg xqpy jrjg clsj")
+
+    # Accéder au dossier "Sent" pour récupérer les messages envoyés
+    mail.select("[Gmail]/Sent Mail")  # Pour Gmail, cela pourrait être [Gmail]/Sent Mail
+    status, messages = mail.search(None, 'ALL')  # ou 'UNSEEN' pour les messages non lus
+    
+    email_ids = messages[0].split()
+    
+    for email_id in email_ids:
+        status, msg_data = mail.fetch(email_id, "(RFC822)")
+        
+        for response_part in msg_data:
+            if isinstance(response_part, tuple):
+                msg = email.message_from_bytes(response_part[1])
+                
+                subject, encoding = decode_header(msg["Subject"])[0]
+                if isinstance(subject, bytes):
+                    subject = subject.decode(encoding if encoding else "utf-8")
+                
+                from_ = msg.get("From")
+                
+                if msg.is_multipart():
+                    for part in msg.walk():
+                        content_type = part.get_content_type()
+                        if "attachment" not in str(part.get("Content-Disposition")):
+                            body = part.get_payload(decode=True).decode()
+                            if content_type == "text/plain":
+                                EmailMessage.objects.create(
+                                    subject=subject,
+                                    from_email=from_,
+                                    body=body
+                                )
+                else:
+                    body = msg.get_payload(decode=True).decode()
+                    EmailMessage.objects.create(
+                        subject=subject,
+                        from_email=from_,
+                        body=body
+                    )
+    
+    mail.logout()
+
+
+
+
+def send_notification_to_admin(message):
+    # Récupérer l'ID de l'opérateur et envoyer une notification FCM
+    operator_fcm_token = "BNme03HjWgqznYpQeMxh-3OFMLZnllIykIs8ojj5F6o86KfJEZ17ICQn9NrfQuPXX0qGknfsYwFhYtNfqa0tI1Q"  # L'ID du token FCM de l'opérateur
+    
+    message_fcm = messaging.Message(
+        notification=messaging.Notification(
+            title='Nouveau message',
+            body=f"Vous avez un nouveau message de {message.id_contribuable}",
+        ),
+        token=operator_fcm_token,
+    )
+    
+    # Envoyer la notification
+    response = messaging.send(message_fcm)
     return response

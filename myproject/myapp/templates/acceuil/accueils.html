@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Page d'Accueil{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- <link rel="stylesheet" href="{% static 'myapp/css/acceuils_style.css' %}"> -->
+</head>
+<body>
+    <header>
+        {% include 'layout/navbar_acceuil.html' %}
+    </header>
+    <div class="page-container">
+        <div class="content-wrapper">
+            <!-- <main class="main-content"> -->
+                <h1>Civisme Fiscal</h1>
+                <div class="video-container">
+                    <!-- Section des détails -->
+                    <div class="video-details">
+                        <p><strong>Titre :</strong> Civisme Fiscal</p>
+                        <p><strong>Description :</strong> Une vidéo éducative pour sensibiliser au civisme fiscal.</p>
+                    </div>
+                
+                    <!-- Section de la vidéo -->
+                    <div class="video-content">
+                        <video width="100%" height="auto" autoplay loop muted>
+                            <source src="{% static 'myapp/video/test_civisme_fiscal.mp4' %}" type="video/mp4">
+                            Votre navigateur ne supporte pas la lecture de ce fichier vidéo.
+                        </video>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <footer>
+        {% include 'layout/footer_acceuil.html' %}
+    </footer>
+</body>
+</html>

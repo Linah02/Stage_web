@@ -43,7 +43,7 @@ p {
 }
 
 /* Aligner les boutons */
-button[type="submit"], button[type="button"] {
+/* button[type="submit"], button[type="button"] {
     margin-top: 20px;
     margin-right: 10px;
     padding: 10px 20px;
@@ -61,7 +61,7 @@ button[type="submit"] {
 button[type="button"] {
     background-color: #ddd;
     color: #333;
-}
+} */
 
 /* Champs du formulaire pour gérer la largeur et les marges */
 .form-control, .form-check-label {

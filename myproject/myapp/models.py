@@ -168,6 +168,23 @@ class Paiement(models.Model):
         return f"Paiement {self.n_quit} - Contribuable {self.id_contribuable}"
 
 
+class Operateurs(models.Model):
+    nom = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    def __str__(self):
+        return f'Operateurs {self.nom} {self.email}'
+
+class Message(models.Model):
+    contenu = models.TextField(blank=True, null=True)  # Le texte du message (optionnel si fichier joint)
+    fichier_joint = models.FileField(upload_to='messages_fichiers/', blank=True, null=True)  # Fichier attaché, ex. PDF, Excel
+    date_envoi = models.DateTimeField(auto_now_add=True)
+    id_contribuable = models.ForeignKey(Contribuable, on_delete=models.CASCADE)
+    id_operateur = models.ForeignKey(Operateurs, on_delete=models.SET_NULL, null=True, blank=True)
+    type_message = models.CharField(max_length=20, choices=[('contribuable', 'Contribuable'), ('operateur', 'Opérateur')])
+    notifié = models.BooleanField(default=False)
+    def __str__(self):
+        return f"Message de {self.type_message} le {self.date_envoi}"
+
 
 class FokontanyView(models.Model):
     fkt_no = models.IntegerField(primary_key=True)

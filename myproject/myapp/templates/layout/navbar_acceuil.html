@@ -1,70 +1,88 @@
 {% load static %}
-<style>
-    .navbar .search-container {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin: 10px 0;
-}
-
-#dropdown-search, #search-input, #search-btn {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #b9e7f3;
-    width: 150px;
-    border-radius: 5px;
-}
-
-#dropdown-search, #search-input {
-
-    flex: 1; /* Pour que le menu déroulant et le champ de recherche prennent plus d'espace */
-}
-
-#search-btn {
-    background-color: #ffffff;
-    border:solid 1px #b9e7f3;
-    color: rgb(0, 0, 0);
-    cursor: pointer;
-}
-
-#search-btn:hover {
-    background-color: #b9e7f3;
-    color: #ffffff;
-}
-
-</style>
+<head>
+    <link rel="stylesheet" href="{% static 'myapp/css/acceuils_style.css' %}">
+    <style>
+   
+    </style>
+    
+    
+</head>
 <nav class="navbar">
     <div class="logo">
         <img src="{% static 'myapp/images/LOGO_MEF.jpeg' %}" alt="Logo">
     </div>
-    <div class="search-container">
-        <select id="dropdown-search">
-            <option value="">Lieu</option>
-            <option value="option1">Antananarivo</option>
-            <option value="option2">Majunga</option>
-            <option value="option3">Tamatave</option>
-            <option value="option3">Fort Dauphin</option>
-        </select>
-        <input type="date" id="search-input" placeholder="Recherche...">
-        <button id="search-btn">Rechercher</button>
+
+    <div class="navbar-content">
+        <div class="menu">
+            <div class="icon">
+                <a href="{% url 'acceuils' %}"> <i class="fas fa-home home-icon"></i></a>
+            </div>
+            <div class="menu-list">
+                <ul>
+                    <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Se connecter</a></li>
+                    <li><a href="{% url 'home' %}"><i class="fas fa-user-plus"></i> S'inscrire</a></li>
+                </ul>
+                
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <ul class="navigation">
+                <li><a href="{% url 'acceuil' %}">actualités</a></li>
+
+                <li class="dropdown" id="dropdown">
+                    Simulateur
+                    <i class="fas fa-caret-down"></i>
+                    <!-- Menu déroulant -->
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="{% url 'IRSA_calcul' %}">IRSA</a>
+                        <a href="{% url 'IR_calcul' %}">IR</a>
+                        <a href="{% url 'IS_calcul' %}">IS</a>
+                    </div>
+                </li>
+                
+                
+                
+
+                <li><a href="{% url 'acceuil' %}">brochure</a></li>
+            </ul>
+            <div class="search-area">
+                <select id="dropdown-search">
+                    <option value="">Lieu</option>
+                    <option value="option1">Antananarivo</option>
+                    <option value="option2">Majunga</option>
+                    <option value="option3">Tamatave</option>
+                    <option value="option4">Fort Dauphin</option>
+                </select>
+                <input type="date" id="search-input" placeholder="Recherche...">
+                <button id="search-btn">Rechercher</button>
+            </div>
+        </div>
+        
     </div>
-    <div class="menu">
-        <ul>
-            <li><a href="{% url 'acceuil' %}">Accueil</a></li>
-            <li><a href="{% url 'acceuil' %}">À propos</a></li>
-            <li><a href="{% url 'acceuil' %}">Contact</a></li>
-            <li><a href="{% url 'home' %}">S'inscrire</a></li>
-        </ul>
-    </div>
-</nav>
+    </nav>
 
 <script>
     window.onscroll = function() {
         const navbar = document.querySelector('.navbar');
         if (window.pageYOffset > 0) {
-            navbar.classList.add('fixed'); // Ajoute la classe 'fixed' lorsque l'utilisateur fait défiler
+            navbar.classList.add('fixed');
         } else {
-            navbar.classList.remove('fixed'); // Retire la classe 'fixed' quand l'utilisateur est en haut
+            navbar.classList.remove('fixed');
         }
     };
+    // Sélection des éléments
+const dropdown = document.getElementById('dropdown');
+const dropdownMenu = document.getElementById('dropdownMenu');
+
+// Afficher le menu au survol
+dropdown.addEventListener('mouseenter', () => {
+    dropdownMenu.style.display = 'block';
+});
+
+// Cacher le menu lorsque la souris quitte
+dropdown.addEventListener('mouseleave', () => {
+    dropdownMenu.style.display = 'none';
+});
+
 </script>

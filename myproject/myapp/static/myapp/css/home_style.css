@@ -1,0 +1,39 @@
+button.btn-warning {
+    background-color: #ac2c05;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button.btn-warning:hover {
+    background-color: #a6190f;
+}
+
+button.btn-light {
+    background-color: #ddd;
+    color: #333;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btns-deconnexions[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: white;
+    background-color: #ff4b4b;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    width: 200px;
+    cursor: pointer;
+}
+button.btn-light:hover {
+    background-color: #bbb;
+}

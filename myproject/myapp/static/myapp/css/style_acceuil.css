@@ -232,7 +232,7 @@ table th {
 .btn-icon {
     padding: 10px 10px;
     color: #bf8d12; /*Jaune personnalisé*/
-    border: none;
+     border: none;
     cursor: pointer;
     font-size: 1.2em;
     text-decoration: none;
@@ -240,7 +240,5 @@ table th {
 
 .btn-icon:hover {
     color: #068e8c;
-}
-
-
+} 
 

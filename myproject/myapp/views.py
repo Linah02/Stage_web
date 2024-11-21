@@ -9,9 +9,15 @@ from .models import Contribuable
 from .models import Operateur
 import logging
 import random
-#  import requests
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+import requests
+
 from django import forms
 import os
+from datetime import datetime
+
 from django.core.exceptions import ValidationError
 logger = logging.getLogger(__name__)
 from .models import Genre
@@ -20,11 +26,42 @@ from django.http import JsonResponse
 from .models import FokontanyView
 from .forms import ContribuableForm
 from datetime import datetime, timedelta
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 
+# def home(request):
+#     genres = Genre.objects.all()  # Récupère tous les genres
+#     situations = Sit_matrim.objects.all()  # Récupère toutes les situations matrimoniales
+
+#     if request.method == 'POST':
+#         nom = request.POST.get('nom')
+#         situation_matrimoniale = request.POST.get('situation_matrimoniale')
+#         prenom = request.POST.get('prenom')
+#         date_naissance = request.POST.get('date_naissance')
+#         genre = request.POST.get('genre')
+#         lieu_naissance = request.POST.get('lieu_naissance')
+
+#           # Stockage des données dans la session
+#         request.session['form_data'] = {
+#             'nom': nom,
+#             'situation_matrimoniale': situation_matrimoniale,
+#             'prenom': prenom,
+#             'date_naissance': date_naissance,
+#             'genre': genre,
+#             'lieu_naissance': lieu_naissance,
+#         }
+#         return redirect('form_part2')  # Redirige vers le formulaire 2
+
+#     # Remplir les champs avec les données de la session s'il y en a
+#     form_data = request.session.get('form_data', {})
+#     # Passer également les genres et situations dans le contexte
+#     return render(request, 'myapp/home.html', context={'genres': genres, 'situations': situations, **form_data})
 
 def home(request):
-    genres = Genre.objects.all()  # Récupère tous les genres
-    situations = Sit_matrim.objects.all()  # Récupère toutes les situations matrimoniales
+    genres = Genre.objects.all()
+    situations = Sit_matrim.objects.all()
+    error_message = None
 
     if request.method == 'POST':
         nom = request.POST.get('nom')
@@ -34,43 +71,100 @@ def home(request):
         genre = request.POST.get('genre')
         lieu_naissance = request.POST.get('lieu_naissance')
 
-          # Stockage des données dans la session
-        request.session['form_data'] = {
-            'nom': nom,
-            'situation_matrimoniale': situation_matrimoniale,
-            'prenom': prenom,
-            'date_naissance': date_naissance,
-            'genre': genre,
-            'lieu_naissance': lieu_naissance,
-        }
-        return redirect('form_part2')  # Redirige vers le formulaire 2
+        # Vérification de l'âge
+        try:
+            date_naissance_dt = datetime.strptime(date_naissance, '%Y-%m-%d')
+            age = (datetime.now() - date_naissance_dt).days // 365
+            if age < 18:
+                error_message = "Vous devez avoir un CIN !"
+            else:
+                # Stockage des données dans la session si l'âge est valide
+                request.session['form_data'] = {
+                    'nom': nom,
+                    'situation_matrimoniale': situation_matrimoniale,
+                    'prenom': prenom,
+                    'date_naissance': date_naissance,
+                    'genre': genre,
+                    'lieu_naissance': lieu_naissance,
+                }
+                return redirect('form_part2')
+        except ValueError:
+            error_message = "Date de naissance invalide."
 
     # Remplir les champs avec les données de la session s'il y en a
     form_data = request.session.get('form_data', {})
-    # Passer également les genres et situations dans le contexte
-    return render(request, 'myapp/home.html', context={'genres': genres, 'situations': situations, **form_data})
+    context = {'genres': genres, 'situations': situations, 'error_message': error_message, **form_data}
+    return render(request, 'myapp/home.html', context=context)
+
+
+
+# def valider_cin_et_contact(cin, contact):
+#     url = 'http://votre_api_url/valider_cin/'
+#     response = requests.post(url, json={'cin': cin, 'contact': contact})
+    
+#     if response.status_code == 200:
+#         # Validation réussie
+#         return True
+#     elif response.status_code == 400:
+#         # Si l'API renvoie une erreur de validation
+#         raise ValidationError(response.json().get('message', 'Erreur de validation inconnue'))
+#     else:
+#         # Erreur de communication avec l'API
+#         raise ValidationError("Impossible de valider les informations, veuillez réessayer.")
+
+
+@api_view(['GET'])
+def get_all_operateurs(request):
+    # Récupérer tous les opérateurs
+    operateurs = Operateur.objects.all()
+    # Sérialiser les opérateurs en un format JSON
+    data = [{"cin": operateur.cin, "contact": operateur.contact} for operateur in operateurs]
+    return Response(data, status=status.HTTP_200_OK)
+
+
+
+# def valider_cin_et_contact(cin, contact):
+#     cin = cin.strip()  # Supprimer les espaces inutiles au début et à la fin du CIN
+#     contact = contact.strip()  # Supprimer les espaces inutiles au début et à la fin du contact
+    
+#     try:
+#         # Rechercher un opérateur avec le CIN donné
+#         operateur = Operateur.objects.get(cin=cin)
+        
+#         # Vérifier si le contact correspond
+#         if operateur.contact != contact:
+#             # Lever une exception si le contact ne correspond pas
+#             raise ValidationError("Le contact ne correspond pas à ce CIN.")
+    
+#     except Operateur.DoesNotExist:
+#         # Lever une exception si aucun opérateur avec ce CIN n'est trouvé
+#         raise ValidationError("Le CIN n'est pas valide.")
+    
+#     # Si aucune exception n'a été levée, tout est correct
+#     return True
 
 
 
 def valider_cin_et_contact(cin, contact):
-    cin = cin.strip()  # Supprimer les espaces inutiles au début et à la fin du CIN
-    contact = contact.strip()  # Supprimer les espaces inutiles au début et à la fin du contact
+    # URL de l'API où les opérateurs sont récupérés
+    url = 'http://127.0.0.1:8000/get_all_operateurs/'  # Remplacez par l'URL correcte
     
-    try:
-        # Rechercher un opérateur avec le CIN donné
-        operateur = Operateur.objects.get(cin=cin)
+    # Faire la requête à l'API pour récupérer tous les opérateurs
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        operateurs = response.json()
         
-        # Vérifier si le contact correspond
-        if operateur.contact != contact:
-            # Lever une exception si le contact ne correspond pas
-            raise ValidationError("Le contact ne correspond pas à ce CIN.")
-    
-    except Operateur.DoesNotExist:
-        # Lever une exception si aucun opérateur avec ce CIN n'est trouvé
-        raise ValidationError("Le CIN n'est pas valide.")
-    
-    # Si aucune exception n'a été levée, tout est correct
-    return True
+        # Vérifier si le CIN existe dans la liste et si le contact correspond
+        for operateur in operateurs:
+            if operateur['cin'] == cin and operateur['contact'] == contact:
+                return True  # Si le CIN et le contact correspondent, on retourne True
+        
+        # Si aucun opérateur avec ce CIN et contact n'a été trouvé, lever une exception
+        raise ValidationError("Le CIN ou le contact ne correspond pas.")
+    else:
+        raise ValidationError("Erreur lors de la validation avec l'API.")
+
 
 
 
@@ -244,7 +338,7 @@ def D_authentification(request):
     if request.method == 'POST':
         if 'send_code' in request.POST:
             # Récupérer l'email de l'utilisateur depuis la session
-            email = request.session.get('user_email')  # Utilisez cet email pour renvoyer le code
+            email = request.session.get('email')  # Utilisez cet email pour renvoyer le code
             code = generate_code()
             request.session['auth_code'] = code  # Stocker le code dans la session
             request.session['code_expiration'] = (datetime.now() + timedelta(minutes=2)).strftime("%Y-%m-%d %H:%M:%S")
@@ -318,7 +412,7 @@ def modifier_contribuable(request):
 
     if request.method == 'POST':
         form = ContribuableForm(request.POST, request.FILES, instance=contribuable)
-        if form.is_valid():
+        if  form.is_valid():
             form.save()
             messages.success(request, 'Profil modifié avec succès.')
             return redirect('profil')  # Redirection après la sauvegarde

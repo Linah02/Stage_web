@@ -39,7 +39,7 @@
         <li >
         <form action="{% url 'deconnexion' %}" method="post" style="display: inline;">
             {% csrf_token %}
-            <button type="submit" class="btn-deconnexions">
+            <button type="submit" class="btns-deconnexions">
                 <i class="fas fa-sign-out-alt sidebar-icon"></i> Déconnexion
             </button>
         </form>
@@ -90,7 +90,7 @@
         padding: 5px 0;
     }
     /* Style pour le bouton de déconnexion */
-    .btn-deconnexions {
+    .btns-deconnexions {
     display: inline-flex;
     align-items: center;
     padding: 10px 15px;
@@ -103,11 +103,11 @@
     cursor: pointer;
 }
 
-.btn-deconnexions:hover {
+.btns-deconnexions:hover {
     background-color: #8fc3c6;
 }
 
-.btn-deconnexions .sidebar-icon {
+.btns-deconnexions .sidebar-icon {
     margin-right: 8px; /* Espace entre l'icône et le texte */
 }
 

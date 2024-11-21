@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 
 from pathlib import Path
+import firebase_admin
+from firebase_admin import credentials
+
+cred = credentials.Certificate("media/espace-contribuable-firebase-adminsdk-c9ae7-c39bdf7224.json")
+firebase_admin.initialize_app(cred)
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -165,5 +172,5 @@ EMAIL_HOST = 'smtp.gmail.com'  # Par exemple, pour Gmail
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'raharinirinalina@gmail.com'
-EMAIL_HOST_PASSWORD = 'cegg xqpy jrjg clsj'
+EMAIL_HOST_PASSWORD = 'bcqm live zzip zdud'
 DEFAULT_FROM_EMAIL = 'raharinirinalina@gmail.com'

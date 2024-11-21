@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du Message</title>
+</head>
+<body>
+    <h1>Message de {{ message.id_contribuable.nom }}</h1>
+    <p>{{ message.contenu }}</p>
+    {% if message.fichier_joint %}
+        <a href="{{ message.fichier_joint.url }}" target="_blank">Voir le fichier joint</a>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Marquer comme lu</button>
+    </form>
+</body>
+</html>
+<script>
+    const messaging = firebase.messaging();
+messaging.requestPermission().then(function() {
+    return messaging.getToken({ vapidKey: 'BJSsiqOD-9NxXUdnHJ78xm44MECTasLBjfZUNS_fQFjZagtEtGRJLuIp8kbTsskKFsk0SfKw1a3CnzW2T818nnQ' });
+}).then(function(token) {
+    // Envoyer le token à votre serveur Django
+}).catch(function(err) {
+    console.log('Erreur lors de la récupération du token', err);
+});
+
+</script>
