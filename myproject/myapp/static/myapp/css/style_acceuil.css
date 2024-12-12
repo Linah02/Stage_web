@@ -2,38 +2,62 @@
 /* Style général pour la barre de navigation */
 /* Style général pour la barre de navigation */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    height: 100px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-    background-color: #ffffff;
-    transition: box-shadow 0.3s; /* Pour une transition douce de l'ombre */
+    display: flex; /* Active Flexbox pour organiser les éléments à l'intérieur */
+    justify-content: flex-end; /* Aligne tout le contenu vers la droite */
+    align-items: center; /* Centre verticalement le contenu dans la navbar */
+    width: calc(100% - 240px); /* Largeur dynamique : 100% de l'écran moins la largeur de la sidebar */
+    height: 50px;
+    background-color: transparent; /* Rend le fond transparent */
+    padding-right: 20px;
+    position: fixed;
+    left: 240px;
+    border-bottom: 2px solid #8fc3c6; /* Ajoute une bordure en haut de 5px avec la couleur bleue */
 }
 
-/* Navbar fixe avec ombre */
 .navbar.fixed {
-    position: fixed; /* Fixe la navbar en haut */
-    top: 0; /* Positionne la navbar en haut de la page */
-    width: 100%; /* S'assure que la navbar prend toute la largeur */
-    z-index: 1000; /* Assure que la navbar est au-dessus des autres éléments */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre grise */
+    position: fixed; 
+    background-color:#8fc3c6; ;
+    /* top: 0;  */
+    width: 1070px;
+    z-index: 1000; 
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  */
+}
+
+/* Styles par défaut des liens */
+.navbar .menu a,
+.navbar .menu-list ul li a {
+    color: #8fc3c6; /* Couleur initiale */
+    transition: color 0.3s ease; /* Transition fluide pour le changement de couleur */
+}
+
+/* Styles pour l'état fixe */
+.navbar.fixed .menu a,
+.navbar.fixed .menu-list ul li a {
+    color: #ffffff; /* Changer en blanc quand la navbar est fixe */
+}
+
+.navbar.fixed .menu a:hover,
+.navbar.fixed .menu-list ul li a:hover {
+    color: #cccccc; /* Couleur légèrement différente au survol */
 }
 
 
-/* Style pour le logo */
-.navbar .logo img {
-    max-width: 280px;
-    height: 100px;
+
+.menu {
+    display: flex; /* Active Flexbox pour le menu */
+    justify-content: flex-end; /* Pousse tous les enfants (le ul) vers la droite */
+    width: 100%; /* Permet au menu de prendre toute la largeur de la navbar */
 }
 
-/* Style du menu */
-.navbar .menu ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
+.menu ul {
+    display: flex; /* Organise les éléments de liste horizontalement */
+    list-style: none; /* Supprime les puces */
+    margin: 0; /* Élimine les marges par défaut */
+    padding: 0; /* Élimine les espacements internes */
+}
+
+.menu ul li {
+    margin-left: 15px; /* Ajoute de l'espace entre les icônes (optionnel) */
 }
 
 /* Style des liens */
@@ -43,7 +67,7 @@
 
 .navbar .menu ul li a {
     text-decoration: none; /* Supprimer le soulignement des liens */
-    color: #c61618; /* Couleur des liens par défaut */
+    color: #8fc3c6; /* Couleur des liens par défaut */
     font-weight: bold;
     font-size: 16px;
     padding: 5px 10px;
@@ -60,26 +84,26 @@
 }
 
 
-/* Style pour la sidebar */
-.sidebar {
-    width: 200px;
-    background-color: #d8d8d8;
-    height: calc(100vh - 100px); /* Prend toute la hauteur de la fenêtre moins la hauteur de la navbar */
-    padding-top: 20px;
-    position: fixed; /* Position fixe */
-    top: 100px; /* Positionne la sidebar juste en dessous de la navbar */
-    left: 0; /* Positionne la sidebar à gauche */
-}
+
+
+
+
+
+
 
 /* Style pour la sidebar */
 .sidebar {
     width: 200px;
-    background-color: #8fc3c6;
-    height: calc(100vh - 100px); /* Hauteur de la sidebar */
-    padding-top: 20px;
+    background-color: #ffffff;
+    height: 400px; /* Hauteur de la sidebar */
+    /* padding-top: 20px; */
     position: fixed; /* Position fixe */
-    top: 120px; /* Ajuster la position pour qu'elle soit en dessous de la navbar */
+    top:0px; /* Ajuster la position pour qu'elle soit en dessous de la navbar */
     left: 0; /* Positionne la sidebar à gauche */
+}
+.logo img {
+    width: 200px; /* Ajustez selon la taille désirée */
+    height: auto; /* Maintient le ratio d'aspect de l'image */
 }
 /* Style pour les icônes de la sidebar */
 .sidebar-icon {
@@ -107,17 +131,15 @@
 }
 
 .sidebar ul li a:hover {
-    background-color: #50989c; /* Change la couleur de fond au survol */
+    background-color: hsl(0, 0%, 85%); /* Change la couleur de fond au survol */
 }
-
-
 
 .main-content {
     margin-left: 220px;
+    margin-top: 100px;
     padding: 20px;
     flex-grow: 1;
 }
-
 
 p {
 
@@ -217,7 +239,7 @@ table th {
 
 .btn {
     padding: 5px 10px;
-    background-color: #068e8c;
+    background-color: #8fc3c6;
     color: white;
     border: none;
     border-radius: 5px;
@@ -226,19 +248,19 @@ table th {
 }
 
 .btn:hover {
-    background-color: #bf8d12;
+    background-color: #616161;
 }
 
 .btn-icon {
     padding: 10px 10px;
-    color: #bf8d12; /*Jaune personnalisé*/
-     border: none;
+    color: #616161; /*Jaune personnalisé*/
+    border: none;
     cursor: pointer;
     font-size: 1.2em;
     text-decoration: none;
 }
 
 .btn-icon:hover {
-    color: #068e8c;
+    color: #8fc3c6;
 } 
 

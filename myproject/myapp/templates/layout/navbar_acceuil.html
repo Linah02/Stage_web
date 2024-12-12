@@ -3,86 +3,113 @@
     <link rel="stylesheet" href="{% static 'myapp/css/acceuils_style.css' %}">
     <style>
    
+   .dropdown {
+       position: relative;
+       font-weight: bold;
+       color: #8fc3c6;
+       cursor: pointer;
+   }
+   
+   .dropdown-menu {
+       display: none;
+       position: absolute;
+       top: 100%;
+       left: 0;
+       background-color: #ffffff;
+       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+       border-radius: 5px;
+       padding: 10px;
+       z-index: 1000;
+       min-width: 150px;
+   }
+   
+   .dropdown-menu a {
+       display: block;
+       padding: 8px 15px;
+       text-decoration: none;
+       color: #9b9898;
+       font-weight: bold;
+       transition: background-color 0.3s;
+   }
+   
+   .dropdown-menu a:hover {
+       background-color: #f0f0f0;
+       color: #000;
+   }
+   
+   .dropdown:hover .dropdown-menu {
+       display: block; /* Affiche le menu au survol */
+   }
     </style>
-    
-    
 </head>
 <nav class="navbar">
-    <div class="logo">
-        <img src="{% static 'myapp/images/LOGO_MEF.jpeg' %}" alt="Logo">
-    </div>
-
     <div class="navbar-content">
         <div class="menu">
-            <div class="icon">
-                <a href="{% url 'acceuils' %}"> <i class="fas fa-home home-icon"></i></a>
-            </div>
-            <div class="menu-list">
-                <ul>
-                    <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Se connecter</a></li>
-                    <li><a href="{% url 'home' %}"><i class="fas fa-user-plus"></i> S'inscrire</a></li>
-                </ul>
+                <a class="test" href="{% url 'acceuils' %}">
+                    <i class="fas fa-home home-icon"></i>
+                </a>
+                <a href="{% url 'acceuil' %}">Actualités</a>
                 
-            </div>
-        </div>
-        
-        <div class="search-container">
-            <ul class="navigation">
-                <li><a href="{% url 'acceuil' %}">actualités</a></li>
-
-                <li class="dropdown" id="dropdown">
-                    Simulateur
+                <!-- Menu déroulant Simulateur -->
+                <div class="dropdown">
+                    <a href="#" id="dropdown">Simulateur</a>
                     <i class="fas fa-caret-down"></i>
-                    <!-- Menu déroulant -->
                     <div class="dropdown-menu" id="dropdownMenu">
                         <a href="{% url 'IRSA_calcul' %}">IRSA</a>
                         <a href="{% url 'IR_calcul' %}">IR</a>
                         <a href="{% url 'IS_calcul' %}">IS</a>
                     </div>
-                </li>
-                
-                
-                
-
-                <li><a href="{% url 'acceuil' %}">brochure</a></li>
-            </ul>
-            <div class="search-area">
-                <select id="dropdown-search">
-                    <option value="">Lieu</option>
-                    <option value="option1">Antananarivo</option>
-                    <option value="option2">Majunga</option>
-                    <option value="option3">Tamatave</option>
-                    <option value="option4">Fort Dauphin</option>
-                </select>
-                <input type="date" id="search-input" placeholder="Recherche...">
-                <button id="search-btn">Rechercher</button>
+                </div>
+                <a href="{% url 'acceuil' %}">Brochure</a>
             </div>
         </div>
-        
+            <div class="menu-list">
+                <ul>
+                    <li>
+                        <a href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt"></i> Se connecter
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'home' %}">
+                            <i class="fas fa-user-plus"></i> S'inscrire
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    </nav>
+</nav>
 
 <script>
-    window.onscroll = function() {
-        const navbar = document.querySelector('.navbar');
-        if (window.pageYOffset > 0) {
-            navbar.classList.add('fixed');
-        } else {
-            navbar.classList.remove('fixed');
-        }
-    };
-    // Sélection des éléments
-const dropdown = document.getElementById('dropdown');
-const dropdownMenu = document.getElementById('dropdownMenu');
-
-// Afficher le menu au survol
-dropdown.addEventListener('mouseenter', () => {
-    dropdownMenu.style.display = 'block';
+window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar'); // Sélectionnez la navbar
+    if (window.scrollY > 0) {
+        navbar.classList.add('fixed'); // Ajoutez la classe fixe
+    } else {
+        navbar.classList.remove('fixed'); // Supprimez la classe fixe
+    }
 });
+ // Sélection des éléments
+ const dropdown = document.querySelector('.dropdown');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
 
-// Cacher le menu lorsque la souris quitte
-dropdown.addEventListener('mouseleave', () => {
-    dropdownMenu.style.display = 'none';
-});
+    // Afficher le menu lorsque la souris entre dans la zone
+    dropdown.addEventListener('mouseenter', () => {
+        dropdownMenu.style.display = 'block';
+    });
+
+    // Garder le menu ouvert si la souris est dans la zone du menu
+    dropdownMenu.addEventListener('mouseenter', () => {
+        dropdownMenu.style.display = 'block';
+    });
+
+    // Masquer le menu lorsque la souris quitte le parent ou le menu
+    dropdown.addEventListener('mouseleave', () => {
+        dropdownMenu.style.display = 'none';
+    });
+    dropdownMenu.addEventListener('mouseleave', () => {
+        dropdownMenu.style.display = 'none';
+    });
 
 </script>

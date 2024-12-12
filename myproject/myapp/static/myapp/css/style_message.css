@@ -1,10 +1,16 @@
   /* Styles pour la page de discussion */
+  .page-container{
+    position: fixed;
+    width: 100%;
+    margin-bottom: 0px;
+  }
   .container {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 20px;
-    max-height: 400px;
+    max-height: 300px;
     overflow-y: auto;
+    /* position: fixed; */
     margin-bottom: 20px;
 }
 .message {
@@ -45,32 +51,69 @@
     right: 10px; /* Position en bas à droite */
     bottom: 5px;
 }
+
 .message-input {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Espacement entre les éléments */
 }
-.message-input textarea {
-    resize: none;
-    height: 100px;
-    margin-bottom: 10px;
+
+.textarea-file {
+    display: flex;
+    flex: 1; /* Occupe tout l'espace disponible */
+    gap: 10px;
+    align-items: center;
 }
-.btn-envoyer {
-    align-self: flex-end;
-    padding: 10px 15px;
-    background-color: #517a5c;
-    color: white;
-    border: none;
+
+textarea {
+    flex: 3; /* Le textarea prend 3 parts de l'espace */
+    resize: none; /* Désactive le redimensionnement */
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    cursor: pointer;
-}
-.btn-envoyer:hover {
-    background-color: #2cbb52;
+    min-height: 50px; /* Ajuster selon vos besoins */
 }
 
 input[type="file"] {
-border: 1px solid #000000;
-padding: 8px;
+    flex: 1; /* L'input fichier prend 1 part de l'espace */
+    border: none;
+    padding: 5px;
+}
+
+.btn-envoyer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #929090;
+    color: #1eebfa;
+    /* color: #fa1ea6; */
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    height: 40px;
+    width: 40px;
+}
+
+.btn-envoyer:hover {
+    background-color: #ffffff; /* Changer la couleur au survol */
+}
+
+.btn-envoyer i {
+    margin: 0; /* Supprime tout espacement autour de l'icône */
+}
+
+textarea:focus, input[type="file"]:focus {
+    outline: none; /* Supprime le contour par défaut au focus */
+    border-color: #007bff; /* Change la couleur de la bordure */
+}
+
+
+input[type="file"] {
 cursor: pointer;
+max-width: 125px;
+max-height: 300px;
 color: #333;
 font-family: Arial, sans-serif;
 font-size: 14px;
@@ -79,7 +122,7 @@ border-radius: 1px;
 }
 
 input[type="file"]::file-selector-button {
-background-color: #9fb4a5;
+background-color: #929090;
 color: white;
 padding: 8px 12px;
 border: none;
@@ -89,5 +132,76 @@ cursor: pointer;
 }
 
 input[type="file"]::file-selector-button:hover {
-background-color: #9e998e;
+background-color: #929090;
+}
+
+
+
+.message-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.message-list li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.message-list li:nth-child(odd) {
+    background-color: #f9f9f9; /* Blanc cassé */
+}
+
+.message-list li:nth-child(even) {
+    background-color: #e6e6e6; /* Gris clair */
+}
+
+.message-content p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.message-content span {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.message-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-view, .btn-reply {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 14px;
+    color: white;
+    background-color: #a9d8de;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-view:hover {
+    background-color: #78a8ac;
+    transform: scale(1.05);
+}
+
+.btn-reply {
+    background-color: #28a745;
+}
+
+.btn-reply:hover {
+    background-color: #218838;
+    transform: scale(1.05);
 }

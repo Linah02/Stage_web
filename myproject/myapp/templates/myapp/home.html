@@ -10,21 +10,18 @@
 
     <link rel="stylesheet" href="{% static 'myapp/css/acceuils_style.css' %}">
         <link rel="stylesheet" href="{% static 'myapp/css/home_style.css' %}">
-        <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
         <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
 <style>
-  
+
 </style>
       </head>
 <body>
+    {% include 'layout/sidebar_acc.html' %}
+
     <header>{% include 'layout/navbar_acceuil.html' %}</header>
     <div class="page-container">
         <!-- Sidebar et contenu principal côte à côte -->
         <div class="content-wrapper">
-            <aside class="sidebar">
-                {% include 'layout/sidebar_acceuil.html' %}
-            </aside>
-
             <main class="main-content">
 <div class="container">
     <h2 style="margin-bottom: 1px;">Informations personnelles</h2>

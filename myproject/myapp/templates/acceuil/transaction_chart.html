@@ -78,21 +78,20 @@ sommes.forEach(item => {
     const ctx = document.getElementById('transactionsChart').getContext('2d');
     const transactionsChart = new Chart(ctx, {
         type: 'bar',
-        // type: 'line',
         data: {
             labels: labels,
             datasets: [{
                 label: 'Montant des achats',
                 data: dataMontants,
                 backgroundColor: [
-                    '#f0c75e', // jaune clair
-                    '#e75d5e', // rouge clair
-                    '#5ac46a', // vert clair
-                    '#3eb4b1', // bleu-vert clair
+                    '#FEE3C2', // jaune clair
+                    '#e46969', // rouge clair
+                    '#7bb46d', // vert clair
+                    '#b3b3b3', // bleu-vert clair
                     '#b3d9da', // bleu clair
-                    '#f0c75e', // jaune clair
-                    '#e75d5e', // rouge clair
-                    '#5ac46a', // vert clair
+                    '#FEE3C2', // jaune clair
+                    '#e46969', // rouge clair
+                    '#7bb46d', // vert clair
                     '#3eb4b1', // bleu-vert clair
                     '#b3d9da', // bleu clair
                     '#f0c75e', // jaune clair
@@ -113,7 +112,7 @@ sommes.forEach(item => {
             
                 ],
                 borderColor: [
-                    '#f0c75e', // jaune clair
+                    '#FEE3C2', // jaune clair
                     '#e75d5e', // rouge clair
                     '#5ac46a', // vert clair
                     '#3eb4b1', // bleu-vert clair

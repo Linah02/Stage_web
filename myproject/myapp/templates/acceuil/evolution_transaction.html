@@ -51,10 +51,9 @@
                         <canvas id="transactionsChart" height="300"></canvas>
                     </div>
                     <div class="chart-details">
-                        <h3>Détails de la Chart</h3>
-                        <p>Voici les informations complémentaires sur le graphique.</p>
-                        <ul id="detailsList"></ul> <!-- Conteneur pour la liste -->
+                        <table id="detailsTable"></table> <!-- Conteneur pour le tableau -->
                     </div>
+                    
                 </div>
             </main>
         </div>
@@ -72,23 +71,44 @@
     const labels = [];
     const recouvrementsData = [];
     const paiementsData = [];
-    const detailsList = document.getElementById('detailsList');
+    const detailsTable = document.getElementById('detailsTable');
 
-    // Itération sur les données pour remplir les étiquettes et les données
-    for (const contribuable in data) {
-        data[contribuable].annees.forEach((annee, index) => {
-            if (!labels.includes(annee)) {
-                labels.push(annee);  // Ajouter l'année à l'ensemble des labels
-            }
-            recouvrementsData.push(data[contribuable].recouvrements[index]);
-            paiementsData.push(data[contribuable].paiements[index]);
+// Créer l'en-tête du tableau
+const tableHeader = document.createElement('thead');
+const headerRow = document.createElement('tr');
+headerRow.innerHTML = `
+    <th>Année</th>
+    <th>MNT AP</th>
+    <th>MNT Payé</th>
+`;
+tableHeader.appendChild(headerRow);
+detailsTable.appendChild(tableHeader);
 
-            // Créer un élément de liste pour chaque contribuable
-            const listItem = document.createElement('li');
-            listItem.textContent = `Contribuable: ${contribuable}, Année: ${annee}, Montant recouvrement: ${data[contribuable].recouvrements[index]}, Montant payé: ${data[contribuable].paiements[index]}`;
-            detailsList.appendChild(listItem);
-        });
-    }
+// Créer le corps du tableau
+const tableBody = document.createElement('tbody');
+
+for (const contribuable in data) {
+    data[contribuable].annees.forEach((annee, index) => {
+        if (!labels.includes(annee)) {
+            labels.push(annee);  // Ajouter l'année à l'ensemble des labels
+        }
+        recouvrementsData.push(data[contribuable].recouvrements[index]);
+        paiementsData.push(data[contribuable].paiements[index]);
+
+        // Créer une ligne de tableau pour chaque contribuable
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${annee}</td>
+            <td>${data[contribuable].recouvrements[index]}</td>
+            <td>${data[contribuable].paiements[index]}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// Ajouter le corps du tableau à la table
+detailsTable.appendChild(tableBody);
+
 
     // Initialiser le graphique
     const ctx = document.getElementById('transactionsChart').getContext('2d');

@@ -5,20 +5,9 @@
 {% load static %}
 
 <nav class="navbar">
-    <div class="logo">
-        <img src="{% static 'myapp/images/logo.png' %}" alt="Logo">
-    </div>
     
     <div class="menu">
         <ul>
-            <!-- Menu pour les notifications -->
-            <li class="notification-icon" onclick="toggleDropdown('notification-dropdown')">
-                <a href="#"><i class="fas fa-bell"></i></a>
-                <div id="notification-dropdown" class="dropdown-menu">
-                    <h4>Notifications</h4>
-                    <a href="{% url 'notification' %}">• Expéditeur 1 :<class  style="color: rgb(0, 0, 0);">Raison de la notification</class> </a>
-                </div>
-            </li>
             <!-- Menu pour les messages -->
             <li class="message-icon" onclick="toggleDropdown('message-dropdown')">
                 <a href="#">
@@ -166,21 +155,5 @@
     });
 
 
-
-</script>
-
-<script>
-    // Initialisation de Firebase dans votre front-end (utilisez votre propre configuration)
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
-
-// Demander la permission de recevoir des notifications
-messaging.requestPermission().then(function () {
-    return messaging.getToken();
-}).then(function (token) {
-    console.log('FCM Token:', token);
-}).catch(function (err) {
-    console.error('Erreur FCM:', err);
-});
 
 </script>

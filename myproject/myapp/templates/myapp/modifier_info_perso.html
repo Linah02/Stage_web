@@ -1,0 +1,111 @@
+
+<!-- Modal de modification -->
+<div id="modal-modifier" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Modifier le Profil</h2>
+        <form action="{% url 'modifier_contribuable' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="nom">Nom:</label>
+                <input type="text" id="nom" name="nom" value="{{ contribuable.nom }}" required>
+            </div>
+            <div class="form-group">
+                <label for="prenom">Prénom:</label>
+                <input type="text" id="prenom" name="prenom" value="{{ contribuable.prenom }}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ contribuable.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact:</label>
+                <input type="text" id="contact" name="contact" value="{{ contribuable.contact }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="province">Province:</label>
+                <input type="text" id="province-input" class="form-control" placeholder="Rechercher une province..." required>
+                <div id="province-suggestions" class="suggestions"></div>
+            </div>
+            <input type="hidden" id="fkt-no-input" value="2" name="fokontany" />
+
+           
+            <button type="submit" class="btn-submit">Enregistrer</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('province-input').addEventListener('input', function() {
+      console.log("Entrée détectée dans le champ province");  // Vérifier que l'événement est capté
+      const query = this.value;
+      console.log("Typed:", query); // Ajoute ce log pour vérifier les entrées
+      
+      const suggestionsBox = document.getElementById('province-suggestions');
+  
+      if (query.length === 0) {
+          suggestionsBox.innerHTML = '';
+          return;
+      }
+  
+      fetch(`/search_province/?query=${query}`)
+  .then(response => response.json())
+  .then(data => {
+      console.log("Données reçues:", data); // Vérifier les données
+      suggestionsBox.innerHTML = '';  // Nettoyer la boîte de suggestions
+      
+      if (data.length === 0) {
+          console.log("Aucune suggestion trouvée");
+      }
+  
+      data.forEach(item => {
+          console.log("Ajout de suggestion:", item.label); // Vérifier chaque suggestion ajoutée
+          const suggestion = document.createElement('div');
+          suggestion.classList.add('suggestion-item');
+          suggestion.textContent = item.label;
+          suggestion.onclick = function() {
+              document.getElementById('province-input').value = item.city_name;
+              // Assurez-vous que ces champs existent dans le DOM
+              document.getElementById('region-input').value = item.parish_name || '';  
+              document.getElementById('district-input').value = item.locality_desc || '';
+              document.getElementById('commune-input').value = item.wereda_desc || '';
+              document.getElementById('fokontany-input').value = item.fkt_desc || '';
+              document.getElementById('fkt-no-input').value = item.fkt_no || '';
+  
+              suggestionsBox.innerHTML = '';  // Vider les suggestions une fois sélectionnées
+          };
+          suggestionsBox.appendChild(suggestion);
+      });
+  })
+  .catch(error => {
+      console.error('Erreur lors du fetch:', error);
+      suggestionsBox.innerHTML = '<p>Impossible de charger les provinces.</p>';
+  });
+  });
+  
+  
+  // Styles for suggestions
+      const style = document.createElement('style');
+      style.innerHTML = `
+          .suggestions {
+              display: block !important;
+              position: relative !important;
+              border: 1px solid #ccc;
+              max-height: 150px;
+              overflow-y: auto;
+              position: absolute; /* Si nécessaire, assurez-vous que la position est correcte */
+              background-color: white;
+              z-index: 1000;
+          }
+          .suggestion-item {
+              padding: 10px;
+              cursor: pointer;
+          }
+          .suggestion-item:hover {
+              background-color: #f0f0f0;
+          }
+      `;
+      document.head.appendChild(style);
+      </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

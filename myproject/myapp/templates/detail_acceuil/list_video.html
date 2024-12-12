@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidéo avec Navigation</title>
+    <link rel="stylesheet" href="{% static 'myapp/css/list_video_style.css' %}">
+    <style>
+    .video-container {
+        position: relative;
+        background-image: url("{% static 'myapp/images/Login/Capture d’écran 2024-11-29 131202.png' %}"); 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        width: 100%;
+        height: 550px;
+    }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        {% for video in videos_publiees %}
+        <div class="video-wrapper {% if forloop.first %}active{% endif %}">
+            <h2 class="video-title">{{ video.titre }}</h2>
+            <p class="video-description">{{ video.description }}</p>
+            <video id="video{{ forloop.counter }}" 
+                   class="video-slide" 
+                   src="/media/{{ video.video }}" 
+                   controls>
+            </video>
+        </div>
+        {% endfor %}
+    </div>
+    <center>
+    <div class="navigation">
+        {% for video in videos_publiees %}
+        <span class="nav-point {% if forloop.first %}active{% endif %}" data-video="{{ forloop.counter }}"></span>
+        {% endfor %}
+    </div>
+</center>
+    
+    <script>
+        document.querySelectorAll('.nav-point').forEach((point, index) => {
+            point.addEventListener('click', () => {
+                changeVideo(index + 1);
+            });
+        });
+
+        function changeVideo(videoNumber) {
+            const videoWrappers = document.querySelectorAll('.video-wrapper');
+            const points = document.querySelectorAll('.nav-point');
+
+            // Masquer toutes les vidéos et désactiver les points de navigation
+            videoWrappers.forEach(wrapper => wrapper.classList.remove('active'));
+            points.forEach(point => point.classList.remove('active'));
+
+            // Activer uniquement la vidéo et le point correspondants
+            videoWrappers[videoNumber - 1].classList.add('active');
+            points[videoNumber - 1].classList.add('active');
+        }
+    </script>
+</body>
+</html>

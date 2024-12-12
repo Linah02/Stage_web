@@ -2,7 +2,7 @@
 .btn-telecharger {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #ad4e17;
+    background-color: #FEE3C2;
     color: white;
     font-size: 16px;
     text-align: center;
@@ -13,7 +13,7 @@
 }
 
 .btn-telecharger:hover {
-    background-color: #9b562f;;
+    background-color: #FEE3C2;
 }
  /* Style pour la page de profil */
  .profile-container {
@@ -51,7 +51,7 @@
 .btn-modifier {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #8e0611;
+    background-color: rgb(26, 172, 123);
     color: white;
     font-size: 16px;
     text-align: center;
@@ -62,7 +62,7 @@
 }
 
 .btn-modifier:hover {
-    background-color: #af0412;
+    background-color: #db0a1c;
 }
 
 .profile-photo {

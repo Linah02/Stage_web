@@ -1,37 +1,45 @@
+{% load static %}
+
 <head>
     <!-- Autres liens -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <aside class="sidebar">
+    <div class="logo">
+        <img src="{% static 'myapp/images/Logo-DGI.jpg' %}" alt="Logo">
+    </div>
+
+
     <ul>
         <li>
-            <a href="{% url 'acceuil' %}">
-                <i class="fas fa-home sidebar-icon"></i>
+            <a href="{% url 'acceuils' %}">
+                <i  style="color: #068e8c;"  class="fas fa-home sidebar-icon"></i>
                 Accueil
             </a>
         </li>
         <li class="has-dropdown">
             <a href="#" onclick="toggleDropdown('historique-dropdown')">
-                <i class="fas fa-history sidebar-icon"></i>
+                <i style="color: #068e8c;" class="fas fa-history sidebar-icon"></i>
                 Historique
-                <i class="fas fa-caret-down dropdown-icon"></i>
+                <i  style="color: #068e8c;"  class="fas fa-caret-down dropdown-icon"></i>
             </a>
             <!-- Sous-menu pour Historique -->
             <ul id="historique-dropdown" class="dropdown-menu-sidebar">
-                <li><a href="{% url 'list_transaction' %}">Transaction</a></li>
+                <li style="color: #068e8c; background-color:#dadada;"><a href="{% url 'list_transaction' %}">Transaction</a></li>
             </ul>
         </li>
         <li class="has-dropdown">
             <a href="#" onclick="toggleDropdown('chart-dropdown')">
-                <i class="fas fa-chart-bar sidebar-icon"></i>
+                <i style="color: #068e8c ; " class="fas fa-chart-bar sidebar-icon"></i>
                 Chart
-                <i class="fas fa-caret-down dropdown-icon"></i>
+                <i style="color: #068e8c;"  class="fas fa-caret-down dropdown-icon"></i>
             </a>
             <!-- Sous-menu pour Chart -->
             <ul id="chart-dropdown" class="dropdown-menu-sidebar">
-                <li><a href="{% url 'chart' %}">Montant par année de paiement</a></li>
-                <!-- <li><a href="{% url 'chart_line' %}">Montant par année de recouvrement</a></li> -->
+                <li style="color: #068e8c; background-color:#dadada;"><a href="{% url 'chart' %}">Montant par année de paiement</a></li>
+                <li style="color: #068e8c; background-color:#dadada;"><a href="{% url 'chart_line' %}">Montant par année de recouvrement</a></li>
             </ul>
         </li>
 
@@ -46,6 +54,8 @@
         </li>
         
     </ul>
+</div>
+
 </aside>
 
 <style>
@@ -60,7 +70,7 @@
 
     .dropdown-menu-sidebar {
         display: none;
-        background-color: #8fc3c6;
+        background-color: #068e8c;
         padding-left: 15px;
         list-style-type: none;
         margin-top: 5px;
@@ -82,7 +92,7 @@
         display: flex;
         align-items: center;
         padding: 10px 15px;
-        color: #ffffff;
+        color: #068e8c;
         text-decoration: none;
     }
 
@@ -95,7 +105,7 @@
     align-items: center;
     padding: 10px 15px;
     color: white;
-    background-color: #ff4b4b;
+    background-color: #068e8c;
     text-decoration: none;
     font-weight: bold;
     border: none;
@@ -104,7 +114,7 @@
 }
 
 .btns-deconnexions:hover {
-    background-color: #8fc3c6;
+    background-color: #ff4b4b;
 }
 
 .btns-deconnexions .sidebar-icon {

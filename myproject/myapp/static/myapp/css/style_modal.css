@@ -1,0 +1,217 @@
+   .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto; /* Permet le défilement de la page si le modal est long */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 60%;
+    max-width: 800px;
+    max-height: 90vh; /* Limite la hauteur du modal */
+    overflow-y: auto; /* Permet le défilement dans le modal */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+.clickable-photo {
+    cursor: pointer; /* Change le curseur pour indiquer qu'il est cliquable */
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+}
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-bottom: 1px solid #e4fdff ;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    /* border: 1px solid #ddd; */
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.btn-submit {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+}
+
+    .description {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin: 20px 0; */
+
+    padding: 20px;
+    width: 260px;
+    height: 140px;
+    border-top: 5px solid rgb(255, 255, 255);
+    border-bottom: 5px solid rgb(255, 255, 255);
+    border-left: 1px solid rgb(189, 71, 71);
+    border-right: 1px solid rgb(17, 94, 17);
+    margin: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Styling for the top border with text */
+.border-top {
+    position: absolute;
+    top: -18px;
+    width: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(255, 255, 255);
+    color: black;
+    padding: 5px;
+    font-weight: bold;
+}
+
+/* Styling for the bottom border with text */
+.border-bottom {
+    position: absolute;
+    bottom: -18px;
+    width: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(255, 255, 255);
+    color: black;
+    padding: 5px;
+    font-weight: bold;
+}
+
+/* Main content styling */
+.description .main-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Logo carré */
+.description .logo_carte img {
+    width: 75px;
+    height: 70px;
+    background-color: gray;
+    margin-right: 1px;
+}
+
+
+/* Texte à droite du logo */
+.text {
+    text-align: left;
+}
+
+.text p {
+    margin: 0;
+    color: #a09e9e;
+    font-weight: bold;
+}
+
+/* Left and right borders with DGI text aligned at the bottom */
+.description::before, .description::after {
+    content: 'DGI';
+    position: absolute;
+    font-size: 12px;
+    color: black;
+    font-weight: bold;
+}
+
+.description::before {
+    left: -25px;
+    bottom: 10px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.description::after {
+    right: -25px;
+    bottom: 10px;
+    writing-mode: vertical-rl;
+}
+
+/* Styling for download button */
+.btn-telecharger {
+    margin-top: 15px;
+    padding: 8px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.form-group input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button {
+    background-color: #d4ecd4;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #c5dbc6;
+}
+

@@ -4,38 +4,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'myapp/css/footer_style.css' %}">
     <title>{% block title %}Page d'Accueil{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Conteneur principal entre logo et vidéo */
+        .middle-container {
+    position: relative; /* Garder la position relative pour un placement contrôlé */
+    margin: 50px auto; /* Ajouter de l'espace en haut et en bas pour "détacher" visuellement */
+    width: 80%; /* Largeur totale du conteneur */
+    text-align: center; /* Centrer le texte */
+    height: 210px; /* Hauteur fixe */
+    background-color: #9e9e9e; /* Couleur de fond claire */
+    /* border-radius: 15px; Arrondir les coins davantage pour un effet plus doux */
+    padding: 20px; /* Ajouter de l'espace intérieur */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animer au survol */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); /* Ombre plus marquée pour un effet flottant */
+}
 
-    <!-- <link rel="stylesheet" href="{% static 'myapp/css/acceuils_style.css' %}"> -->
+.middle-container h1 {
+    margin-bottom: 20px; /* Ajouter de l'espace entre le titre et les divs */
+    font-size: 2rem;
+    color: #ffffff; /* Couleur du texte */
+    text-align: left !important;
+
+}
+
+.middle-container .divs-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.middle-container .clickable-div {
+    display: flex;
+    width: calc(100% / 3);
+    height: 120px;
+    background-color: #9e9e9e;
+    padding: 10px;
+    cursor: pointer;
+
+    align-items: center; /* Centrer verticalement */
+    justify-content: center; /* Centrer horizontalement */
+    
+}
+
+.middle-container .clickable-div:hover {
+    background-color: transparent;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+.middle-container .clickable-div p {
+    font-size: 1rem; /* Taille de la police */
+    /* font-weight: bold; Texte en gras */
+    color: #ffffff; /* Couleur du texte */
+    margin: 0; /* Supprimer les marges par défaut */
+    text-align: center; /* Texte centré */
+}
+    </style>
 </head>
+
 <body>
     <header>
-        {% include 'layout/navbar_acceuil.html' %}
+        {% include 'layout/nav_acceuil.html' %}
     </header>
-    <div class="page-container">
-        <div class="content-wrapper">
-            <!-- <main class="main-content"> -->
-                <h1>Civisme Fiscal</h1>
-                <div class="video-container">
-                    <!-- Section des détails -->
-                    <div class="video-details">
-                        <p><strong>Titre :</strong> Civisme Fiscal</p>
-                        <p><strong>Description :</strong> Une vidéo éducative pour sensibiliser au civisme fiscal.</p>
-                    </div>
-                
-                    <!-- Section de la vidéo -->
-                    <div class="video-content">
-                        <video width="100%" height="auto" autoplay loop muted>
-                            <source src="{% static 'myapp/video/test_civisme_fiscal.mp4' %}" type="video/mp4">
-                            Votre navigateur ne supporte pas la lecture de ce fichier vidéo.
-                        </video>
-                    </div>
-                </div>
+    <body>
+    {% include 'detail_acceuil/logo.html' %}
+    <center>
+
+        <div class="middle-container">
+            <h1>L'administration fiscale s'est engagée à ,</h1>
+            <div class="divs-container">
+                <div class="clickable-div"><p>Mobiliser des recettes budgétaires pour répondre aux objectifs du Gouvernement notamment ceux fixés dans le cadre du Madagascar action Plan (MAP)</p></div>
+                <div class="clickable-div"><p>Définir une politique fiscale propice à l'investissement et à l'intégration régionale</p></div>
+                <div class="clickable-div"><p>Moderniser ses structures et procédures</p></div>
+                <div class="clickable-div"><p>Rendre des meilleurs services au public</p></div>
+            </div>
         </div>
+        
+</center>
+    {% include 'detail_acceuil/video1.html' %}
+    <div id="video">
+        {% include 'detail_acceuil/list_video.html' with videos_publiees=videos_publiees %}
+
     </div>
+    <div id="a_savoir">
+        {% include 'detail_acceuil/a_savoir.html' %}
+    </div>
+    </body>
     <footer>
-        {% include 'layout/footer_acceuil.html' %}
+    {% include 'layout/footer_acceuil.html' %}
     </footer>
 </body>
+<script>
+    // Attacher un événement clic à chaque div
+    document.querySelectorAll('.clickable-div').forEach((div, index) => {
+        div.addEventListener('click', () => {
+            alert(`Vous avez cliqué sur l'élément ${index + 1}`);
+            // Vous pouvez rediriger vers une autre page avec :
+            // window.location.href = 'url_de_destination';
+        });
+    });
+
+    
+</script>
+
+
 </html>

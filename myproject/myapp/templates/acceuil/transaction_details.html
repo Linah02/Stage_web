@@ -1,4 +1,6 @@
 {% load static %}
+{% load humanize %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -50,38 +52,37 @@
                                 {% if transaction_details %}
                                     {% for transaction in transaction_details %}
                                         {% if forloop.first %}
-                                        <!-- Détails de la première transaction (id, base, montant à payer, etc.) -->
                                         <tr>
                                             <td class="title-cell">Numéro quittance</td>
                                             <td>{{ transaction.1 }}</td>
                                         </tr>
                                         <tr>
                                             <td class="title-cell">Base</td>
-                                            <td>{{ transaction.7 }} .Ar</td>
+                                            <td>{{ transaction.8|intcomma }} .Ar</td>
                                         </tr>
                                         <tr>
                                             <td class="title-cell">Montant à Payer</td>
-                                            <td>{{ transaction.8 }} .Ar</td>
+                                            <td>{{ transaction.9|intcomma }} .Ar</td>
                                         </tr>
                                         <tr>
                                             <td class="title-cell">Numéro impôt</td>
-                                            <td>{{ transaction.11 }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="title-cell">Impôt</td>
                                             <td>{{ transaction.12 }}</td>
                                         </tr>
                                         <tr>
+                                            <td class="title-cell">Impôt</td>
+                                            <td>{{ transaction.13 }}</td>
+                                        </tr>
+                                        <tr>
                                             <td class="title-cell">Impôt Détail</td>
-                                            <td></td><!-- <td>{{ transaction.10 }}</td> -->
+                                            <td>{{ transaction.11 }}</td><!-- <td>{{ transaction.10 }}</td> -->
                                         </tr>
                                         <tr>
                                             <td class="title-cell">Logiciel</td>
-                                            <td>{{ transaction.14 }}</td>
+                                            <td>{{ transaction.15 }}</td>
                                         </tr>
                                         <tr>
                                             <td class="title-cell">Date de recouvrement</td>
-                                            <td>{{ transaction.4 }}</td>
+                                            <td>{{ transaction.5 }}</td>
                                         </tr>
                                         {% endif %}
                                     {% endfor %}
@@ -101,6 +102,7 @@
                         <table class="transaction-table">
                             <thead>
                                 <tr>
+                                    <th>NUM REC</th>
                                     <th>Date de Paiement</th>
                                     <th>Montant</th>
                                 </tr>
@@ -109,8 +111,9 @@
                                 {% if transaction_details %}
                                     {% for transaction in transaction_details %}
                                         <tr>
+                                            <td>{{ transaction.3 }}</td>
                                             <td class="{% if transaction.3 > transaction.4 %}color-red{% endif %}">{{ transaction.2 }}</td>
-                                            <td>{{ transaction.15 }}</td>
+                                            <td>{{ transaction.16|intcomma }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% else %}
@@ -119,12 +122,14 @@
                                     </tr>
                                 {% endif %}
                                 <tr>
-                                    <td style="background-color: rgb(115, 148, 115); color: white;">Total renversé.</td>
-                                    <td style="background-color: rgb(115, 148, 115); color: white;">1 200 000 .Ar</td>
+                                    <td></td>
+                                    <td style="color: rgb(94, 94, 94); background-color: rgb(230, 230, 230);">Total renversé.</td>
+                                    <td style="color: #5db8bd; background-color: rgb(230, 230, 230);"> {{montant|intcomma}}.Ar</td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color: rgb(173, 119, 119); color: white;">Reste à payer.</td>
-                                    <td style="background-color: rgb(173, 119, 119); color: white;">40 000 .Ar</td>
+                                    <td></td>
+                                    <td style="color: rgb(94, 94, 94); background-color: rgb(230, 230, 230);">Reste à payer.</td>
+                                    <td style="color: rgb(255, 65, 65);background-color: rgb(230, 230, 230);"> {{reste|intcomma}}.Ar</td>
                                 </tr>
                             </tbody>
                         </table>

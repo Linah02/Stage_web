@@ -26,7 +26,7 @@ class Contribuable(models.Model):
     contact = models.CharField(max_length=14)
     email = models.EmailField(unique=True)
     fokontany = models.IntegerField()
-    mot_de_passe = models.CharField(max_length=50, null=True)
+    mot_de_passe = models.CharField(max_length=128, null=True)
     bank_acct_no = models.CharField(max_length=250, null=True)  # Numéro de compte bancaire
     passeport = models.CharField(max_length=20, null=True)  # Numéro de passeport
     dm_ref = models.CharField(max_length=15, null=True)  # Référence de la demande
@@ -136,7 +136,6 @@ class CentralRecette(models.Model):
     rib = models.CharField(max_length=30, null=True, blank=True)
     raison_sociale = models.CharField(max_length=250, null=True, blank=True)
     nimp = models.ForeignKey(NumImpot, on_delete=models.CASCADE, null=True, blank=True)  # N° impôts
-    numrec = models.IntegerField(null=True, blank=True)  # N° de créance
     libelle = models.CharField(max_length=20, null=True, blank=True)
     flag = models.CharField(max_length=1, default='N')
     date_debut = models.DateField(null=True, blank=True)
@@ -161,6 +160,7 @@ class Paiement(models.Model):
     central_recette = models.ForeignKey(CentralRecette, on_delete=models.CASCADE)
     mode_paiement = models.ForeignKey(ModePaiement, on_delete=models.CASCADE)
     n_quit = models.CharField(max_length=50)  # Numéro quittance de paiement
+    numrec = models.IntegerField(null=True, blank=True,default=0)  # N° de créance
     montant = models.DecimalField(max_digits=20, decimal_places=2)  # Montant à payer
     date_paiement = models.DateField(auto_now_add=True)
 
@@ -227,7 +227,6 @@ class VueTransactionsParQuitEtContribuable(models.Model):
     reste_ap = models.DecimalField(max_digits=20, decimal_places=2)  # Reste à payer
     code_bureau = models.CharField(max_length=50)
     libelle_bureau = models.CharField(max_length=50)
-    numrec = models.CharField(max_length=50)
     imp_detail = models.CharField(max_length=50)
     numero = models.CharField(max_length=50)
     impot =models.CharField(max_length=50)
@@ -268,6 +267,7 @@ class TransactionDetail(models.Model):
     contribuable = models.IntegerField()  # Utilisez IntegerField pour l'ID du contribuable
     n_quit = models.CharField(max_length=50)
     date_paiement = models.DateField()
+    numrec = models.IntegerField(null=True, blank=True,default=0)  # N° de créance
     annee_de_paiement = models.IntegerField()
     annee_recouvrement = models.IntegerField()
     date_debut = models.DateField()
@@ -293,6 +293,47 @@ class TransactionDetail(models.Model):
         return f"Contribuable {self.contribuable} - Quittance {self.n_quit}"
 
 
-    #      // type: 'doughnut',  // ou autre type de graphique
-    # // type: 'line',  // ou autre type de graphique
-    # // type: 'pie',  // ou autre type de graphique
+from django.db import models
+
+class VideoPublicite(models.Model):
+    titre = models.CharField(max_length=255, help_text="Titre de la vidéo publicitaire")
+    description = models.TextField(blank=True, help_text="Description ou contenu de la vidéo")
+    video = models.FileField(upload_to='videos/', blank=True, null=True, help_text="Fichier vidéo local")
+    lien_video = models.URLField(blank=True, null=True, help_text="Lien externe pour la vidéo")
+    date_publication = models.DateTimeField(auto_now_add=True, help_text="Date de publication")
+    duree = models.DurationField(blank=True, null=True, help_text="Durée de la vidéo (HH:MM:SS)")
+    categorie = models.CharField(max_length=100, blank=True, help_text="Catégorie de la publicité")
+    langue = models.CharField(max_length=50, blank=True, help_text="Langue principale de la vidéo")
+    statut = models.CharField(
+        max_length=20,
+        choices=[
+            ('brouillon', 'Brouillon'),
+            ('publie', 'Publié'),
+            ('archive', 'Archivé')
+        ],
+        default='brouillon',
+        help_text="Statut de la vidéo"
+    )
+    tags = models.CharField(max_length=255, blank=True, help_text="Tags ou mots-clés pour la recherche")
+    nombre_vues = models.PositiveIntegerField(default=0, help_text="Nombre de vues de la vidéo")
+    auteur = models.CharField(max_length=255, blank=True, help_text="Auteur de la vidéo")
+    miniature = models.ImageField(upload_to='thumbnails/', blank=True, null=True, help_text="Miniature pour la vidéo")
+    date_modification = models.DateTimeField(auto_now=True, help_text="Date de dernière modification")
+
+    def __str__(self):
+        return self.titre
+
+    class Meta:
+        verbose_name = "Vidéo Publicitaire"
+        verbose_name_plural = "Vidéos Publicitaires"
+        ordering = ['-date_publication']
+
+
+class Brochure(models.Model):
+    titre = models.CharField(max_length=200)  # Titre de la brochure
+    description = models.TextField()  # Description de la brochure
+    fichier_pdf = models.FileField(upload_to='brochurespdfs/')  # Fichier PDF
+    date_publication = models.DateField(auto_now_add=True)  # Date de publication de la brochure
+
+    def __str__(self):
+        return self.titre

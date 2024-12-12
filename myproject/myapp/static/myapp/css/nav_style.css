@@ -1,0 +1,135 @@
+.navbar {
+    display: flex; /* Active Flexbox pour organiser les éléments à l'intérieur */
+    justify-content: flex-end; /* Aligne tout le contenu vers la droite */
+    align-items: center; /* Centre verticalement le contenu dans la navbar */
+    width:100%; /* Largeur dynamique : 100% de l'écran moins la largeur de la sidebar */
+    height: 50px;
+    background-color: transparent; /* Rend le fond transparent */
+    padding-right: 20px;
+    position: fixed;
+    border-bottom: 2px solid #8fc3c6; /* Ajoute une bordure en haut de 5px avec la couleur bleue */
+}
+
+.navbar.fixed {
+    position: fixed; 
+    background-color: #8fc3c6;
+    /* top: 0;  */
+    width: 100%;
+    z-index: 1000; 
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  */
+}
+
+
+/* Styles par défaut des liens */
+.navbar .menu a,
+.navbar .menu-list ul li a {
+    color: #8fc3c6; /* Couleur initiale */
+    transition: color 0.3s ease; /* Transition fluide pour le changement de couleur */
+}
+
+/* Styles pour l'état fixe */
+.navbar.fixed .menu a,
+.navbar.fixed .menu-list ul li a {
+    color: #ffffff; /* Changer en blanc quand la navbar est fixe */
+}
+
+.navbar.fixed .menu a:hover,
+.navbar.fixed .menu-list ul li a:hover {
+    color: #cccccc; /* Couleur légèrement différente au survol */
+}
+
+ /* Contenu de la navbar */
+.navbar-content {
+    display: flex;
+    flex-direction: column;
+    height: 80px;
+    margin-left: 10px;
+    flex: 1;
+}
+
+
+.navbar .menu {
+    bottom: -30px; 
+    position: relative; /* Ou absolute si nécessaire */
+    display: flex; /* Active Flexbox pour aligner les éléments horizontalement */
+    gap: 20px; /* Ajoute des espaces de 20px entre les éléments directs */
+}
+
+
+.navbar .menu a {
+    text-decoration: none;
+    color: #8fc3c6;
+    font-size: 14px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+
+
+.menu-list {
+    position: relative; /* Ou absolute si nécessaire */
+    top: -5px; 
+}
+
+.menu-list ul {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0; /* Réinitialise toute marge par défaut */
+    padding: 0; /* Réinitialise tout padding par défaut */
+}
+
+.menu-list ul li a {
+    text-decoration: none;
+    color: #8fc3c6;
+    font-size: 14px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.menu-list ul li a:hover {
+    color: #000000;
+}
+
+
+
+
+
+.dropdown {
+    position: relative;
+    font-weight: bold;
+    color: #8fc3c6;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #6a9496;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #9b9898;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block; /* Affiche le menu au survol */
+}
+

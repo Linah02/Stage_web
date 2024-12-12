@@ -1,0 +1,46 @@
+
+/* Footer Styles */
+.footer_acceuil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa; /* Couleur de fond du footer */
+    border-top: 1px solid #e7e7e7;
+}
+
+.footer-text {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.footer-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
+
+
+/* Social icons styles */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-icon {
+    width: 30px;
+    margin: 0 10px;
+    transition: transform 0.3s;
+}
+
+.social-icon:hover {
+    transform: scale(1.2); /* Légère animation d'agrandissement au survol */
+}
+

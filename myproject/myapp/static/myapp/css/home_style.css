@@ -1,5 +1,5 @@
 button.btn-warning {
-    background-color: #ac2c05;
+    background-color: #FEE3C2;
     color: white;
     border: none;
     padding: 8px 15px;
@@ -9,7 +9,7 @@ button.btn-warning {
 }
 
 button.btn-warning:hover {
-    background-color: #a6190f;
+    background-color: #FEE3C2;
 }
 
 button.btn-light {

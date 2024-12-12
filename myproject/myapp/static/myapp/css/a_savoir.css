@@ -1,0 +1,70 @@
+/* Conteneur principal */
+.a-savoir-container {
+    width: 100%;
+    background-color: #ffffff;
+    text-align: left;
+    padding: 20px;
+}
+
+/* Conteneur des brochures */
+.brochure-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Div clicable */
+.brochure-container .clickable-div {
+    width: 200px; /* Taille fixe pour éviter tout débordement */
+    height: 200px; /* Taille fixe réduite */
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden; /* Empêche tout débordement */
+}
+
+/* PDF Viewer */
+.pdf-viewer {
+    width: 200px !important; /* Réduit la largeur à 80% du parent */
+    height: 120px !important; /* Taille réduite du PDF */
+    border: none; /* Supprime les bordures */
+}
+
+/* Détail de la brochure */
+.brochure-detail {
+    font-size: 14px;
+    color: #333;
+    margin: 10px 0;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Bouton de téléchargement */
+.download-button {
+    width: 100%; /* Occupe toute la largeur du div */
+    height: 25px; /* Hauteur ajustée */
+    background-color: #8fc3c6;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 12px;
+}
+
+/* Effet hover sur le bouton */
+.download-button:hover {
+    background-color: #2da9ad;
+    color: #ffffff;
+}
+
+
+

@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mon Profil{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'myapp/css/style_profil.css' %}">
+    <link rel="stylesheet" href="{% static 'myapp/css/style_modal.css' %}">
     <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Inclure jQuery ici -->
-    
-    <style>
-       
-    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 </head>
 <body>
     <header>
@@ -30,48 +30,32 @@
         <div class="alert alert-warning">{{ message }}</div>
     {% endfor %}
 {% endif %}
-
                 <div class="profile-container">
                     <!-- Section photo -->
                     <div class="profile-photo">
                         <h2>Profil</h2>
                         <div class="photo-wrapper">
-
-
                             {% if contribuable.photo %}
-                            <img src="/media/{{ contribuable.photo }}" alt="Photo de {{ contribuable.id }}">
-
-  {% else %}
-                            <p>Aucune photo disponible.</p>
-                        {% endif %}
-                        
-
-
-                        
+                        <img src="/media/{{ contribuable.photo }}" alt="Photo de {{ contribuable.nom }}" onclick="openPhotoModal()" class="clickable-photo">
+                    {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" alt="Avatar par défaut" onclick="openPhotoModal()" class="clickable-photo">
+                    {% endif %}
                         </div>
-
                         <div class="description">
-                            <!-- Border haut avec texte -->
-                            
-                            <!-- Contenu principal de la carte -->
                             <div class="main-content">
-                                
-                                <!-- Texte à droite du logo -->
                                 <div class="text">
                                     <p>N° CIN : <span>{{ contribuable.cin }}</span></p>
                                     <p>N° PRENIF : <span>{{ contribuable.propr_nif }}</span></p>
                                 </div>
                             </div>
-                            
-                            <!-- Border bas avec texte -->
-                            
-                            <!-- Bouton de téléchargement -->
                         </div>
+                        <!-- Remplace le bouton par une icône -->
+                    <button id="download-btn" class="btn-icon">
+                        <i style="color: rgb(26, 172, 123);" class="fas fa-download">telecharger</i>
+                    </button>
 
-                        
-                        
+
                     </div>
-                    <!-- Section détails -->
                     <div class="profile-details">
                         <h2>Détails du Contribuable</h2>
                         <div class="profile-info">
@@ -86,381 +70,104 @@
                             <label>Email:</label>
                             <p>{{ contribuable.email }}</p>
                         </div>
-
                         <div class="profile-info">
                             <label>Contact:</label>
                             <p>{{ contribuable.contact }}</p>
                         </div>
-
                        <br>
                        <br>
-                      
-                        
-                        <!-- Bouton de modification -->
-                        <button type="reset" class="btn-modifier" onclick="openModal()">Modifier Profil</button>
-    
-                        <!-- <button type="reset" class="btn-modifier">Modifier Profil</button> -->
+                            <button type="reset" class="btn-modifier" onclick="openModal()">Modifier Profil</button>
+                            <button type="button" class="btn-modifier" onclick="openPasswordModal()">Modifier mot de passe</button>
                     </div>
                 </div>
             </main>
         </div>
     </div>
-    
     <footer>
         {% include 'layout/footer_acceuil.html' %}
     </footer>
 </body>
 </html>
 
-<!-- Modal de modification -->
-<div id="modal-modifier" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Modifier le Profil</h2>
-        <form action="{% url 'modifier_contribuable' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="nom">Nom:</label>
-                <input type="text" id="nom" name="nom" value="{{ contribuable.nom }}" required>
-            </div>
-            <div class="form-group">
-                <label for="prenom">Prénom:</label>
-                <input type="text" id="prenom" name="prenom" value="{{ contribuable.prenom }}">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="{{ contribuable.email }}" required>
-            </div>
-            <div class="form-group">
-                <label for="contact">Contact:</label>
-                <input type="text" id="contact" name="contact" value="{{ contribuable.contact }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="mdp">Mot de passe:</label>
-                <input type="password" id="mdp" name="mot_de_passe" value="{{ contribuable.mot_de_passe }}">
-            </div>
-
-            <div class="form-group">
-                <label for="province">Province:</label>
-                <input type="text" id="province-input" class="form-control" placeholder="Rechercher une province..." required>
-                <div id="province-suggestions" class="suggestions"></div>
-            </div>
-            <input type="hidden" id="fkt-no-input" value="2" name="fokontany" />
-
-            <div class="form-group">
-                <label for="photo">Photo:</label>
-                <input type="file" id="photo" name="photo">
-            </div>
-            <button type="submit" class="btn-submit">Enregistrer</button>
-        </form>
-    </div>
-</div>
-<!-- CSS pour le modal -->
-<style>
-   .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    overflow-y: auto; /* Permet le défilement de la page si le modal est long */
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: 5% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 60%;
-    max-width: 800px;
-    max-height: 90vh; /* Limite la hauteur du modal */
-    overflow-y: auto; /* Permet le défilement dans le modal */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.close {
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-h2 {
-    margin-top: 0;
-    font-size: 24px;
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border-bottom: 1px solid #e4fdff ;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    /* border: 1px solid #ddd; */
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.form-group input:focus {
-    border-color: #4CAF50;
-    outline: none;
-}
-
-.btn-submit {
-    padding: 12px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 15px;
-}
-
-.btn-submit:hover {
-    background-color: #45a049;
-}
-
-    .description {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* margin: 20px 0; */
-
-    padding: 20px;
-    width: 260px;
-    height: 140px;
-    border-top: 5px solid rgb(255, 255, 255);
-    border-bottom: 5px solid rgb(255, 255, 255);
-    border-left: 1px solid rgb(189, 71, 71);
-    border-right: 1px solid rgb(17, 94, 17);
-    margin: 10px;
-    text-align: center;
-    font-size: 14px;
-}
-
-/* Styling for the top border with text */
-.border-top {
-    position: absolute;
-    top: -18px;
-    width: 300px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgb(255, 255, 255);
-    color: black;
-    padding: 5px;
-    font-weight: bold;
-}
-
-/* Styling for the bottom border with text */
-.border-bottom {
-    position: absolute;
-    bottom: -18px;
-    width: 300px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgb(255, 255, 255);
-    color: black;
-    padding: 5px;
-    font-weight: bold;
-}
-
-/* Main content styling */
-.description .main-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-/* Logo carré */
-.description .logo_carte img {
-    width: 75px;
-    height: 70px;
-    background-color: gray;
-    margin-right: 1px;
-}
-
-
-/* Texte à droite du logo */
-.text {
-    text-align: left;
-}
-
-.text p {
-    margin: 0;
-    color: #a09e9e;
-    font-weight: bold;
-}
-
-/* Left and right borders with DGI text aligned at the bottom */
-.description::before, .description::after {
-    content: 'DGI';
-    position: absolute;
-    font-size: 12px;
-    color: black;
-    font-weight: bold;
-}
-
-.description::before {
-    left: -25px;
-    bottom: 10px;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-}
-
-.description::after {
-    right: -25px;
-    bottom: 10px;
-    writing-mode: vertical-rl;
-}
-
-/* Styling for download button */
-.btn-telecharger {
-    margin-top: 15px;
-    padding: 8px 20px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-.form-group input[type="file"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f8f8f8;
-    cursor: pointer;
-}
-
-.form-group input[type="file"]::-webkit-file-upload-button {
-    background-color: #d4ecd4;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.form-group input[type="file"]::-webkit-file-upload-button:hover {
-    background-color: #c5dbc6;
-}
-
-
-</style>
-
-<!-- JavaScript pour ouvrir et fermer le modal -->
-<script>
-    function openModal() {
-        document.getElementById('modal-modifier').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('modal-modifier').style.display = 'none';
-    }
-
-    // Ferme le modal si on clique en dehors
-    window.onclick = function(event) {
-        var modal = document.getElementById('modal-modifier');
-        if (event.target == modal) {
-            modal.style.display = "none";
+ <script>
+    function openPhotoModal() {
+        const modal = document.getElementById('photo-modal');
+        if (modal) {
+            modal.style.display = 'block';
+        } else {
+            console.error("Modal avec l'ID 'photo-modal' introuvable.");
         }
     }
+
+    function closePhotoModal() {
+    document.getElementById('photo-modal').style.display = "none";
+}
+
+function openPasswordModal() {
+    document.getElementById('passwordModal').style.display = "block";
+}
+
+function closePasswordModal() {
+    document.getElementById('passwordModal').style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('passwordModal')) {
+        closePasswordModal();
+    }
+}
+
+function openPasswordModal() {
+    document.getElementById('passwordModal').style.display = "block";
+}
+
+function closePasswordModal() {
+    document.getElementById('passwordModal').style.display = "none";
+}
+
+function openModal() {
+    const modal = document.getElementById('modal-modifier');
+    if (modal) {
+        modal.style.display = 'block'; // Rendre le modal visible
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal-modifier');
+    if (modal) {
+        modal.style.display = 'none'; // Masquer le modal
+    }
+}
+window.onclick = function(event) {
+    if (event.target == document.getElementById('passwordModal')) {
+        closePasswordModal();
+    }
+}
+</script> 
+<script>
+   document.getElementById('download-btn').addEventListener('click', function () {
+    const element = document.querySelector('.description');
+
+    html2canvas(element, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jspdf.jsPDF();
+
+        // Ajustez ici la taille de l'image dans le PDF
+        const pdfWidth = 100; // Largeur souhaitée dans le PDF
+        const aspectRatio = canvas.width / canvas.height;
+        const pdfHeight = pdfWidth / aspectRatio;
+
+        // Ajoute l'image redimensionnée
+        pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight);
+
+        // Télécharge le PDF
+        pdf.save('PRENIF.pdf');
+    });
+});
+
 </script>
 
-
-<script>
-    document.getElementById('province-input').addEventListener('input', function() {
-      console.log("Entrée détectée dans le champ province");  // Vérifier que l'événement est capté
-      const query = this.value;
-      console.log("Typed:", query); // Ajoute ce log pour vérifier les entrées
-      
-      const suggestionsBox = document.getElementById('province-suggestions');
+  {% include 'myapp/modifier_mot_de_passe.html' %}
+  {% include 'myapp/modifier_profil.html' %}
+  {% include 'myapp/modifier_info_perso.html' %}
   
-      if (query.length === 0) {
-          suggestionsBox.innerHTML = '';
-          return;
-      }
-  
-      fetch(`/search_province/?query=${query}`)
-  .then(response => response.json())
-  .then(data => {
-      console.log("Données reçues:", data); // Vérifier les données
-      suggestionsBox.innerHTML = '';  // Nettoyer la boîte de suggestions
-      
-      if (data.length === 0) {
-          console.log("Aucune suggestion trouvée");
-      }
-  
-      data.forEach(item => {
-          console.log("Ajout de suggestion:", item.label); // Vérifier chaque suggestion ajoutée
-          const suggestion = document.createElement('div');
-          suggestion.classList.add('suggestion-item');
-          suggestion.textContent = item.label;
-          suggestion.onclick = function() {
-              document.getElementById('province-input').value = item.city_name;
-              // Assurez-vous que ces champs existent dans le DOM
-              document.getElementById('region-input').value = item.parish_name || '';  
-              document.getElementById('district-input').value = item.locality_desc || '';
-              document.getElementById('commune-input').value = item.wereda_desc || '';
-              document.getElementById('fokontany-input').value = item.fkt_desc || '';
-              document.getElementById('fkt-no-input').value = item.fkt_no || '';
-  
-              suggestionsBox.innerHTML = '';  // Vider les suggestions une fois sélectionnées
-          };
-          suggestionsBox.appendChild(suggestion);
-      });
-  })
-  .catch(error => {
-      console.error('Erreur lors du fetch:', error);
-      suggestionsBox.innerHTML = '<p>Impossible de charger les provinces.</p>';
-  });
-  });
-  
-  
-  // Styles for suggestions
-      const style = document.createElement('style');
-      style.innerHTML = `
-          .suggestions {
-              display: block !important;
-              position: relative !important;
-              border: 1px solid #ccc;
-              max-height: 150px;
-              overflow-y: auto;
-              position: absolute; /* Si nécessaire, assurez-vous que la position est correcte */
-              background-color: white;
-              z-index: 1000;
-          }
-          .suggestion-item {
-              padding: 10px;
-              cursor: pointer;
-          }
-          .suggestion-item:hover {
-              background-color: #f0f0f0;
-          }
-      `;
-      document.head.appendChild(style);
-      </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

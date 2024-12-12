@@ -3,34 +3,33 @@
 
 </head>
 {% load static %}
-
 <nav class="navbar">
-    <div class="logo">
-        <img src="{% static 'myapp/images/logo.png' %}" alt="Logo">
-    </div>
-    
     <div class="menu">
         <ul>
-            <!-- Menu pour les notifications -->
-            <li class="notification-icon" onclick="toggleDropdown('notification-dropdown')">
-                <a href="#"><i class="fas fa-bell"></i></a>
-                <div id="notification-dropdown" class="dropdown-menu">
-                    <h4>Notifications</h4>
-                    <a href="{% url 'notification' %}">• Expéditeur 1 :<class  style="color: rgb(0, 0, 0);">Raison de la notification</class> </a>
-                </div>
-            </li>
-            <!-- Menu pour les messages -->
-            <li class="message-icon" onclick="toggleDropdown('message-dropdown')">
-                <a href="#"><i class="fas fa-envelope"></i></a>
-                <div id="message-dropdown" class="dropdown-menu">
-                    <h4>Messages</h4>
-                    <a href="{% url 'discussion' %}">• Expéditeur 1 : <class  style="color: rgb(0, 0, 0);">Contenu du message</class></a>
-                </div>
-            </li>
-
+          <li class="message-icon" onclick="toggleDropdown('message-dropdown')">
+            <a href="#">
+                <i class="fas fa-envelope"></i>
+                <span class="badge">{{ messages_non_lus.count }}</span>  <!-- Affiche le nombre de messages non lus -->
+            </a>
+            <div id="message-dropdown" class="dropdown-menu">
+                <h4 style="color: white;">Messages</h4>
+                {% for message in messages_non_lus %}
+                    <a href="{% url 'view_message_contribuable' message.id %}">
+                        • {{ message.expediteur }} : {{ message.contenu }}
+                    </a>
+                {% endfor %}
+            </div>
+            
+        </li>
             <li class="profile-icon" onclick="toggleDropdown('profile-dropdown')">
                 <a href="#">
-                    <img src="{% static 'myapp/images/faces/face6.jpg' %}" alt="Profil" class="profile-image">
+                    {% if request.session.photo %}
+                        <!-- Afficher l'image de profil de l'utilisateur connecté -->
+                        <img src="/media/{{ request.session.photo}}" alt="Profil" class="profile-image">
+                    {% else %}
+                        <!-- Afficher une icône de profil avec Font Awesome -->
+                        <i class="fas fa-user-circle profile-icon"></i>
+                    {% endif %}
                 </a>
                 <div id="profile-dropdown" class="dropdown-menu">
                     <a href="{% url 'profil' %}">Voir Profil</a>
@@ -39,16 +38,12 @@
                         {% csrf_token %}
                         <button type="submit" class="btns-deconnexion">Déconnexion</button>
                     </form>
-                </div>
-                
-            </li>
-            
+                </div>                
+           </li>            
         </ul>
     </div>
 </nav>
-
 <style>
-
 .profile-icon {
     position: relative;
     cursor: pointer;
@@ -60,8 +55,6 @@
     border-radius: 50%; /* Cercle pour une apparence de photo de profil */
     object-fit: cover; /* Ajuste l'image pour remplir sans déformation */
 }
-
-
     .notification-icon, .message-icon, .profile-icon {
         position: relative;
         cursor: pointer;
@@ -72,7 +65,7 @@
         position: absolute;
         right: 0;
         top: 100%;
-        background-color: white;
+        background-color: gray;
         border: 1px solid #ddd;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
@@ -103,7 +96,7 @@
     background: none;
     border: none;
     text-decoration: none;
-    color: #c61618; /* Couleur du lien */
+    color: #ffffff; /* Couleur du lien */
     cursor: pointer;
     padding: 0;
     font-size: 14px;
@@ -112,7 +105,7 @@
 }
 
     .btns-deconnexion:hover {
-        color: #000000; /* Couleur du lien */
+        color: #ff0000; /* Couleur du lien */
         text-decoration: none; /* Supprime le soulignement au survol */
     }
     .dropdown-menu a:hover {

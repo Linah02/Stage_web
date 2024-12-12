@@ -1,0 +1,127 @@
+{% load static %}
+
+<head> <link rel="stylesheet" href="{% static 'myapp/css/a_savoir.css' %}">
+    <style>
+        .brochure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .brochure-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .brochure-item iframe {
+            width: 100%;
+            height: 150px;
+        }
+
+        .load-more-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .load-more-btn {
+            padding: 10px 20px;
+            background-color: #1c868d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .load-more-btn:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+        .download-btn {
+    padding: 10px 20px;
+    background-color: #57cfd8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+
+
+.download-btn:hover {
+    background-color: #1eb5c0;
+}
+
+    </style></head>
+<div class="brochures-section">
+    <h2>Brochures</h2>
+    <div id="brochure-grid" class="brochure-grid">
+        <!-- Brochures chargées dynamiquement -->
+    </div>
+    <div id="pagination-controls" class="load-more-container">
+        <button id="prev-btn" class="load-more-btn" disabled>Précédent</button>
+        <span id="page-info">Page 1</span>
+        <button id="next-btn" class="load-more-btn">Suivant</button>
+    </div>
+</div>
+
+<script>
+    let currentPage = 1;
+    const baseUrl = window.location.origin;
+
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const pageInfo = document.getElementById('page-info');
+    const brochureGrid = document.getElementById('brochure-grid');
+    
+    function loadBrochures(page) {
+        fetch(`/get_brochures?page=${page}`)
+            .then(response => response.json())
+            .then(data => {
+                // Vider la grille de brochures
+                brochureGrid.innerHTML = '';
+
+                // Ajouter les nouvelles brochures
+                data.brochures.forEach(brochure => {
+                    const brochureItem = document.createElement('div');
+                    brochureItem.classList.add('brochure-item');
+                    brochureItem.innerHTML = `
+                        <iframe src="http://127.0.0.1:8000/${brochure.fichier_pdf}" title="${brochure.titre}"></iframe>
+                        <p>${brochure.titre}</p>
+                        <button onclick="window.open('${baseUrl}${brochure.fichier_pdf}', '_blank')" class="download-btn">
+        Télécharger
+    </button>
+                    `;
+                    brochureGrid.appendChild(brochureItem);
+                });
+
+                // Mettre à jour les contrôles de pagination
+                prevBtn.disabled = !data.has_previous;
+                nextBtn.disabled = !data.has_next;
+                pageInfo.textContent = `Page ${data.current_page}`;
+                currentPage = data.current_page;
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des brochures:', error);
+            });
+    }
+
+    // Chargement initial
+    loadBrochures(currentPage);
+
+    // Gestion des boutons
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            loadBrochures(currentPage - 1);
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        loadBrochures(currentPage + 1);
+    });
+</script>

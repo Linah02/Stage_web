@@ -1,39 +1,112 @@
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Assure qu'il est au-dessus du reste */
+}
+footer {
+    width: 100%;
+    z-index: 1000; /* Assure qu'il est au-dessus du reste */
+}
 
+
+.page-container {
+    margin-top: 70px; /* Ajustez cette valeur selon la hauteur réelle du header */
+}
 .calcul-container {
     display: flex; /* Place les deux sections côte à côte */
     gap: 20px; /* Ajoute un espacement entre les deux sections */
-    align-items: center; /* Aligne verticalement au centre */
-    margin-top: 20px;
 }
 
-/* Section des détails */
-.calcul-details {
-    flex: 1; /* Prend moins de place */
-    padding: 10px;
-    background-color: #f9f9f9; /* Couleur de fond pour démarquer */
-    border: 1px solid #ddd; /* Bordure discrète */
-    border-radius: 5px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Légère ombre */
+.calcul-details h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
 }
+
+.calcul-details p {
+    font-size: 0.8rem;
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.calcul-details p strong {
+    color: #2980b9;
+}
+
+
+
+
+.calcul-details {
+    font-family: Arial, sans-serif;
+    flex: 1; /* Prend moins de place */
+    width: 50% !important;
+    /* display: flex; */
+    /* flex-direction: column; Empile les sections verticalement */
+    gap: 20px; /* Espacement entre les sections */
+    padding: 20px;
+    height: auto;
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    
+}
+
+/* Détails en haut */
+.calcul-details-top {
+    flex: 1; /* Cette section prend la première partie de l'espace */
+    margin-bottom: 20px; /* Espacement entre les détails et les résultats */
+}
+
+/* Résultats en bas */
+.calcul-details-bottom {
+    display: flex;
+    flex-direction: column; /* Empile les éléments en colonne */
+    gap: 15px;
+}
+
+.calcul-result {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.calcul-chart {
+    /* Style pour votre graphique */
+    height: auto;
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 20px;
+}
+
 
 /* Section de la vidéo */
 .calcul-content {
-    flex: 3; /* Prend plus de place */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 50% !important;
+    flex: 1; /* Prend moins de place */
+    flex-direction: column; /* Empile les sections verticalement */
+    gap: 20px; /* Espacement entre les sections */
+    padding: 20px;
+    height: auto;
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
 }
 
 .form-calcul {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
+
+    background-color: #ffffff;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     text-align: left;
 }
 
 .form-calcul h2 {
+
     font-size: 18px;
     margin-bottom: 15px;
     color: #333;
@@ -41,7 +114,7 @@
 
 .form-group {
     display: flex;
-    align-items: center; /* Aligne verticalement les éléments */
+    /* align-items: center; Aligne verticalement les éléments */
     gap: 10px; /* Espacement entre les labels et les inputs */
     margin-bottom: 15px;
 }
@@ -88,7 +161,7 @@
 
 
 .btn_calculer:hover {
-    background-color: #bf8d12;
+    background-color: #FEE3C2;
 }
 
 
@@ -112,4 +185,61 @@
     margin-top: 15px;
     font-size: 16px;
     color: #333;
+}
+
+
+
+.chart-wrapper {
+    flex: 2;
+    padding-right: 20px;
+}
+
+.chart-details {
+    flex: 1;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+    width: 50% !important;
+    height: auto !important;
+}
+
+.calcul-details-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.calcul-details-section h3 {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.calcul-details-section h4 {
+    font-size: 1.2rem;
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
+.calcul-details-section p,
+.calcul-details-section ul {
+    font-size: 0.8rem;
+    color: #4d4d4d;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.calcul-details-section ul {
+    margin-left: 20px;
+    list-style-type: disc;
+}
+
+.calcul-details-section strong {
+    color: #2980b9;
 }

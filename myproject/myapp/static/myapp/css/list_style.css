@@ -48,14 +48,14 @@
 
 .search-container input[type="date"]:focus,
 .search-container input[type="number"]:focus {
-    border-color: #178b36;
+    border-color: #575756;
     outline: none;
 }
 
 /* Style pour le bouton de recherche */
 #search-btn {
     padding: 10px 20px;
-    background-color: #178b36;
+    background-color: #575756;
     color: white;
     border: none;
     border-radius: 5px;
@@ -64,7 +64,7 @@
 }
 
 #search-btn:hover {
-    background-color: #178b36;
+    background-color: #575756;
 }
 
 .pagination {
@@ -84,7 +84,7 @@
 }
 
 .pagination .step-links a:hover {
-    background-color: #0056b3;
+    background-color: #78a8ac;
 }
 
 .pagination .step-links span {

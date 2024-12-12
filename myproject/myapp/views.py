@@ -9,6 +9,8 @@ from .models import Contribuable
 from .models import Operateur
 import logging
 import random
+from django.contrib.auth.hashers import check_password, make_password
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -29,34 +31,6 @@ from datetime import datetime, timedelta
 # from rest_framework.views import APIView
 # from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-
-# def home(request):
-#     genres = Genre.objects.all()  # Récupère tous les genres
-#     situations = Sit_matrim.objects.all()  # Récupère toutes les situations matrimoniales
-
-#     if request.method == 'POST':
-#         nom = request.POST.get('nom')
-#         situation_matrimoniale = request.POST.get('situation_matrimoniale')
-#         prenom = request.POST.get('prenom')
-#         date_naissance = request.POST.get('date_naissance')
-#         genre = request.POST.get('genre')
-#         lieu_naissance = request.POST.get('lieu_naissance')
-
-#           # Stockage des données dans la session
-#         request.session['form_data'] = {
-#             'nom': nom,
-#             'situation_matrimoniale': situation_matrimoniale,
-#             'prenom': prenom,
-#             'date_naissance': date_naissance,
-#             'genre': genre,
-#             'lieu_naissance': lieu_naissance,
-#         }
-#         return redirect('form_part2')  # Redirige vers le formulaire 2
-
-#     # Remplir les champs avec les données de la session s'il y en a
-#     form_data = request.session.get('form_data', {})
-#     # Passer également les genres et situations dans le contexte
-#     return render(request, 'myapp/home.html', context={'genres': genres, 'situations': situations, **form_data})
 
 def home(request):
     genres = Genre.objects.all()
@@ -98,20 +72,6 @@ def home(request):
 
 
 
-# def valider_cin_et_contact(cin, contact):
-#     url = 'http://votre_api_url/valider_cin/'
-#     response = requests.post(url, json={'cin': cin, 'contact': contact})
-    
-#     if response.status_code == 200:
-#         # Validation réussie
-#         return True
-#     elif response.status_code == 400:
-#         # Si l'API renvoie une erreur de validation
-#         raise ValidationError(response.json().get('message', 'Erreur de validation inconnue'))
-#     else:
-#         # Erreur de communication avec l'API
-#         raise ValidationError("Impossible de valider les informations, veuillez réessayer.")
-
 
 @api_view(['GET'])
 def get_all_operateurs(request):
@@ -123,39 +83,15 @@ def get_all_operateurs(request):
 
 
 
-# def valider_cin_et_contact(cin, contact):
-#     cin = cin.strip()  # Supprimer les espaces inutiles au début et à la fin du CIN
-#     contact = contact.strip()  # Supprimer les espaces inutiles au début et à la fin du contact
-    
-#     try:
-#         # Rechercher un opérateur avec le CIN donné
-#         operateur = Operateur.objects.get(cin=cin)
-        
-#         # Vérifier si le contact correspond
-#         if operateur.contact != contact:
-#             # Lever une exception si le contact ne correspond pas
-#             raise ValidationError("Le contact ne correspond pas à ce CIN.")
-    
-#     except Operateur.DoesNotExist:
-#         # Lever une exception si aucun opérateur avec ce CIN n'est trouvé
-#         raise ValidationError("Le CIN n'est pas valide.")
-    
-#     # Si aucune exception n'a été levée, tout est correct
-#     return True
-
-
-
 def valider_cin_et_contact(cin, contact):
     # URL de l'API où les opérateurs sont récupérés
-    url = 'http://127.0.0.1:8000/get_all_operateurs/'  # Remplacez par l'URL correcte
-    
+    url = 'http://127.0.0.1:8000/get_all_operateurs/'  
     # Faire la requête à l'API pour récupérer tous les opérateurs
     response = requests.get(url)
 
     if response.status_code == 200:
         operateurs = response.json()
         
-        # Vérifier si le CIN existe dans la liste et si le contact correspond
         for operateur in operateurs:
             if operateur['cin'] == cin and operateur['contact'] == contact:
                 return True  # Si le CIN et le contact correspondent, on retourne True
@@ -166,30 +102,6 @@ def valider_cin_et_contact(cin, contact):
         raise ValidationError("Erreur lors de la validation avec l'API.")
 
 
-
-
-
-# def valider_cin_et_contact_api(cin, contact):
-#     cin = cin.strip()  # Supprimer les espaces
-#     contact = contact.strip()
-    
-#     try:
-#         # Appel à l'API pour obtenir l'opérateur
-#         response = requests.get(f"https://api.exemple.com/operateurs?cin={cin}")
-        
-#         if response.status_code == 200:
-#             data = response.json()  # Récupérer les données JSON
-            
-#             # Vérifier si le contact correspond
-#             if 'contact' not in data or data['contact'] != contact:
-#                 raise ValidationError("Le contact ne correspond pas à ce CIN.")
-#         else:
-#             raise ValidationError("Le CIN n'est pas valide.")
-        
-#     except requests.exceptions.RequestException:
-#         raise ValidationError("Erreur lors de l'accès à l'API.")
-    
-#     return True
 
 def form_part2(request):
     show_modal = False  # Pour contrôler l'affichage du modal de succès
@@ -286,6 +198,7 @@ def login(request):
                 request.session['contribuable_id'] = contribuable.id  # Stocker l'utilisateur pour la prochaine étape
                 request.session['prenif'] = contribuable.propr_nif
                 request.session['email'] = contribuable.email
+                request.session['photo'] = contribuable.photo
                 return redirect('D_authentification')  # Redirigez vers la vue pour la confirmation 2FA
             else:
                 # Si le mot de passe est incorrect, afficher une erreur
@@ -399,6 +312,87 @@ def GenererPRENIFetMdp(cin):
     return prenif, mot_de_passe
 
 
+def modifier_photo_profil(request):
+    # Récupérer l'ID du contribuable connecté depuis la session
+    id_contribuable = request.session.get('contribuable_id')
+
+    if not id_contribuable:
+        return redirect('login')  # Redirige vers la page de login si non connecté
+
+    # Charger le contribuable avec l'ID récupéré
+    contribuable = get_object_or_404(Contribuable, id=id_contribuable)
+
+    if request.method == 'POST':
+        form = PhotoProfilForm(request.POST, request.FILES, instance=contribuable)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Photo de profil modifiée avec succès.')
+            return redirect('profil')  # Redirection après la sauvegarde
+        else:
+            messages.error(request, 'Erreur lors de la modification de la photo.')
+    else:
+        form = PhotoProfilForm(instance=contribuable)
+
+    return render(request, 'myapp/modifier_photo_profil.html', {
+        'form': form,
+        'contribuable': contribuable
+    })
+
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import redirect, render
+from django.contrib.auth import update_session_auth_hash
+from .models import Contribuable  # Remplacez par le nom correct de votre modèle
+
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import make_password, check_password
+
+def modifier_mot_de_passe(request):
+    # Récupérer l'ID du contribuable connecté depuis la session
+    id_contribuable = request.session.get('contribuable_id')
+
+    # Vérifier si l'utilisateur est connecté
+    if not id_contribuable:
+        return redirect('login')  # Redirige vers la page de connexion si non connecté
+
+    # Récupérer l'utilisateur connecté
+    try:
+        contribuable = Contribuable.objects.get(pk=id_contribuable)
+    except Contribuable.DoesNotExist:
+        messages.error(request, "Utilisateur introuvable.")
+        return redirect('login')
+
+    # Vérification pour hacher les mots de passe non hachés
+    if not contribuable.mot_de_passe.startswith("pbkdf2_"):  # Vérifie si le mot de passe est déjà haché
+        contribuable.mot_de_passe = make_password(contribuable.mot_de_passe)
+        contribuable.save()
+
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Vérifier si le mot de passe actuel est correct
+        if check_password(old_password, contribuable.mot_de_passe):
+            # Vérifier si les nouveaux mots de passe correspondent
+            if new_password == confirm_password:
+                contribuable.mot_de_passe = make_password(new_password)  # Hacher et mettre à jour le mot de passe
+                contribuable.save()
+                # messages.success(request, 'Votre mot de passe a été modifié avec succès.')
+                return redirect('profil')  # Redirige vers la page de profil
+            else:
+                messages.error(request, 'Les nouveaux mots de passe ne correspondent pas.')
+        else:
+            messages.error(request, 'Le mot de passe actuel est incorrect.')
+
+    return redirect('profil')  # Retourne la page de profil
+
+
+class PhotoProfilForm(forms.ModelForm):
+    class Meta:
+        model = Contribuable
+        fields = ['photo'] 
+
 def modifier_contribuable(request):
     # Récupérer l'ID du contribuable connecté depuis la session
     id_contribuable = request.session.get('contribuable_id')
@@ -431,17 +425,37 @@ def modifier_contribuable(request):
     })
 
 
+def modifier_infos_personnelles(request):
+    id_contribuable = request.session.get('contribuable_id')
+
+    if not id_contribuable:
+        return redirect('login')
+
+    contribuable = get_object_or_404(Contribuable, id=id_contribuable)
+
+    if request.method == 'POST':
+        form = ContribuableForm(request.POST, instance=contribuable)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Informations modifiées avec succès.')
+            return redirect('profil')
+    else:
+        form = ContribuableForm(instance=contribuable)
+
+    return render(request, 'myapp/modifier_infos_personnelles.html', {'form': form})
+
+
 class ContribuableForm(forms.ModelForm):
     class Meta:
         model = Contribuable
-        fields = ['nom', 'prenom', 'email', 'contact', 'mot_de_passe', 'fokontany', 'photo']  # Assurez-vous que les champs sont corrects
+        fields = ['nom', 'prenom', 'email', 'contact', 'fokontany']  # Assurez-vous que les champs sont corrects
 
     # Rendre 'mot_de_passe' et 'photo' optionnels
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['mot_de_passe'].required = False
+        # self.fields['mot_de_passe'].required = False
         self.fields['fokontany'].required = False
-        self.fields['photo'].required = False
+        # self.fields['photo'].required = False
 
 def deconnexion(request):
     request.session.flush()

@@ -34,6 +34,8 @@ SECRET_KEY = 'django-insecure-ue0^2rmtj*1cca(e_ywcm*cu!gnxh8s1rmjffv$k-otf9l#r+w
 DEBUG = True
 
 ALLOWED_HOSTS = []
+SECURE_CONTENT_TYPE_NOSNIFF = False
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 
 # Application definition
@@ -150,6 +152,7 @@ USE_TZ = True
 # Chemin vers le dossier des fichiers médias
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 
 # Static files (CSS, JavaScript, Images)

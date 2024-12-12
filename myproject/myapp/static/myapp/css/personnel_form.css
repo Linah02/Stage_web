@@ -1,4 +1,54 @@
 /* Nouveau style pour container pour un alignement vertical */
+.btns-deconnexions[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: white;
+    background-color: #ff4b4b;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    width: 200px;
+    cursor: pointer;
+}
+            button.btn-warning {
+            background-color: #5a5a5a;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button.btn-warning:hover {
+            background-color: #d6d6d6;
+        }
+        
+        button.btn-light {
+            background-color: #ddd;
+            color: #333;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button.btn-light:hover {
+            background-color: #bbb;
+        }
+        
+.main-content {
+    margin-left: 220px;
+    margin-top: 100px;
+    padding: 20px;
+    flex-grow: 1;
+    /* position: fixed; */
+}
+
+
+
 .container {
     display: flex;
     flex-direction: column; /* Aligne les éléments de haut en bas */
