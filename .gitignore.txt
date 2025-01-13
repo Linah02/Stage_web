@@ -1,0 +1,40 @@
+# Virtual environment
+venv/
+env/
+*.pyc
+*.pyo
+__pycache__/
+
+# Configuration sensitive
+.env
+*.env
+
+# Database
+*.sqlite3
+db.sqlite3
+
+# Static and media files
+/static/
+/media/
+
+# Django migrations
+**/migrations/*
+!**/migrations/__init__.py
+
+# Logs
+*.log
+*.out
+*.err
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*~
+*.tmp
