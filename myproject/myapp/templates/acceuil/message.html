@@ -30,7 +30,11 @@
                             <div class="message-info" 
                                 {% if message.type_message == 'operateur' %} style="justify-content: flex-end;" {% endif %}>
                                 {% if message.type_message == 'contribuable' %}
+                                {% if message.id_contribuable.photo %}
                                     <img src="{{ message.id_contribuable.photo.url }}" alt="Photo Contribuable">
+                                {% else %}
+                                <i class="fa fa-user-circle" style="font-size: 30px; margin-left: 10px;"></i>  <!-- Espacement avec margin-left -->
+                                {% endif %}
                                     <span>{{ message.id_contribuable.nom }}</span>
                                 {% else %}
                                     <span>{{ message.id_operateur.nom }}</span>

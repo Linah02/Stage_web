@@ -1,6 +1,5 @@
 {% load static %}
 {% load humanize %}
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,8 +9,8 @@
     <link rel="stylesheet" href="{% static 'myapp/css/details_style.css' %}">
     <link rel="stylesheet" href="{% static 'myapp/css/style_acceuil.css' %}">
     <link rel="stylesheet" href="{% static 'myapp/css/personnel_form.css' %}">
-    <style>
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
     <header>
@@ -23,9 +22,6 @@
                 {% include 'layout/sidebar_acceuil.html' %}
             </aside>
             <main class="main-content">
-                <h1>Détails des Transactions</h1>
-                <!-- <h3>Requête SQL :</h3>
-                    <pre>{{ query }}</pre> -->
 
                     <div class="container">
                         <!-- Formulaire de recherche avec filtres -->
@@ -38,8 +34,17 @@
                                 <button id="search-btn" type="submit">Rechercher</button>
                             </div>
                         </form>
-                        
-                    
+                        <div class="container_telecharger" id="container_telecharger">
+                            {% if transaction_details %}
+                            {% for transactions in transaction_details %}
+                            {% if forloop.first %}
+                            
+                            <h1 class="pdf-title">Détails des Transactions - N° Quit {{ transactions.1 }}</h1>
+                            {% endif %}
+
+                            {% endfor %}
+                            {% endif %}
+
                         <!-- Détails de la transaction -->
                         <table class="details-table">
                             <thead>
@@ -93,7 +98,7 @@
                                 {% endif %}
                             </tbody>
                         </table>
-                    </div>
+                  
                     
                     <br>
                     
@@ -134,11 +139,72 @@
                             </tbody>
                         </table>
                     </div>
+
+                </div>
+                    </div>
                                 </main>
         </div>
     </div>
     <footer>
         {% include 'layout/footer_acceuil.html' %}
     </footer>
+       <!-- jsPDF -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+       <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const downloadButton = document.getElementById('download-pdf');
+
+    downloadButton.addEventListener('click', () => {
+        const element = document.querySelector('#container_telecharger');
+        
+        // Appliquez des styles spécifiques pour garantir l'affichage du titre
+        const styleElement = document.createElement('style');
+        styleElement.innerHTML = `
+            .pdf-title {
+                display: block !important;
+                text-align: center;
+                font-size: 20px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+            .details-table, .transaction-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .details-table th, .details-table td, 
+            .transaction-table th, .transaction-table td {
+                border: 1px solid #000;
+                padding: 8px;
+            }
+            .transaction-table tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+        `;
+
+        document.head.appendChild(styleElement);
+
+        const options = {
+            margin: 0.5,
+            filename: `transaction_details_NQ_{{ transaction.1 }}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf()
+            .set(options)
+            .from(element)
+            .save()
+            .finally(() => {
+                document.head.removeChild(styleElement); // Nettoyage après génération
+            });
+    });
+});
+
+    </script>
+    
+   
 </body>
 </html>

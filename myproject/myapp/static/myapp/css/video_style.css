@@ -1,11 +1,11 @@
-body {
+/* body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     background-color: rgb(255, 255, 255);
-}
+} */
 
-.container {
+#video1 .container {
     display: flex;
     background: transparent;
     width: 100%;
@@ -14,20 +14,21 @@ body {
     align-items: center;
 }
 
-.container .image-div{
+#video1 .container .image-div{
     flex: 1;
+    left: 10px;
     background-color: transparent;
 }
 
 
-.container .image-div video {
+#video1 .container .image-div video {
     top: 100px !important;
     border-radius: 5px;
     max-width: 700px;
     max-height: auto;
 }
 
-.container .content-div {
+#video1 .container .content-div {
     text-align: left !important;
     padding: 200px 20px 20px 50px !important;
     flex: 1 !important;

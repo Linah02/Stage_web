@@ -81,9 +81,20 @@
                 <div class="clickable-div"><p>Rendre des meilleurs services au public</p></div>
             </div>
         </div>
-        
 </center>
+<div id="video2">
+{% include 'detail_acceuil/video2.html' %}
+</div>
+<br>
+<br>
+<div id="role">
+    {% include 'detail_acceuil/role.html' %}
+
+</div>
+<div id="video1">
     {% include 'detail_acceuil/video1.html' %}
+</div>
+
     <div id="video">
         {% include 'detail_acceuil/list_video.html' with videos_publiees=videos_publiees %}
 
@@ -92,6 +103,7 @@
         {% include 'detail_acceuil/a_savoir.html' %}
     </div>
     </body>
+    
     <footer>
     {% include 'layout/footer_acceuil.html' %}
     </footer>
@@ -105,8 +117,6 @@
             // window.location.href = 'url_de_destination';
         });
     });
-
-    
 </script>
 
 

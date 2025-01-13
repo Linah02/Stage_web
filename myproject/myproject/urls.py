@@ -75,7 +75,7 @@ urlpatterns = [
     path('acceuils/', acceuils, name='acceuils'),
     path('home/', home, name='home'),
     path('form-part2/', form_part2, name='form_part2'),
-    path('login/', login, name='login'),
+    path('connexion/', login, name='connexion'),
     path('deconnexion/', deconnexion, name='deconnexion'),
     path('get_brochures/', get_brochures, name='get_brochures'),
     
@@ -115,6 +115,7 @@ urlpatterns = [
     path('export_transaction_pdf/<str:n_quit>/',export_transaction_pdf, name='export_transaction_pdf'),
     path('filtre_list_transaction/',filtre_list_transaction, name='filtre_list_transaction'),
     path('transaction_detail/<str:n_quit>/filtre_detail_transaction', filtre_detail_transaction, name='filtre_detail_transaction'),
+    path('api/', include('myapp.urls')),
     
 ]
 

@@ -1,36 +1,37 @@
-from django.shortcuts import render, redirect,get_object_or_404
-from django.core.mail import send_mail
-from django.conf import settings
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import authenticate, login
-from django.views.decorators.csrf import csrf_exempt
+from multiprocessing.connection import Client
+from django.shortcuts import render, redirect,get_object_or_404 # type: ignore
+from django.core.mail import send_mail # type: ignore
+from django.conf import settings # type: ignore
+from django.shortcuts import render, get_object_or_404 # type: ignore
+from django.contrib.auth import authenticate, login # type: ignore
+from django.views.decorators.csrf import csrf_exempt # type: ignore
 from .models import Sit_matrim
 from .models import Contribuable 
 from .models import Operateur
 import logging
 import random
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import check_password, make_password # type: ignore
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-import requests
+from rest_framework.decorators import api_view # type: ignore
+from rest_framework.response import Response # type: ignore
+from rest_framework import status # type: ignore
+import requests # type: ignore
 
-from django import forms
+from django import forms # type: ignore
 import os
 from datetime import datetime
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError # type: ignore
 logger = logging.getLogger(__name__)
 from .models import Genre
-from django.contrib import messages
-from django.http import JsonResponse
+from django.contrib import messages # type: ignore
+from django.http import JsonResponse # type: ignore
 from .models import FokontanyView
 from .forms import ContribuableForm
 from datetime import datetime, timedelta
 # from rest_framework.views import APIView
 # from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError # type: ignore
 
 def home(request):
     genres = Genre.objects.all()
@@ -97,7 +98,7 @@ def valider_cin_et_contact(cin, contact):
                 return True  # Si le CIN et le contact correspondent, on retourne True
         
         # Si aucun opérateur avec ce CIN et contact n'a été trouvé, lever une exception
-        raise ValidationError("Le CIN ou le contact ne correspond pas.")
+        raise ValidationError("❌Le CIN ou le contact ne correspond pas.")
     else:
         raise ValidationError("Erreur lors de la validation avec l'API.")
 
@@ -169,8 +170,8 @@ def envoyer_email(email, prenif, mot_de_passe):
     """Envoie un email avec les informations d'inscription."""
     subject = 'Inscription réussie'
     message = (
-        f"Vous êtes inscrit en tant que membre,\n"
-        f"votre n° d'immatriculation fiscale est : {prenif} "
+        f"Vous êtes inscrit en tant que contribuable,\n"
+        f"votre PRE N° d'Immatriculation Fiscale est : {prenif} "
         f"et votre mot de passe est : {mot_de_passe}.\n"
         "Merci d'utiliser ces informations pour vous connecter à votre compte."
     )
@@ -183,6 +184,30 @@ def envoyer_email(email, prenif, mot_de_passe):
         fail_silently=False,
     )
 
+
+
+def envoyer_sms(contact, prenif, mot_de_passe):
+    """Envoie un SMS avec les informations d'inscription."""
+    account_sid = settings.TWILIO_ACCOUNT_SID
+    auth_token = settings.TWILIO_AUTH_TOKEN
+    client = Client(account_sid, auth_token)
+
+    message_body = (
+        f"Félicitations, votre inscription est réussie !\n"
+        f"Votre NIF est : {prenif}\n"
+        f"Votre mot de passe est : {mot_de_passe}\n"
+        f"Connectez-vous pour accéder à votre compte."
+    )
+    
+    try:
+        client.messages.create(
+            body=message_body,
+            from_=settings.TWILIO_PHONE_NUMBER,  # Numéro Twilio fourni par le service
+            to=contact  # Numéro du bénéficiaire
+        )
+        return True
+    except Exception as e:
+        raise ValidationError(f"Échec de l'envoi du SMS : {str(e)}")
 
 
 def login(request):
@@ -198,7 +223,6 @@ def login(request):
                 request.session['contribuable_id'] = contribuable.id  # Stocker l'utilisateur pour la prochaine étape
                 request.session['prenif'] = contribuable.propr_nif
                 request.session['email'] = contribuable.email
-                request.session['photo'] = contribuable.photo
                 return redirect('D_authentification')  # Redirigez vers la vue pour la confirmation 2FA
             else:
                 # Si le mot de passe est incorrect, afficher une erreur
@@ -207,6 +231,7 @@ def login(request):
             # Si l'utilisateur n'existe pas, afficher une erreur
             return render(request, 'myapp/login.html', {'error': 'Email non trouvé'})
     return render(request, 'myapp/login.html')
+
 
 def search_province(request):
     query = request.GET.get('query', '')
@@ -259,7 +284,7 @@ def D_authentification(request):
             send_mail(
                 'Votre code de vérification',
                 f'Votre code de vérification est : {code}',
-                settings.DEFAULT_FROM_EMAIL,  # Adresse de l'expéditeur
+                f"immatriculationenligne <{settings.DEFAULT_FROM_EMAIL}>",  # Adresse de l'expéditeur
                 [email],  # Destinataire (email de l'utilisateur)
                 fail_silently=False,
             )
@@ -338,14 +363,14 @@ def modifier_photo_profil(request):
         'contribuable': contribuable
     })
 
-from django.contrib import messages
-from django.contrib.auth.hashers import check_password
-from django.shortcuts import redirect, render
-from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages # type: ignore
+from django.contrib.auth.hashers import check_password # type: ignore
+from django.shortcuts import redirect, render # type: ignore
+from django.contrib.auth import update_session_auth_hash # type: ignore
 from .models import Contribuable  # Remplacez par le nom correct de votre modèle
 
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import check_password # type: ignore
+from django.contrib.auth.hashers import make_password, check_password # type: ignore
 
 def modifier_mot_de_passe(request):
     # Récupérer l'ID du contribuable connecté depuis la session
@@ -459,4 +484,4 @@ class ContribuableForm(forms.ModelForm):
 
 def deconnexion(request):
     request.session.flush()
-    return redirect('login')  # Redirige vers la page d'accueil
+    return redirect('connexion')  # Redirige vers la page d'accueil

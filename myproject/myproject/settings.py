@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 
 from pathlib import Path
-import firebase_admin
-from firebase_admin import credentials
+import firebase_admin # type: ignore
+from firebase_admin import credentials # type: ignore
 
 cred = credentials.Certificate("media/espace-contribuable-firebase-adminsdk-c9ae7-c39bdf7224.json")
 firebase_admin.initialize_app(cred)
@@ -33,11 +33,17 @@ SECRET_KEY = 'django-insecure-ue0^2rmtj*1cca(e_ywcm*cu!gnxh8s1rmjffv$k-otf9l#r+w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.199', 'localhost', '127.0.0.1', '0.0.0.0','192.168.0.185']
+
 SECURE_CONTENT_TYPE_NOSNIFF = False
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:19006",  # Adresse de votre app React Native
+    "http://192.168.1.199:8000",
+    "http://192.168.0.185:8000",
+    "http://127.0.0.1:8000",
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',#integration de mon app dans mon projet
     'django.contrib.humanize',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -59,8 +66,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Utilisation des sessions basées sur la base de données
+SESSION_COOKIE_NAME = 'sessionid'  # Nom du cookie de session
+SESSION_COOKIE_AGE = 3600  # Durée de vie du cookie en secondes
+SESSION_COOKIE_HTTPONLY = True
+CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'myproject.urls'
 
 # TEMPLATES = [
@@ -93,6 +108,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
@@ -177,3 +194,12 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'raharinirinalina@gmail.com'
 EMAIL_HOST_PASSWORD = 'bcqm live zzip zdud'
 DEFAULT_FROM_EMAIL = 'raharinirinalina@gmail.com'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+}
+
+# (OTP - One-Time Password)

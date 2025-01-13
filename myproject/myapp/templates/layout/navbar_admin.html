@@ -15,7 +15,7 @@
                     <span class="badge">{{ messages_non_lus.count }}</span>  <!-- Affiche le nombre de messages non lus -->
                 </a>
                 <div id="message-dropdown" class="dropdown-menu">
-                    <h4>Messages</h4>
+                    <a href="#"><h4>Messages</h4></a>
                     {% for message in messages_non_lus %}
                         <a href="{% url 'view_message' message.id %}">• {{ message.expediteur }} : {{ message.contenu }}</a>
                     {% endfor %}

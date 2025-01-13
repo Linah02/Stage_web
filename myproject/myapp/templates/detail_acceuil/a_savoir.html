@@ -2,6 +2,13 @@
 
 <head> <link rel="stylesheet" href="{% static 'myapp/css/a_savoir.css' %}">
     <style>
+        .brochures-section {
+    max-width: 1200px; /* Limite la largeur */
+    margin: 0 auto; /* Centre le contenu */
+    padding: 20px; /* Ajoute un espacement interne */
+    background-color: transparent; /* Ajoute une couleur de fond douce */
+}
+
         .brochure-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -9,7 +16,7 @@
         }
 
         .brochure-item {
-            border: 1px solid #ddd;
+            border: 1px solid #dddddd;
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -59,15 +66,20 @@
 
     </style></head>
 <div class="brochures-section">
-    <h2>Brochures</h2>
+    <h2 style="color: #69bec4;">Brochures</h2>
     <div id="brochure-grid" class="brochure-grid">
         <!-- Brochures chargées dynamiquement -->
     </div>
+    <br>
+    <br>
+    
     <div id="pagination-controls" class="load-more-container">
         <button id="prev-btn" class="load-more-btn" disabled>Précédent</button>
         <span id="page-info">Page 1</span>
         <button id="next-btn" class="load-more-btn">Suivant</button>
     </div>
+    <br>
+    <br>
 </div>
 
 <script>

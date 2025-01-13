@@ -1,4 +1,4 @@
-#!C:\LINAH\S6\PREPA LICENCE\immatriculation\env\Scripts\python.exe
+#!E:\LINAH\PREPALICENCE\immatriculation\env\Scripts\python.exe
 # -*- coding: utf-8 -*-
 # Copyright 2024 Google LLC
 #

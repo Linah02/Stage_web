@@ -364,9 +364,9 @@ WHERE
 
 UPDATE myapp_paiement
 SET 
-    date_paiement ='2025-04-01'
+    montant =15000
 WHERE 
-    id  =6;
+    id  =4;
 
 UPDATE myapp_centralrecette SET nimp_id =5 WHERE id  =2;
 
@@ -379,4 +379,4 @@ SELECT
 FROM 
     information_schema.columns 
 WHERE 
-    table_name = 'myapp_operateur';
+    table_name = 'myapp_country';

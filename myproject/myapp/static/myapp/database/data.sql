@@ -27,16 +27,76 @@ INSERT INTO myapp_numimpot (impot, numero) VALUES
 ('PENALITE', 44);
 
 
-INSERT INTO myapp_fokontany (wereda_id,fkt_desc) values();
-INSERT INTO myapp_wereda (wereda_code,locality_id,wereda_desc)values();
-INSERT INTO myapp_locality (city_id,locality_desc,locality_desc_f,locality_desc_s,locality_code) VALUES();
-INSERT INTO myapp_city(parish_id,city_name_f,city_code,city_name_extra,city_name_s,city_name) values();
-INSERT INTO myapp_parish (id, parish_name, parish_name_f, parish_name_s, parish_code)
-VALUES 
-((SELECT id FROM myapp_country WHERE country_code = 'MG'), 'Analamanga', 'Analamanga', '', 'ANL'),
-((SELECT id FROM myapp_country WHERE country_code = 'MG'), 'Vakinankaratra', 'Vakinankaratra', '', 'VAK');
-INSERT INTO myapp_country (country_name, country_name_f, country_name_s, country_code, capital) 
-VALUES ('Madagascar', 'Madagascar', 'Madagasikara', 'MG', 'Antananarivo');
+INSERT INTO myapp_country (country_name, country_name_f, country_name_s, country_code, capital)
+VALUES
+('Madagascar', 'Madagasikara', 'Madagasikara', 'MG', 'Antananarivo');
+
+-- Insérer les paroisses pour la province d'Antananarivo
+INSERT INTO myapp_parish (country_id, parish_name, parish_name_f, parish_name_s, parish_code)
+VALUES
+(1, 'Antananarivo', 'Antananarivo', 'Antananarivo', '001'),
+(1, 'Itasy', 'Itasy', 'Itasy', '002');
+
+-- Insérer les paroisses pour la province de Toamasina
+INSERT INTO myapp_parish (country_id, parish_name, parish_name_f, parish_name_s, parish_code)
+VALUES
+(1, 'Toamasina', 'Toamasina', 'Toamasina', '003'),
+(1, 'Atsinanana', 'Atsinanana', 'Atsinanana', '004');
+
+
+-- Insérer des villes pour la paroisse d'Antananarivo
+INSERT INTO myapp_city (parish_id, city_name_f, city_code, city_name_extra, city_name_s, city_name)
+VALUES
+(1, 'Antananarivo', '001', 'Antananarivo Ville', 'Antananarivo', 'Antananarivo City'),
+(1, 'Ambohijatovo', '002', 'Ambohijatovo City', 'Ambohijatovo', 'Ambohijatovo');
+
+-- Insérer des villes pour la paroisse de Toamasina
+INSERT INTO myapp_city (parish_id, city_name_f, city_code, city_name_extra, city_name_s, city_name)
+VALUES
+(3, 'Toamasina', '003', 'Toamasina Ville', 'Toamasina', 'Toamasina City'),
+(3, 'Foulpointe', '004', 'Foulpointe City', 'Foulpointe', 'Foulpointe');
+
+-- Insérer des localités pour la ville d'Antananarivo
+INSERT INTO myapp_locality (city_id, locality_desc, locality_desc_f, locality_desc_s, locality_code)
+VALUES
+(1, 'Centre Ville', 'Centre Ville', 'Centre Ville', '0001'),
+(1, 'Ankorondrano', 'Ankorondrano', 'Ankorondrano', '0002');
+
+-- Insérer des localités pour la ville de Toamasina
+INSERT INTO myapp_locality (city_id, locality_desc, locality_desc_f, locality_desc_s, locality_code)
+VALUES
+(3, 'Centre Ville', 'Centre Ville', 'Centre Ville', '0003'),
+(3, 'Foulpointe', 'Foulpointe', 'Foulpointe', '0004');
+
+
+-- Insérer des weredas pour Antananarivo
+INSERT INTO myapp_wereda (wereda_code, locality_id, wereda_desc)
+VALUES
+(1, 1, 'Antananarivo District'),
+(2, 2, 'Ankorondrano District');
+
+-- Insérer des weredas pour Toamasina
+INSERT INTO myapp_wereda (wereda_code, locality_id, wereda_desc)
+VALUES
+(3, 3, 'Toamasina District'),
+(4, 4, 'Foulpointe District');
+
+INSERT INTO myapp_fokontany (wereda_id, fkt_desc)
+VALUES
+(1, 'Fokontany d''Antananarivo Ville'),
+(1, 'Fokontany de Soavimasoandro'),
+(2, 'Fokontany d''Ambohijatovo'),
+(2, 'Fokontany de Antsirabe II'),
+(2, 'Fokontany de Ankadifotsy');
+
+
+INSERT INTO myapp_fokontany (wereda_id, fkt_desc)
+VALUES
+(3, 'Fokontany de Toamasina Ville'),
+(3, 'Fokontany de Mahavoky'),
+(4, 'Fokontany de Foulpointe'),
+(4, 'Fokontany de Mahatsara'),
+(4, 'Fokontany de Ambodiriana');
 
 
 
@@ -46,7 +106,7 @@ INSERT INTO myapp_centralrecette (id_contribuable_id,id_centre_recette,regisseur
     mouvement,moyen_paiement,rib,raison_sociale,nimp_id,libelle,flag,date_debut,date_fin,periode,periode2,mnt_ap,base,imp_detail,da,
     banque,annee_recouvrement,code_bureau,libelle_bureau
 ) VALUES (
-    6,                         
+    20,                         
     'NIF123QUITCENTRE',        
     'Regisseur 1',             
     1,                        
@@ -76,8 +136,8 @@ INSERT INTO myapp_centralrecette (id_contribuable_id,id_centre_recette,regisseur
 
 
 INSERT INTO myapp_paiement (id_contribuable_id,central_recette_id,mode_paiement_id,n_quit,montant,date_paiement) VALUES
-(6, 5, 1, 'QUIT126', 50000.00, '2027-02-01'),  
-(6, 5, 1, 'QUIT126', 15000.00, '2027-03-01');  
+(20, 1, 1, 'QUIT126', 35000.00, '2027-02-01'),  
+(20, 1, 1, 'QUIT126', 15000.00, '2027-03-01');  
 
 
 
@@ -153,6 +213,9 @@ VALUES
     ('Brochure 10', 'industrie_44', '/brochurespdfs/industrie_448.pdf', '2024-12-10');
 
 
-insert into myapp_operateurs(nom,email) values('','');
+insert into myapp_operateurs(nom,email) values('Operateur 1','raharinirinalina@gmail.com');
 
-insert into myapp_operateur(cin,contact) values ('','');
+insert into myapp_operateur(cin,contact) values ('123123123123','0345319718');
+
+
+-- lina04!s
