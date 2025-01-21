@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,7 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animation des Divs</title>
     <style>
-      
+      .logo_role {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Prend la hauteur du conteneur */
+}
+
+.logo_role img {
+    max-width: 80px; /* Ajustez la taille maximale de l'image */
+    max-height: 80px;
+}
+
         /* Conteneur principal pour centrer les divs */
         #role .container {
             display: flex;
@@ -58,7 +71,7 @@
         }
 
         .flip-box-back {
-            background-color: #f1f1f1;
+            background-color: white;
             color: black;
             transform: rotateY(180deg); /* Retourner le verso */
         }
@@ -77,38 +90,47 @@
 </head>
 <body>
     <div class="container">
+        <!-- Citoyenneté -->
         <div class="flip-box">
             <div class="flip-box-inner">
                 <div class="flip-box-front">
-                    <div class="icon">💡</div>
-                    <div>Idée</div>
+                    <div class="icon">🌍</div>
+                    <div>Citoyenneté</div>
                 </div>
                 <div class="flip-box-back">
-                    <div>Informations supplémentaires sur l'idée.</div>
+                    <div class="logo_role">
+                        <img src="{% static 'myapp/images/Logo-DGI.jpg' %}" alt="Logo DGI">
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Développement -->
         <div class="flip-box">
             <div class="flip-box-inner">
                 <div class="flip-box-front">
-                    <div class="icon">📚</div>
-                    <div>Lecture</div>
+                    <div class="icon">📈</div>
+                    <div>Développement</div>
                 </div>
                 <div class="flip-box-back">
-                    <div>Informations supplémentaires sur la lecture.</div>
+                    <div class="logo_role">
+                        <img src="{% static 'myapp/images/Logo-DGI.jpg' %}" alt="Logo DGI">
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Transparence -->
         <div class="flip-box">
             <div class="flip-box-inner">
                 <div class="flip-box-front">
-                    <div class="icon">🎮</div>
-                    <div>Jeux</div>
+                    <div class="icon">🔍</div>
+                    <div>Transparence</div>
                 </div>
                 <div class="flip-box-back">
-                    <div>Informations supplémentaires sur les jeux.</div>
+                    <div class="logo_role">
+                        <img src="{% static 'myapp/images/Logo-DGI.jpg' %}" alt="Logo DGI">
+                    </div>
                 </div>
             </div>
         </div>

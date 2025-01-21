@@ -160,7 +160,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'  # Exemple pour UTC+3
+USE_TZ = True  # Active la gestion des fuseaux horaires
 
 USE_I18N = True
 

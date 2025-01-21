@@ -1,5 +1,7 @@
 from django.db import models
-
+from datetime import datetime, timedelta
+import uuid
+ 
 class Genre(models.Model):
     genre = models.CharField(max_length=100)
 
@@ -11,6 +13,10 @@ class Sit_matrim(models.Model):
 
     def __str__(self):
         return self.situation
+
+# class User_token(models.Model):
+#     id_contribuable = models.IntegerField()
+#     tokenid
 
 class Contribuable(models.Model):
     # Colonnes déjà présentes
@@ -38,6 +44,22 @@ class Contribuable(models.Model):
     def __str__(self):
         return f'{self.nom} {self.prenom} {self.photo.name if self.photo else 'No Image'}'
 
+
+class Token(models.Model):
+    contribuable = models.ForeignKey(Contribuable, on_delete=models.CASCADE, related_name='tokens')  # Lien vers Contribuable
+    token = models.CharField(max_length=255, unique=True)  # Token unique
+    created_at = models.DateTimeField(auto_now_add=True)  # Date de création du token
+    expires_at = models.DateTimeField()  # Date d'expiration du token
+    is_active = models.BooleanField(default=True)  # Statut actif/inactif du token
+
+    def is_expired(self):
+        """Vérifie si le token est expiré."""
+        return datetime.utcnow() > self.expires_at
+
+    def __str__(self):
+        return f'Token for {self.contribuable.nom} {self.contribuable.prenom} (Active: {self.is_active})'
+   
+   
 class Operateur(models.Model):
     cin = models.CharField(max_length=15)
     contact = models.CharField(max_length=14)

@@ -150,25 +150,9 @@ INSERT INTO myapp_videopublicite (
 )
 VALUES
     (
-        'Video Publicitaire 1', 
-        'Decouvrez notre premiere video promotionnelle.',
-        'videos/facebook-video-y2downloots (1).mp4', 
-        NULL, 
-        '2024-12-01', 
-        '00:02:30', 
-        'Promotion', 
-        'fr', 
-        'publie', 
-        'promotion,fonctionnalites,nouvelle', 
-        123, 
-        'Auteur 1', 
-        'images/miniature1.png', 
-        '2024-12-03'
-    ),
-    (
-        'Video Publicitaire 2', 
-        'Une autre video mettant en avant nos produits.',
-        'videos/facebook-video-y2downloots (2).mp4', 
+        'Lutter Contre la Corruption', 
+        'Connaissez Vos Droits, Protégez-Vous !',
+        'videos/1.mp4', 
         NULL, 
         '2024-12-02', 
         '00:03:15', 
@@ -182,9 +166,57 @@ VALUES
         '2024-12-03'
     ),
     (
-        'Video Publicitaire 3', 
-        'Video speciale pour un evenement a venir.',
-        'videos/facebook-video-y2downloots.mp4', 
+        'Partagez Vos Idées et Préoccupations', 
+        'Visitez www.mef.gov.mg pour soumettre vos suggestions.',
+        'videos/4.mp4', 
+        NULL, 
+        '2024-12-02', 
+        '00:03:15', 
+        'Produit', 
+        'fr', 
+        'publie', 
+        'produit,marketing,visibilite', 
+        456, 
+        'Auteur 2', 
+        'images/miniature2.png', 
+        '2024-12-03'
+    ),
+    (
+        'Comprendre l''IFPB et Son Importance pour Tous', 
+        'Impôt Foncier sur les Propriétés Bâties (IFPB)',
+        'videos/2.mp4', 
+        NULL, 
+        '2024-12-02', 
+        '00:03:15', 
+        'Produit', 
+        'fr', 
+        'publie', 
+        'produit,marketing,visibilite', 
+        456, 
+        'Auteur 2', 
+        'images/miniature2.png', 
+        '2024-12-03'
+    ),
+    (
+        'la DGI (Direction Générale des Impôts)', 
+        'Votre Partenaire Fiscal au Service de la Nation',
+        'videos/5.mp4', 
+        NULL, 
+        '2024-12-01', 
+        '00:02:30', 
+        'Promotion', 
+        'fr', 
+        'publie', 
+        'promotion,fonctionnalites,nouvelle', 
+        123, 
+        'Auteur 1', 
+        'images/miniature1.png', 
+        '2024-12-03'
+    ),
+    (
+        'Après l''Obtention de Votre Carte Fiscale', 
+        'Les démarches à effectuer pour bien utiliser votre carte fiscale',
+        'videos/6.mp4', 
         NULL, 
         '2024-12-03', 
         '00:01:45', 
@@ -195,6 +227,22 @@ VALUES
         789, 
         'Auteur 3', 
         'images/miniature3.png', 
+        '2024-12-03'
+    ),
+    (
+        'Lutter Contre la Corruption', 
+        'Connaissez Vos Droits, Protégez-Vous !',
+        'videos/0.mp4', 
+        NULL, 
+        '2024-12-02', 
+        '00:03:15', 
+        'Produit', 
+        'fr', 
+        'publie', 
+        'produit,marketing,visibilite', 
+        456, 
+        'Auteur 2', 
+        'images/miniature2.png', 
         '2024-12-03'
 );
 
@@ -216,6 +264,9 @@ VALUES
 insert into myapp_operateurs(nom,email) values('Operateur 1','raharinirinalina@gmail.com');
 
 insert into myapp_operateur(cin,contact) values ('123123123123','0345319718');
+
+insert into myapp_message('love you',,default,20,1,f);
+
 
 
 -- lina04!s

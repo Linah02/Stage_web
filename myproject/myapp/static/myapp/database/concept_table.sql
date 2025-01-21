@@ -362,14 +362,17 @@ WHERE
 
 
 
-UPDATE myapp_paiement
+UPDATE myapp_contribuable
 SET 
-    montant =15000
+    mot_de_passe ='000000'
 WHERE 
-    id  =4;
+    id  =20;
 
 UPDATE myapp_centralrecette SET nimp_id =5 WHERE id  =2;
 
+
+update myapp_message
+set 
 
 -- describe table
 SELECT 

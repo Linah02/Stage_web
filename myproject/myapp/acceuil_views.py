@@ -528,8 +528,6 @@ def discussion(request):
             type_message='contribuable',
             date_envoi=timezone.now()
         )
-        # Appel à la fonction d'envoi de notification après la création du message
-        # send_notification_to_admin(message)
 
     # Récupérer les messages pour cet utilisateur, triés par date
     messages = Message.objects.filter(id_contribuable=contribuable_id).order_by('date_envoi')

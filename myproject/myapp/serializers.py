@@ -30,7 +30,15 @@ class FokontanyViewSerializer(serializers.ModelSerializer):
 
 
 
-
+class ContribuableFormSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contribuable
+        fields = ['nom', 'contact', 'email']
+    
+    def validate_email(self, value):
+        if '@' not in value:
+            raise serializers.ValidationError("Email invalide.")
+        return value
 class ContribuableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contribuable

@@ -7,6 +7,7 @@ from .views import valider_cin_et_contact,GenererPRENIFetMdp,envoyer_email
 from .serializers import GenreSerializer,FokontanyView
 from .serializers import SitMatrimSerializer
 from .serializers import FokontanyViewSerializer
+from .serializers import ContribuableFormSerializer
 from rest_framework.filters import SearchFilter
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -450,46 +451,254 @@ def api_transaction_details(request, n_quit):
 
     return JsonResponse({'transactions': transactions}, status=200)
 
-    # def get(self, request, *args, **kwargs):
-    #     id_contribuable = 20  # Utilisation d'un ID fixe pour le moment
 
-    #     print(f"ID du contribuable: {id_contribuable}")  # Vérification de l'ID du contribuable
+from rest_framework import status
+@api_view(['PUT'])
+def modifier_infos_personnelles(request):
+    # Récupérer l'ID du contribuable depuis la session
+    id_contribuable = request.session.get('contribuable_id')
 
-    #     # Requête SQL pour récupérer les transactions
-    #     query = """
-    #         SELECT n_quit, contribuable, total_payee, reste_ap
-    #         FROM vue_transactions_par_quit_et_contribuable
-    #         WHERE contribuable = %s;
-    #     """
+    if not id_contribuable:
+        return Response({"detail": "Utilisateur non authentifié"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    #     with connection.cursor() as cursor:
-    #         cursor.execute(query, [id_contribuable])
-    #         rows = cursor.fetchall()
+    # Récupérer l'objet contribuable
+    contribuable = Contribuable.objects.filter(id=id_contribuable).first()
 
-    #     print(f"Résultats de la requête SQL: {rows}")  # Affiche les résultats de la requête
+    if not contribuable:
+        return Response({"detail": "Contribuable introuvable"}, status=status.HTTP_404_NOT_FOUND)
 
-    #     if not rows:
-    #         print("Aucune transaction trouvée pour ce contribuable.")  # Vérification de l'absence de résultats
+    # Afficher les données du contribuable dans la console
+    print("Contribuable récupéré:", contribuable)
 
-    #     # Sérialiser les données
-    #     transactions = [
-    #         {
-    #             'n_quit': row[0],
-    #             'contribuable': row[1],
-    #             'total_payee': row[2],
-    #             'rest_payee': row[3],
-    #         }
-    #         for row in rows
-    #     ]
+    # Sérialiser les données
+    if request.method == 'PUT':
+        serializer = ContribuableFormSerializer(contribuable, data=request.data)
 
-    #     # Pagination
-    #     paginator = self.TransactionPagination()
-    #     paginated_transactions = paginator.paginate_queryset(transactions, request)
+        # Afficher les données envoyées dans la requête PUT
+        print("Données reçues dans la requête PUT:", request.data)
 
-    #     # Retourner la réponse paginée
-    #     return paginator.get_paginated_response(paginated_transactions)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": "Informations modifiées avec succès"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"detail": "Méthode non autorisée"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)    # def get(self, request, *args, **kwargs):
+
+
+
+from django.core.files.storage import default_storage
+
+@api_view(['POST'])
+def modifier_photo_profil(request):
+    # Vérifier si l'utilisateur est authentifié via la session
+    id_contribuable = request.session.get('contribuable_id')
+    if not id_contribuable:
+        return Response({"detail": "Utilisateur non authentifié"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    # Charger le contribuable correspondant
+    contribuable = Contribuable.objects.filter(id=id_contribuable).first()
+    if not contribuable:
+        return Response({"detail": "Contribuable introuvable"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Afficher les données du contribuable dans la console (utile pour le débogage)
+    print("Contribuable récupéré:", contribuable)
+
+    # Vérifier si un fichier a été envoyé
+    if 'photo' not in request.FILES:
+        return Response({'detail': 'Aucune photo fournie'}, status=status.HTTP_400_BAD_REQUEST)
+
+    photo = request.FILES['photo']
+
+    # Utiliser le gestionnaire de fichier du modèle pour sauvegarder l'image
+    try:
+        contribuable.photo = photo
+        contribuable.save()
+    except Exception as e:
+        return Response({'detail': f"Erreur lors de l'enregistrement de la photo : {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({'detail': 'Photo de profil mise à jour avec succès.'}, status=status.HTTP_200_OK)
+   #     id_contribuable = 20  # Utilisation d'un ID fixe pour le moment
+
+
+def chart_api(request):
+    # Récupérer l'ID du contribuable connecté depuis la session
+    id_contribuable = request.session.get('contribuable_id')
+
+    # Vérifier si l'utilisateur est connecté
+    if not id_contribuable:
+        return JsonResponse({'error': 'Utilisateur non connecté'}, status=401)
+
+    # Récupérer les données depuis la base de données
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT annee, total_mnt_ver FROM vue_somme_par_contribuable_par_annee WHERE contribuable = %s",
+            [id_contribuable]
+        )
+        rows = cursor.fetchall()
+
+    # Préparer les données en format JSON
+    data = [
+        {'annee': row[0], 'total_mnt_ver': float(row[1])} for row in rows
+    ]
     
+    return JsonResponse({'data': data}, safe=False)
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from django.utils import timezone
+from .models import Contribuable, Operateurs, Message
+# @api_view(['POST', 'GET'])
+# def discussion(request):
+#     contribuable_id = request.session.get('contribuable_id')
+    
+#     # Vérifier si l'utilisateur existe dans la session
+#     if not contribuable_id:
+#         return Response({"error": "Contribuable non trouvé dans la session"}, status=status.HTTP_400_BAD_REQUEST)
+    
+#     try:
+#         contribuable = Contribuable.objects.get(id=contribuable_id)
+#     except Contribuable.DoesNotExist:
+#         return Response({"error": "Contribuable non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+    
+#     # Utiliser l'opérateur par défaut
+#     try:
+#         operateur = Operateurs.objects.get(id=1)  # Opérateur par défaut
+#     except Operateurs.DoesNotExist:
+#         return Response({"error": "Opérateur non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+    
+#     if request.method == 'POST':
+#         contenu = request.data.get('contenu')
+#         fichier_joint = request.FILES.get('fichier_joint')
+#         # Afficher dans la console les données reçues
+#         print("Contenu:", contenu)
+#         print("Fichier joint:", fichier_joint)
+
+#         # Enregistrement du message dans la base de données
+#         message = Message.objects.create(
+#             contenu=contenu,
+#             fichier_joint=fichier_joint,
+#             id_contribuable_id=contribuable.id,
+#             id_operateur_id=operateur.id,
+#             type_message='contribuable',
+#             date_envoi=timezone.now()
+#         )
+
+#         return Response({"message": "Message envoyé avec succès"}, status=status.HTTP_201_CREATED)
+
+#     # Récupérer les messages pour cet utilisateur, triés par date
+#     messages = Message.objects.filter(id_contribuable=contribuable.id).order_by('date_envoi')
+
+#     # Récupérer tous les champs de chaque message dans la table
+#     messages_data = messages.values(
+#         'id', 'contenu', 'fichier_joint', 'date_envoi', 'type_message', 
+#         'id_contribuable_id', 'id_operateur_id', 'notifié'
+#     )
+
+#     # Sérialiser les données pour les renvoyer
+#     return Response({"messages": list(messages_data)}, status=status.HTTP_200_OK)
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Contribuable, Operateurs, Message
+from django.utils import timezone
+
+@api_view(['POST', 'GET'])
+def discussion(request):
+    contribuable_id = request.session.get('contribuable_id')
+    
+    # Vérifier si l'utilisateur existe dans la session
+    if not contribuable_id:
+        return Response({"error": "Contribuable non trouvé dans la session"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        contribuable = Contribuable.objects.get(id=contribuable_id)
+    except Contribuable.DoesNotExist:
+        return Response({"error": "Contribuable non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Utiliser l'opérateur par défaut
+    try:
+        operateur = Operateurs.objects.get(id=1)  # Opérateur par défaut
+    except Operateurs.DoesNotExist:
+        return Response({"error": "Opérateur non trouvé"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'POST':
+        contenu = request.data.get('contenu')
+        fichier_joint = request.FILES.get('fichier_joint')
+
+        # Enregistrement du message dans la base de données
+        message = Message.objects.create(
+            contenu=contenu,
+            fichier_joint=fichier_joint,
+            id_contribuable_id=contribuable.id,
+            id_operateur_id=operateur.id,
+            type_message='contribuable',
+            date_envoi=timezone.now()
+        )
+
+        return Response({"message": "Message envoyé avec succès"}, status=status.HTTP_201_CREATED)
+
+    # Récupérer les messages non lus de l'opérateur
+    messages_non_lus = Message.objects.filter(notifié=False, type_message='operateur')
+
+    # Compter le nombre de messages non lus
+    unread_count = messages_non_lus.count()
+
+    # Récupérer tous les champs de chaque message dans la table
+    messages_data = Message.objects.filter(id_contribuable=contribuable.id).order_by('date_envoi').values(
+        'id', 'contenu', 'fichier_joint', 'date_envoi', 'type_message', 
+        'id_contribuable_id', 'id_operateur_id', 'notifié'
+    )
+
+    # Sérialiser les données pour les renvoyer
+    return Response({
+        "messages": list(messages_data),
+        "unread_count": unread_count  # Ajouter le comptage des messages non lus
+    }, status=status.HTTP_200_OK)
 
 
+def get_unread_message_count(request):
+    # Récupérer l'ID du contribuable dans la session
+    contribuable_id = request.session.get('contribuable_id')
+    
+    if not contribuable_id:
+        return Response({"error": "Contribuable non trouvé dans la session"}, status=status.HTTP_400_BAD_REQUEST)
 
+    try:
+        # Filtrer les messages non lus pour le contribuable
+        messages_non_lus = Message.objects.filter(notifié=False, type_message='operateur', id_contribuable_id=contribuable_id)
+        
+        # Afficher les messages non lus dans la console Django
+        print("Messages non lus pour le contribuable connecté :")
+        for message in messages_non_lus:
+            print(f"- ID: {message.id}, Contenu: {message.contenu}, Date: {message.date_envoi}")
 
+        # Retourner le nombre de messages non lus
+        unread_count = messages_non_lus.count()
+        return JsonResponse({'unread_count': unread_count})
+
+    except Exception as e:
+        print(f"Erreur lors de la récupération des messages non lus : {e}")
+        return JsonResponse({'error': 'Erreur serveur lors de la récupération des messages'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+def mark_messages_as_read(request):
+    # Récupérer l'ID du contribuable dans la session
+    contribuable_id = request.session.get('contribuable_id')
+
+    if not contribuable_id:
+        return Response({"error": "Contribuable non trouvé dans la session"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # Filtrer les messages non lus
+        messages_non_lus = Message.objects.filter(notifié=False, type_message='operateur', id_contribuable_id=contribuable_id)
+
+        # Mettre à jour les messages pour les marquer comme "lus"
+        messages_non_lus.update(notifié=True)
+
+        # Retourner une réponse de succès
+        return JsonResponse({'success': True, 'updated_count': messages_non_lus.count()})
+
+    except Exception as e:
+        print(f"Erreur lors de la mise à jour des messages : {e}")
+        return JsonResponse({'error': 'Erreur serveur lors de la mise à jour des messages'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

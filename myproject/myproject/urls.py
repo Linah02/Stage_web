@@ -47,7 +47,7 @@ from myapp.acceuil_views import profil
 from myapp.acceuil_views import chart_line
 from myapp.acceuil_views import discussion
 from myapp.acceuil_views import reponse_admin
-
+from myapp.views_token import generate_token
 from myapp.acceuil_views import notification
 from myapp.acceuil_views import get_transaction_details
 from myapp.acceuil_views import export_transaction_pdf
@@ -76,6 +76,7 @@ urlpatterns = [
     path('home/', home, name='home'),
     path('form-part2/', form_part2, name='form_part2'),
     path('connexion/', login, name='connexion'),
+    path('generate-token/<int:contribuable_id>/',generate_token, name='generate_token'),
     path('deconnexion/', deconnexion, name='deconnexion'),
     path('get_brochures/', get_brochures, name='get_brochures'),
     

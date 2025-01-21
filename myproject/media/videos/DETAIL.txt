@@ -21,9 +21,8 @@ DETAIL:Votre Partenaire Fiscal au Service de la Nation
 
 6
 TITRE:Après l'Obtention de Votre Carte Fiscale 
-Les Étapes à Suivre pour Être en Règle 
-DETAIL:Nous allons vous guider sur les prochaines démarches à effectuer pour bien utiliser votre carte 
-fiscale et rester conforme aux exigences fiscales.
+DETAIL:Les démarches à effectuer pour bien utiliser votre carte 
+fiscale
 
 
 7
