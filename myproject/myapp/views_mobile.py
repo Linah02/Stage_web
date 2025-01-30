@@ -548,55 +548,6 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.utils import timezone
 from .models import Contribuable, Operateurs, Message
-# @api_view(['POST', 'GET'])
-# def discussion(request):
-#     contribuable_id = request.session.get('contribuable_id')
-    
-#     # Vérifier si l'utilisateur existe dans la session
-#     if not contribuable_id:
-#         return Response({"error": "Contribuable non trouvé dans la session"}, status=status.HTTP_400_BAD_REQUEST)
-    
-#     try:
-#         contribuable = Contribuable.objects.get(id=contribuable_id)
-#     except Contribuable.DoesNotExist:
-#         return Response({"error": "Contribuable non trouvé"}, status=status.HTTP_404_NOT_FOUND)
-    
-#     # Utiliser l'opérateur par défaut
-#     try:
-#         operateur = Operateurs.objects.get(id=1)  # Opérateur par défaut
-#     except Operateurs.DoesNotExist:
-#         return Response({"error": "Opérateur non trouvé"}, status=status.HTTP_404_NOT_FOUND)
-    
-#     if request.method == 'POST':
-#         contenu = request.data.get('contenu')
-#         fichier_joint = request.FILES.get('fichier_joint')
-#         # Afficher dans la console les données reçues
-#         print("Contenu:", contenu)
-#         print("Fichier joint:", fichier_joint)
-
-#         # Enregistrement du message dans la base de données
-#         message = Message.objects.create(
-#             contenu=contenu,
-#             fichier_joint=fichier_joint,
-#             id_contribuable_id=contribuable.id,
-#             id_operateur_id=operateur.id,
-#             type_message='contribuable',
-#             date_envoi=timezone.now()
-#         )
-
-#         return Response({"message": "Message envoyé avec succès"}, status=status.HTTP_201_CREATED)
-
-#     # Récupérer les messages pour cet utilisateur, triés par date
-#     messages = Message.objects.filter(id_contribuable=contribuable.id).order_by('date_envoi')
-
-#     # Récupérer tous les champs de chaque message dans la table
-#     messages_data = messages.values(
-#         'id', 'contenu', 'fichier_joint', 'date_envoi', 'type_message', 
-#         'id_contribuable_id', 'id_operateur_id', 'notifié'
-#     )
-
-#     # Sérialiser les données pour les renvoyer
-#     return Response({"messages": list(messages_data)}, status=status.HTTP_200_OK)
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
